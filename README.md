@@ -40,6 +40,7 @@ Step 1 is performed by the R script `mu dividers resize.r`: all the relevant par
 
 * Name of input pdf file
   + this needs to be set in the R script file
+  + I usually copy the pdf file I'm working on into this folder, to make it easier to find within R.  The paths currently assume that's where it will be.
 * Name of the output pdf file
   + this needs to be set in the Rmarkdown file
 * Dimensions of dividers in output
@@ -60,13 +61,16 @@ The compilation process will:
 
 This means that there are several places where things can go wrong: in R (step 1), in Markdown (step 2), or LaTeX (step 3).
 
-The R Markdown file uses a lot of custom LaTeX to achieve the desired result, which is to able to layout the pages dynamically, with no horizontal or vertical space between dividers.  This may not always work on other systems, especially if you have different LaTeX parameters.  
+The R Markdown file uses a lot of custom LaTeX to achieve the desired result, which is to layout the pages dynamically, fitting as many dividers as possible on a page, with no horizontal or vertical space between dividers.  This may not always work on other systems, especially if you have different default LaTeX parameters.  
+
 
 # To Do
 
 * Collect all the parameters in one place.
 * Make R script use parameters from the Rmarkdown file, meaning it could not be run independently.  You can run individual R chunks from the Rmarkdown file, like a notebook, so this should still be functional.  Maybe I'll add a block of necessary parameters in an `if` block so it won't run when source()d, but is still available if running it separately.
-
++ Make output file name based on input file name, to reduce the number of parameters, and make it easier to run on multiple input files?
++ Create a sub-folder for input files that be ignored by git.
+    + Allow the program to iterate over a list of input files (i.e., to combine Legion into the main X-Men file, or season 1 and X-Men, in a single pass).
 
 # License
 

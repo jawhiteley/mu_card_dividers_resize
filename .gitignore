@@ -1,3 +1,10 @@
+# Working temporary files
+pdf_images/*
+!pdf_images/.gitkeep
+input/*
+!input/.gitkeep
+/*.pdf
+
 # History files
 .Rhistory
 .Rapp.history
