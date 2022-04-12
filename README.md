@@ -34,7 +34,9 @@ Everything you need is in the `mu dividers resize.Rmd` file.  This is an R Markd
 1. Extract images from input pdf file (i.e., the originals on BGG)
 2. Re-size and output to pdf
 
-Step 1 is performed by the R script `mu dividers resize.r`: all the relevant parameters for this step are in the R script file, not in the Rmarkdown file.  The Rmarkdown file can run this script automatically, but you don't have to: see the comments in the second r chunk (`extract`) to disable the external script if it has already run, or enable it to do everything in 1 step.
+Step 1 is performed by the R script `mu dividers resize.r`: all the relevant parameters for this step are in the R script file, not in the Rmarkdown file.  The main result is a bunch of png files and sub-folders created in the `pdf_images` folder, including a separate image file for each divider.  These are used byt R Markdown file to layout on a page in the desired size.
+
+The R Markdown file can run the script automatically, but you don't have to: see the comments in the second r chunk (`extract`) to disable the external script if it has already run, or enable it to do everything in 1 step.
 
 Splitting the process into the two steps above allows you the opportunity to make any manual changes you want to the extracted images: remove some, change the order, etc.  The second step (in the R Markdown file) will automatically detect all `png` files in the `pdf_files` directory and put them all in the output file.
 
@@ -58,6 +60,7 @@ Once the parameters have been set, you just need to `knit` the R Markdown file. 
 The compilation process will:
 
 1. Run the R code embedded in the R Markdown file, producing a Markdown file.
+    - This will produce a bunch of png files in the `pdf_images` folder.
 2. Compile the Markdown file into LaTeX.
 3. Compile the LaTeX file into the final pdf.
 4. Clean-up and remove the intermediary (Markdown, LaTeX) files.
@@ -71,6 +74,7 @@ The R Markdown file uses a lot of custom LaTeX to achieve the desired result, wh
 
 * Tweak and finalize sizes
 * Cleanup unnecessary commands in R, LaTeX
++ Figure out how to handle different paper orientation (season 1 vs X-Men)
 + Automatically check extracted graphics to confirm that they are dividers, and not 'empty space' (X-Men file has pages with <8 dividers on the page for variations and other collections).
   - I should be able to do with by running image_trim() on the extracted image and checking to see if the width is the same or not.  If not, remove it from the list.
 * Collect all the parameters in one place (in a way that is accessible to both R and LaTeX): 
