@@ -7,7 +7,7 @@ Spiffworld has created some excellent horizontal dividers for all the cards in M
 
 These dividers look great and are very space-efficient: they only extend above unsleeved cards by about 4 mm, yet are still readable (and look great).  Recent versions even include handy reference information, like the number of symbols, and tokens for Super-Villain Mode.
 
-As some have noted, the original dividers are so efficient that they barely extend above sleeved cards, or not at all in the case of some premium sleeves.  Many have asked for a version that was taller, but that's a lot of work to maintain for someone in their spare time.  Like others, I have considered various craft hacks, but ultimately decided I wanted the simplicity of printing & cutting, and decided to challenge myself to see if I could resize them programmatically.
+I am thinking of sleeving some cards, but as some have noted, the original dividers are so efficient that they barely extend above sleeved cards, or not at all in the case of some premium sleeves.  Many have asked for a version that was taller, but that's a lot of work to maintain for someone in their spare time.  Like others, I have considered various craft hacks, but ultimately decided I wanted the simplicity of printing & cutting, and decided to challenge myself to see if I could resize them programmatically.
 
 I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudio.com/) to output to PDF via LaTeX, because that's what I'm familiar with.  I have no doubt this could be done in python, probably more efficiently.  I just haven't learned enough python to do it yet.
 
@@ -48,7 +48,8 @@ Splitting the process into the two steps above allows you the opportunity to mak
 * Dimensions of dividers in output
   + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), though I'm not sure if that includes the borders or not.
   + That's **9.19 cm** wide, and **6.64 cm** tall.  In practice, I have been approximating as 9.2 cm \times 6.6 cm.
-  + In practice, I found **7 cm** (2.76 inches) is the minimum height to be readable above sleeved cards.
+
+In practice, I found **7 cm** (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but they fit at a slight angle, which also leaves a little extra space to be able to easily take cards out from between dividers.  The beauty of this system is that they can be resized to whatever height you prefer.
 
 ## Compile the Rmarkdown file
 
