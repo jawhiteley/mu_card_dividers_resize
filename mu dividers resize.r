@@ -1,6 +1,7 @@
 # R v4.1.3        Jonathan Whiteley        2022-04-12
 # Trying to automatically resize Spiffworld's card dividers for Marvel United
 # https://boardgamegeek.com/filepage/220250/horizontal-card-dividers
+# https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men
 
 # https://www.thepythoncode.com/article/extract-pdf-images-in-python
 # https://rdrr.io/cran/metagear/src/R/PDF_extractImages.R

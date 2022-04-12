@@ -20,7 +20,8 @@ library(magick)
 
 test_div <- image_read(paste0(base_path, "/div-001.png"))
 
-# https://bookdown.org/yihui/rmarkdown/pdf-document.html
+# https://raw.githubusercontent.com/rstudio/cheatsheets/main/rmarkdown-2.0.pdf
+# https://bookdown.org/yihui/rmarkdown/
 # https://yihui.org/knitr/options/#plots
 # http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
 
@@ -28,6 +29,7 @@ test_div <- image_read(paste0(base_path, "/div-001.png"))
 # https://tex.stackexchange.com/questions/20640/how-to-add-border-for-an-image
 # https://stackoverflow.com/questions/43024846/unable-to-force-left-align-text-in-rmarkdown-document
 # https://tex.stackexchange.com/questions/410250/understanding-line-height-line-spacing-baselineskip-in-latex
+# https://tex.stackexchange.com/questions/87509/removing-the-spaces-between-words
 ```
 
 ## R Markdown
