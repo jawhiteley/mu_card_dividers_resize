@@ -42,6 +42,8 @@ Splitting the process into the two steps above allows you the opportunity to mak
 
 ## Set Parameters
 
+These can all be set in the R Markdown file for 1-step execution.  Any required in the R script have definitions there, too, if you want to run it independently.
+
 * `pdf_file`: Name of input pdf file (or path relative to working directory)
   + I usually copy the pdf file I'm working on into this folder, to make it easier to find within R.  The paths currently assume that's where it will be.
 * Dimensions of dividers in output: `\DivWidth`, `\DivHeight`, and `\fboxrule` (border thickness)
