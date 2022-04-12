@@ -53,6 +53,8 @@ Splitting the process into the two steps above allows you the opportunity to mak
 
 In practice, I found **7 cm** (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but they fit at a slight angle, which also leaves a little extra space to be able to easily take cards out from between dividers.  The beauty of this system is that they can be resized to whatever height you prefer.
 
+Note that because of how R Markdown and LaTeX handle images, the code here allows you to increase the height relative to the original width, but not decrease it (i.e., it can only _decrease_ the aspect ratio).  It is possible to make the dividers even shorter, but would require additional code and clipping the original graphics.  If you want shorter dividers, you can always just cut them down: this tool is to allow **taller** dividers, which the original filse don't allow.
+
 ## Compile the Rmarkdown file
 
 Once the parameters have been set, you just need to `knit` the R Markdown file.  In Rstudio, you can simply click on the **Knit** button: see "[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/compile.html)" for more details.
