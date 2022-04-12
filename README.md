@@ -36,6 +36,8 @@ Everything you need is in the `mu dividers resize.Rmd` file.  This is an R Markd
 
 Step 1 is performed by the R script `mu dividers resize.r`: all the relevant parameters for this step are in the R script file, not in the Rmarkdown file.  The Rmarkdown file can run this script automatically, but you don't have to: see the comments in the second r chunk (`extract`) to disable the external script if it has already run, or enable it to do everything in 1 step.
 
+Splitting the process into the two steps above allows you the opportunity to make any manual changes you want to the extracted images: remove some, change the order, etc.  The second step (in the R Markdown file) will automatically detect all `png` files in the `pdf_files` directory and put them all in the output file.
+
 ## Set Parameters
 
 * Name of input pdf file
@@ -66,7 +68,12 @@ The R Markdown file uses a lot of custom LaTeX to achieve the desired result, wh
 
 # To Do
 
-* Collect all the parameters in one place.
+* Tweak and finalize sizes
+* Cleanup unnecessary commands in R, LaTeX
++ Automatically check extracted graphics to confirm that they are dividers, and not 'empty space' (X-Men file has pages with <8 dividers on the page for variations and other collections).
+  - I should be able to do with by running image_trim() on the extracted image and checking to see if the width is the same or not.  If not, remove it from the list.
+* Collect all the parameters in one place (in a way that is accessible to both R and LaTeX): 
+  - Divider height, width, border thickness; run external script; etc.
 * Make R script use parameters from the Rmarkdown file, meaning it could not be run independently.  You can run individual R chunks from the Rmarkdown file, like a notebook, so this should still be functional.  Maybe I'll add a block of necessary parameters in an `if` block so it won't run when source()d, but is still available if running it separately.
 + Make output file name based on input file name, to reduce the number of parameters, and make it easier to run on multiple input files?
 + Create a sub-folder for input files that be ignored by git.

@@ -16,12 +16,6 @@ img_dir <- "pdf_images"
 #library(magrittr)
 library(knitr)
 #library(magick)
-
-#### TO DO
-# Tweak and finalize sizes
-# Collect all the parameters in one place (in a way that is accessible to both R and LaTeX): 
-# - Divider height, width, border thickness; run external script; etc.
-# Clean up unnecessary commands
 ```
 ```{r extract, include=FALSE, eval=FALSE}
 # If you already ran the r script and want to skip directly to output, change 'eval=TRUE' to 'eval=FALSE' in the line above.
