@@ -11,11 +11,12 @@ header-includes: |
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+# PARAMETERS - will be used by `mu dividers resize.r` if run from here.
 setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
+pdf_file <- "mu_card_dividers_v2.pdf"
 img_dir <- "pdf_images"
-#library(magrittr)
+
 library(knitr)
-#library(magick)
 ```
 ```{r extract, include=FALSE, eval=FALSE}
 # If you already ran the r script and want to skip directly to output, change 'eval=TRUE' to 'eval=FALSE' in the line above.
