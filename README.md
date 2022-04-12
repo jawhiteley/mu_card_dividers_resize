@@ -73,6 +73,7 @@ The R Markdown file uses a lot of custom LaTeX to achieve the desired result, wh
 # To Do
 
 * Tweak and finalize sizes
+* Confirm if there is a loss in image quality.  Try to figure out why and prevent it.
 * Cleanup unnecessary commands in R, LaTeX
 + Figure out how to handle different paper orientation (season 1 vs X-Men)
 + Automatically check extracted graphics to confirm that they are dividers, and not 'empty space' (X-Men file has pages with <8 dividers on the page for variations and other collections).

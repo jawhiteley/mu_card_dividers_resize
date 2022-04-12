@@ -151,4 +151,6 @@ dev.off()
 }
 
 # R Markdown & LaTeX will give me more precise control over layout, especially treating each image as an inline box.
+# I also don't trust R's native handling of raster images (see `magick` vignette), 
+#  so I would rather do the resizing in LaTex/Markdown to preserve as much of the original image quality as possible.
 # See R Markdown file for final output.
