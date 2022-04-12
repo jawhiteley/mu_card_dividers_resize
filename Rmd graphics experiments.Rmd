@@ -1,0 +1,141 @@
+---
+title: "mu_card_dividers_exp"
+output: 
+  pdf_document:
+    keep_tex: TRUE
+geometry: margin=1cm
+header-includes: |
+  \usepackage[export]{adjustbox}
+  \graphicspath{{./pdf_images/}}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
+base_path <- "pdf_images"
+library(magrittr)
+library(knitr)
+library(magick)
+
+test_div <- image_read(paste0(base_path, "/div-001.png"))
+
+# https://bookdown.org/yihui/rmarkdown/pdf-document.html
+# https://yihui.org/knitr/options/#plots
+# http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
+
+# https://en.wikibooks.org/wiki/LaTeX/Boxes
+# https://tex.stackexchange.com/questions/20640/how-to-add-border-for-an-image
+# https://stackoverflow.com/questions/43024846/unable-to-force-left-align-text-in-rmarkdown-document
+# https://tex.stackexchange.com/questions/410250/understanding-line-height-line-spacing-baselineskip-in-latex
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Test Images
+
+```{r, out.width = "9.2cm", echo=FALSE}
+image_border(test_div, "black", "1x1")
+```
+```{r, out.width = "9.2cm", out.height = "9cm", echo=FALSE}
+include_graphics(paste0(base_path, "/div-001.png"))
+
+image_read(paste0(base_path, "/div-001.png")) %>%
+  image_border("black", "1x1")
+```
+```{r, out.height = "9cm", echo=FALSE}
+image_border(test_div, "black", "1x1")
+```
+
+- - -
+```{r, fig.width = (9.2 / cm(1)), fig.height = (7 / cm(1)), out.width = "9.2cm", echo=FALSE}
+# fig.width & fig.height only really apply to R-generated graphics (plots), not external graphics files (png)
+# out.width OR out.height do affect the size of both (fig.asp can be used to change the aspect ratio; fig.height = fig.width * fig.asp)
+image_border(test_div, "black", "1x1")
+```
+```{r, fig=T, out.extra='height=9cm, width=9.2cm', echo=FALSE}
+# keepaspectratio = true by default: \includegraphics will not distort pictures if both height and width are specified, instead the image is scaled so that neither dimensions exceeds the specified dimensions.
+image_border(test_div, "black", "1x1")
+```
+```{r, fig=T, out.extra='height=9cm, width=9.2cm, keepaspectratio=false', echo=FALSE}
+# keepaspectratio = false: now the height and width are respected, and the image is distorted.
+image_border(test_div, "black", "1x1")
+```
+
+- - -
+\La\TeX
+
+```{=latex}
+
+\includegraphics{div-001.png} % native size? Or just full textwidth
+
+% https://en.wikibooks.org/wiki/LaTeX/Boxes
+% https://tex.stackexchange.com/questions/282994/why-is-fbox-leaving-padding-on-the-left-and-right-of-my-includegraphics
+\setlength{\fboxsep}{0cm}    % still some horizontal white space?  Check white space around the contents (new lines)
+\setlength{\fboxrule}{1pt}
+
+\fbox{%
+  \parbox[t][7cm]{8cm}{%
+    \fbox{\includegraphics{./pdf_images/div-001.png}}
+  }%
+} % *any* whitespace between figures will result in whitespace in the output ;)
+% using 'frame' option to \includegraphics (adjustbox package)
+% https://tex.stackexchange.com/questions/349918/image-frame-borders-in-pdf-from-latex-template-with-pandoc-markdown
+% suggests I could create a custom version of the \includegraphics command in the YAML header, which would be applied for every include_graphics() command in an R chunk ...
+\fbox{%
+  \parbox[t][7cm]{8cm}{%
+    \includegraphics[frame, width=9.2cm]{div-001.png}%
+  }%
+}
+
+\fbox{%
+  \parbox[t][7cm]{8cm}{%
+    \includegraphics[frame]{div-001.png}%
+  }%
+}
+\fbox{%
+  \parbox[t][7cm]{8cm}{%
+    \includegraphics[frame, width=544px]{div-001.png}%
+  }%
+}
+
+\fbox{%
+  \parbox[t][2cm]{9cm}{%
+    \includegraphics[trim=0 0 0 0, clip]{div-001.png}% image is resized to fit _width_, box appears to resize to accommodate _height_
+  }%
+}
+% any empty lines between boxes will put graphics on a new line in the output. ;)
+\fbox{%
+  \parbox[t]{9cm}{%
+    \includegraphics[trim=0 4cm 0 0, clip]{div-001.png}% image is resized to fit _width_, box appears to resize to accommodate _height_
+  }%
+}
+
+% what a mess.  I clearly do not understand the viewport argument:
+\fbox{%
+  \includegraphics[frame, width=9.2cm, totalheight=7cm, viewport=0 0.4cm 9cm 9cm, clip]{div-001.png}%
+}
+
+% Can I get images to wrap cleanly: no clipping off the page, line breaks where appropriate, with no space between images?
+%  \- hypenation?
+%  \figure environment - I think this creates 'floats', which is not quite what I want; I think I prefer inline boxes that I can stack together.
+% Based on examination of .tcx outpute from Rmarkdown, R code that includes an external file is always converted to an \includegraphics statement (using the graphicx package).
+```

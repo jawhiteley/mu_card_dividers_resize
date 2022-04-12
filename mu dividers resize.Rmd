@@ -1,0 +1,69 @@
+---
+output: 
+  pdf_document:
+    keep_tex: FALSE
+geometry: margin=1cm
+header-includes: |
+  \graphicspath{{./pdf_images/}}
+  \usepackage{setspace}
+  \pagenumbering{gobble}  % remove page numbers
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
+img_dir <- "pdf_images"
+#library(magrittr)
+library(knitr)
+#library(magick)
+
+#### TO DO
+# Tweak and finalize sizes
+# Collect all the parameters in one place (in a way that is accessible to both R and LaTeX): 
+# - Divider height, width, border thickness; run external script; etc.
+# Clean up unnecessary commands
+```
+```{r extract, include=FALSE, eval=FALSE}
+# If you already ran the r script and want to skip directly to output, change 'eval=TRUE' to 'eval=FALSE' in the line above.
+# If you want to do everything here in one step, change 'eval=FALSE' to 'eval=TRUE'.
+
+# Run the external script to extract graphics from the input pdf.
+# All the necessary parameters are set in that script. 
+# This document does not rely on running this script during compilation, in case you want to run the script first, then produce the output in 2 steps (see comments above).
+# Running the external script here just allows you to do it all in one step.
+source("mu dividers resize.r", local = knitr::knit_global())
+```
+```{=latex}
+% LaTeX setup - some of this could go in the (YAML) header, but there's quite a bit, and this works.
+\def\DivWidth{9.2cm}   % Width of each divider (originals are 3.620 in, not sure if that includes the border)
+\def\DivHeight{7cm}    % Height of each divider (originals are 2.613 in, which is too short for sleeved cards)
+\setlength{\fboxrule}{1pt}   % width of border around each divider
+\setlength{\fboxsep}{0cm}    % space separating border from contents (set to 0 for a tight border)
+% re-define \includegraphics command to set desired size and border: the image will be automatically sized to fit the width, flush with the top-left (aspect ratio is preserved by default)
+\let\includegraphicsOG\includegraphics
+\renewcommand*{\includegraphics}[2][]{\fbox{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
+
+% control spacing around graphics
+\fontsize{10pt}{10pt}\selectfont    % arg1 = font size, zrg2 = baselineskip
+\setlength{\lineskip}{-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
+
+%\begin{flushleft}   % force left alignment (aka 'raggedright') instead of fully justified
+\raggedright
+\ttfamily   % used a fixed-width font: this makes specifying horizontal space more reliable.
+% Set the inter-word spacing to the same as the border width, but negative, so that they overlap.
+%   For whatever reason, line and page breaks still work fine. 
+%   Alternatively, these lengths can be set very small, and `\hspace{-\fboxrule}` added to the end of the \includegraphics re-definition above.
+\setlength{\spaceskip}{-\fboxrule}
+\setlength{\xspaceskip}{-\fboxrule}
+```
+
+```{r graphics, echo=FALSE}
+# get list of (png) files: 1 file per divider
+img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
+# loop over the list and apply include_graphics() (vectorized!), which should use the custom command defined above.
+include_graphics(img_files)
+```
+
+```{=latex}
+%\end{flushleft}
+```
