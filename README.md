@@ -1,6 +1,6 @@
-Automatically re-size Spiffworld's horizontal dividers for Marvel United in Rmarkdown.
+Automatically re-size Spiffworld's horizontal dividers for Marvel United, in Rmarkdown.
 
-Spiffworld has created some excellent horizontal dividers for all the cards in Marvel United on BGG:
+Spiffworld has created some excellent horizontal dividers for all the cards in Marvel United on [BGG](https://boardgamegeek.com/):
 
 * https://boardgamegeek.com/filepage/220250/horizontal-card-dividers
 * https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men
@@ -56,7 +56,7 @@ These can all be set in the header of the R Markdown file for 1-step execution (
   + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
   + set to `FALSE` to save time if it was already run.
 * Dimensions of dividers in output: `div_height`, `div_width`, and `border` (border thickness)
-  + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), though I'm not sure if that includes the borders or not.  That's about **9.2 cm** wide, and **6.6 cm** tall.
+  + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), which includes a 1 pixel wide black border (confirmed in a personal communication).  That's about **9.2 cm** wide, and **6.6 cm** tall.
 
 In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but they fit at a slight angle, which also leaves a little extra space to be able to easily take cards out from between dividers.  The current settings might be a bit taller than 7 cm (I can always cut them a bit shorter than printed).  The beauty of this system is that they can be resized to whatever height you prefer.
 

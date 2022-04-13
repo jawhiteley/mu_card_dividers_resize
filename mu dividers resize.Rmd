@@ -6,7 +6,7 @@ geometry: margin=1cm
 params:
   extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
   div_height: 72 # in mm: Height of dividers (originals are 66.4 mm, which is too short for sleeved cards)
-  div_width:  92 # in mm: Width of dividers (originals are 91.9 mm, not sure if that includes the border)
+  div_width:  92 # in mm: Width of dividers (originals are 91.9 mm, including a 1 px wide black border)
   border:   0.25 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
 # DIMENSIONS:
 # Dividers in original file are 3.620 in wide x 2.613 in tall (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice).
