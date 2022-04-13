@@ -5,9 +5,9 @@ Spiffworld has created some excellent horizontal dividers for all the cards in M
 * https://boardgamegeek.com/filepage/220250/horizontal-card-dividers
 * https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men
 
-These dividers look great and are very space-efficient: they only extend above unsleeved cards by about 4 mm, yet are still readable (and look great).  Recent versions even include handy reference information, like the number of symbols, and tokens for Super-Villain Mode.
+These dividers look great and are very space-efficient: they only extend above unsleeved cards by about 3-4 mm, yet are still readable (and look great).  Recent versions even include handy reference information, like the number of symbols, and starting tokens for Super-Villain Mode.
 
-I am thinking of sleeving some cards, but as some have noted, the original dividers are so efficient that they barely extend above sleeved cards, or not at all in the case of some premium sleeves.  Many have asked for a version that was taller, but that's a lot of work to maintain for someone in their spare time.  Like others, I have considered various craft hacks, but ultimately decided I wanted the simplicity of printing & cutting, and decided to challenge myself to see if I could resize them programmatically.
+I am thinking of sleeving some cards for this game, but as some have noted, the original dividers are so efficient that they barely extend above sleeved cards, or not at all in the case of some premium sleeves.  Many have asked for a version that was taller, but that's a lot of work to maintain for someone in their spare time.  Like others, I have considered various hacks, like printing them onto paper and gluing to a tall card back, but ultimately decided I wanted the simplicity of printing & cutting directly onto cardstock, and decided to challenge myself to see if I could resize them programmatically.
 
 I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudio.com/) to output to PDF via LaTeX, because that's what I'm familiar with.  I have no doubt this could be done in python, probably more efficiently.  I just haven't learned enough python to do it yet.
 
@@ -26,7 +26,9 @@ I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudi
     
         brew install poppler
 
+## Suggestions
 
+[RStudio](https://www.rstudio.com/) should not be required, but makes it easier to edit and run.  All the code was tested in RStudio.
 
 # How to Use
 
