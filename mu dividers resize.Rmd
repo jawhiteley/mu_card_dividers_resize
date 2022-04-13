@@ -29,7 +29,7 @@ library(knitr)
 source("mu dividers resize.r", local = knitr::knit_global())
 ```
 ```{=latex}
-% LaTeX setup - some of this could go in the (YAML) header, but there's quite a bit, and this works.
+% LaTeX setup - some of this could go in the (YAML) header (header-includes), but there's quite a bit, and this works.
 
 % PARAMETERS: Dimensions
 \def\DivWidth{92mm}    % Width of each divider (originals are 3.620 in, not sure if that includes the border)
@@ -37,10 +37,10 @@ source("mu dividers resize.r", local = knitr::knit_global())
 \setlength{\fboxrule}{0.25mm}    % width of border around each divider
 \setlength{\fboxsep}{0mm}        % space separating border from contents (set to 0 for a tight border)
 % Dividers in original file are 3.620 in wide x 2.613 in tall (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice).
-% Cards themselves are 63 x 88 mm (standard poker size).  
+% Cards themselves are 63 x 88 mm (standard poker size).  Therefore original dividers only project about 3-4 mm above the top of cards.
 % Sleeves vary in size, but I have found that premium sleeves (e.g., Dragon Shield) are about as wide as the original dividers are tall.  
 % Dragon Shield (one of the largest) specifications are up to 92.5 x 66.5 mm (https://daviscardsandgames.com/products/dragon-shield-clear-matte-sleeves-standard-size)
-% Therefore, a reasonable target is 92 mm wide (about the same as large premium sleeves, maybe even a bit less) and 72 mm tall, to allow 5 mm above sleeves.
+% Therefore, a reasonable target is 92 mm wide (about the same as large premium sleeves, maybe even a bit less) and 71-72 mm tall, to allow 4-5 mm above sleeves.
 % Except that my insert from TinkeringPaws only has a vertical clearance of 70 mm (2.76 in), and the core box only has 68 mm (2.68 in) clearance. 
 % 70 mm fits in the core box at an angle, but I might not want to go much taller.  Or use 72 mm (2.83 in) for output here, and just cut mine to 70. ;)
 % Borders: 
@@ -56,8 +56,7 @@ source("mu dividers resize.r", local = knitr::knit_global())
 \fontsize{10pt}{10pt}\selectfont    % arg1 = font size, zrg2 = baselineskip
 \setlength{\lineskip}{-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
 
-%\begin{flushleft}   % force left alignment (aka 'raggedright') instead of fully justified
-\raggedright
+\raggedright    % force left alignment (aka 'raggedright') instead of fully justified
 \ttfamily   % used a fixed-width font: this makes specifying horizontal space more reliable.
 % Set the inter-word spacing to the same as the border width, but negative, so that they overlap.
 %   For whatever reason, line and page breaks still work fine. 
@@ -71,8 +70,4 @@ source("mu dividers resize.r", local = knitr::knit_global())
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
 # loop over the list and apply include_graphics() (vectorized!), which should use the custom command defined above.
 include_graphics(img_files)
-```
-
-```{=latex}
-%\end{flushleft}
 ```
