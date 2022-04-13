@@ -5,13 +5,15 @@
 * Confirm if there is a loss in image quality.  Try to figure out why and prevent it.
   - only apparent in Inkscape, but could just be anti-aliasing or lack thereof.  Not apparent in Preview?
 
-+ Figure out how to handle different paper orientation (season 1 vs X-Men)
-
-+ Automatically check extracted graphics to confirm that they are dividers, and not 'empty space' (X-Men file has pages with <8 dividers on the page for variations and other collections).
-  - I should be able to do with by running image_trim() on the extracted image and checking to see if the width is the same or not.  If not, remove it from the list.
-
 + Create a sub-folder for input files that be ignored by git.
     + Allow the program to iterate over a list of input files (i.e., to combine Legion into the main X-Men file, or season 1 and X-Men, in a single pass).
+
+* Updates for X-Men:
+
+  + Figure out how to handle different paper/image orientation (season 1 vs X-Men)
+
+  + Automatically check extracted graphics to confirm that they are dividers, and not 'empty space' (X-Men file has pages with <8 dividers on the page for variations and other collections).
+    - I should be able to do with by running image_trim() on the extracted image and checking to see if the width is the same or not.  If not, remove it from the list.
 
 + Make output file name based on input file name, to reduce the number of parameters, and make it easier to run on multiple input files?
 
