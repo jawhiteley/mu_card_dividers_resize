@@ -4,11 +4,10 @@ output:
     keep_tex: FALSE
 geometry: margin=1cm
 params:
-  pdf_file: mu_card_dividers_v2.pdf
+  extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
   div_height: 72 # in mm
   div_width:  92 # in mm
   border:   0.25 # in mm
-  extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
 # DIMENSIONS:
 # Dividers in original file are 3.620 in wide x 2.613 in tall (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice).
 # Cards themselves are 63 x 88 mm (standard poker size).  Therefore original dividers only project about 3-4 mm above the top of cards.
@@ -27,18 +26,20 @@ header-includes: |
   \pagenumbering{gobble}  % remove page numbers
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
-# PARAMETERS - will be used by `mu dividers resize.r` if run from here.
-setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
-pdf_file <- params$pdf_file
+## PARAMETERS - will be used by `mu dividers resize.r` if run from here.
 img_dir  <- params$img_dir
 
 library(knitr)
+
+## Working Directory: all paths are relative to here
+# When compiling an R Markdown document (using render()), the default working directory is automatically the same directory as the file itself. :)
+# https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html
 ```
 ```{r extract, include=FALSE, eval=params$extract_images}
-# If you already ran the r script and want to skip directly to output, change 'eval=TRUE' to 'eval=FALSE' in the line above.
-# If you want to do everything here in one step, change 'eval=FALSE' to 'eval=TRUE'.
+# If you want to do everything here in one step, set the value of the 'extract_images' parameter to 'TRUE' in the in the document header.
+# If you already ran the r script and want to skip directly to output, set the value of the 'extract_images' parameter to 'FALSE' in the in the document header.
 
 # Run the external script to extract graphics from the input pdf.
 # All the necessary parameters are set in that script. 
@@ -46,6 +47,7 @@ library(knitr)
 # Running the external script here just allows you to do it all in one step.
 source("mu dividers resize.r", local = knitr::knit_global())
 ```
+
 ```{=latex}
 % LaTeX setup - some of this could go in the (YAML) header (header-includes), but there's quite a bit, and this works.
 

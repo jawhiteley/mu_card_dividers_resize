@@ -35,18 +35,21 @@ Everything you need is in the `mu dividers resize.Rmd` file.  This is an R Markd
 1. Extract images from input pdf file (i.e., the originals on BGG)
 2. Re-size and output to pdf
 
-Step 1 is performed by the R script `mu dividers resize.r`: all the relevant parameters for this step are in the R script file, not in the Rmarkdown file.  The main result is a bunch of png files and sub-folders created in the `pdf_images` folder, including a separate image file for each divider.  These are used byt R Markdown file to layout on a page in the desired size.
+Step 1 is performed by the R script `mu dividers resize.r`: this file includes all the relevant parameters for this step, but will use any defined in the R Markdown file if run from there.  The main result of this script is a bunch of png files and sub-folders created in the `pdf_images` folder, including a separate image file for each divider.  These are used by the R Markdown file to layout dividers on a page in the desired size.
 
-The R Markdown file can run the script automatically, but you don't have to: see the comments in the second r chunk (`extract`) to disable the external script if it has already run, or enable it to do everything in 1 step.
+The R Markdown file can run the script automatically, but you don't have to: see the `extract_images` parameter, and comments in the second r chunk (`extract`) to disable the external script if it has already run, or enable it to do everything in 1 step.
 
-Splitting the process into the two steps above allows you the opportunity to make any manual changes you want to the extracted images: remove some, change the order, etc.  The second step (in the R Markdown file) will automatically detect all `png` files in the `pdf_files` directory and put them all in the output file.
+Splitting the process into the two steps above allows you the opportunity to make any manual changes you want to the extracted images before producing the final pdf output: remove some dividers, change the order, etc.  The second step (in the R Markdown file) will automatically detect all `png` files in the `pdf_files` directory and put them all in the output file.
 
-## Set Parameters
+## 1. Setup
+
+Put the pdf file of the dividers into the `input` sub-directory.
+Currently, if there is more than one file in this directory, the script will only process the first one (sorted by name).
+
+## 2. Set Parameters
 
 These can all be set in the header of the R Markdown file for 1-step execution (under `params:`).  Any required in the R script have definitions there, too, if you want to run it independently.
 
-* `pdf_file`: Name of input pdf file (or path relative to working directory)
-  + I usually copy the pdf file I'm working on into this folder, to make it easier to find within R.  The paths currently assume that's where it will be.
 * `extract_images`: run the R script to extract images from the pdf all in 1 step?
   + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
   + set to `FALSE` to save time if it was already run.
@@ -55,9 +58,9 @@ These can all be set in the header of the R Markdown file for 1-step execution (
 
 In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but they fit at a slight angle, which also leaves a little extra space to be able to easily take cards out from between dividers.  The current settings might be a bit taller than 7 cm (I can always cut them a bit shorter than printed).  The beauty of this system is that they can be resized to whatever height you prefer.
 
-Note that because of how R Markdown and LaTeX handle images, the code here allows you to increase the height relative to the original width, but not decrease it (i.e., it can only _decrease_ the aspect ratio).  It is _possible_ to make the dividers even shorter in LaTeX, but would require additional code and clipping the original graphics.  If you want shorter dividers, you can always just cut them down: this tool is to allow **taller** dividers, which the original filse don't allow.
+Note that because of how R Markdown and LaTeX handle images, the code here allows you to increase the height relative to the original width, but not decrease it (i.e., it can only _decrease_ the aspect ratio).  It is _possible_ to make the dividers even shorter in LaTeX, but would require additional code and clipping the original graphics.  If you want shorter dividers, you can always just cut them down: this tool is to allow **taller** dividers, which the original files don't allow.
 
-## Compile the Rmarkdown file
+## 3. Compile the Rmarkdown file
 
 Once the parameters have been set, you just need to `knit` the R Markdown file.  In Rstudio, you can simply click on the **Knit** button: see "[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/compile.html)" for more details.
 
@@ -74,7 +77,6 @@ The compilation process will:
 This means that there are several places where things can go wrong: in R (step 1), in Markdown (step 2), or LaTeX (step 3).
 
 The R Markdown file uses a lot of custom LaTeX to achieve the desired result, which is to layout the pages dynamically, fitting as many dividers as possible on a page, with no horizontal or vertical space between dividers.  This may not always work on other systems, especially if you have different default LaTeX parameters.  
-
 
 # License
 

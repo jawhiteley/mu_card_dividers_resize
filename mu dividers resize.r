@@ -8,12 +8,26 @@
 
 
 ## PARAMETERS
-if (!exists("img_dir") || !exists("pdf_file")) {
-  # Set Working Directory - update to the path to this directory on your system
-  setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
+input_dir <- "input"
+
+if (!exists("img_dir")) {
+  # Not source()d from the R Markdown file
+  img_dir   <- "pdf_images"
   
-  pdf_file <- "mu_card_dividers.pdf"
-  img_dir <- "pdf_images"
+  ## Working Directory: all paths are relative to here
+  # If source()d from the R Markdown file being rendered, the default working directory is the same directory as the file.
+  # The code here is for cases where this code is being run outside the R Markdown file (debugging, 2-step process, etc.)
+  # Detect the directory of this file (on source()) and set the working directory automatically?
+  # https://stackoverflow.com/questions/13672720/r-command-for-setting-working-directory-to-source-file-location-in-rstudio
+  here <- utils::getSrcDirectory(function(x) {x})
+  if (here == "") {
+    # didn't work, or not being source()d
+    # try Rstudio API - works if running interactively in RStudio (not on source)
+    if (require(rstudioapi, quietly = TRUE)) {
+      here <- dirname(rstudioapi::getActiveDocumentContext()$path)
+    }
+  }
+  setwd(here)
 }
 
 library(magrittr)
@@ -24,10 +38,12 @@ library(magrittr)
 # download.file(pdf_url, pdf_file)
 
 # Instead, copy the file manually into the working directory (this folder), and set 'pdf_file' to the name of the file
+pdf_files <- paste(input_dir, list.files(input_dir, '.pdf$'), sep="/") %>% sort()
+pdf_file <- pdf_files[1]    # keep the first file only, for now
 
 # Check that the pdf file exists, and throw an error if it does not.
 if (file.exists(pdf_file) == FALSE) {
-  stop(sprintf("file '%s' not found: check the 'pdf_file' parameter and working directory.", pdf_file))
+  stop(sprintf("file '%s' not found: check the 'input_dir' parameter and working directory.", pdf_file))
 }
 
 
