@@ -37,7 +37,7 @@ library(magrittr)
 # BGG file links are dynamic and expire, probably to prevent exactly this type of automated request.
 # download.file(pdf_url, pdf_file)
 
-# Instead, copy the file manually into the working directory (this folder), and set 'pdf_file' to the name of the file
+# Instead, copy the file manually into the `input` directory, and set 'pdf_file' to the name of the file (automatically)
 pdf_files <- paste(input_dir, list.files(input_dir, '.pdf$'), sep="/") %>% sort()
 pdf_file <- pdf_files[1]    # keep the first file only, for now
 
