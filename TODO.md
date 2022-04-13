@@ -4,6 +4,7 @@
 
 * Confirm if there is a loss in image quality.  Try to figure out why and prevent it.
   - only apparent in Inkscape, but could just be anti-aliasing or lack thereof.  Not apparent in Preview?
+  - Some visual artifacts visible in the bottom part of vertical borders between adjacent dividers: looks like a shadow or anti-aliasing of the border from the divider on the left is visible under the image for the divider on the right, so the border appears slightly thicker under the right divider image.  This effect is not visible at certain zoom levels and disappears when zooming in.  It happens starting at about 70% overlap between borders (`\spaceskip=-0.7\fboxrule` or higher).  Not sure if this will affect printing.
 
 + Create a sub-folder for input files that be ignored by git.
     - Allow the program to iterate over a list of input files (i.e., to combine Legion into the main X-Men file, or season 1 and X-Men, in a single pass).

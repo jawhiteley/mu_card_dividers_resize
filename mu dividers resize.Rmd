@@ -5,9 +5,9 @@ output:
 geometry: margin=1cm
 params:
   extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
-  div_height: 72 # in mm
-  div_width:  92 # in mm
-  border:   0.25 # in mm
+  div_height: 72 # in mm: Height of dividers (originals are 66.4 mm, which is too short for sleeved cards)
+  div_width:  92 # in mm: Width of dividers (originals are 91.9 mm, not sure if that includes the border)
+  border:   0.25 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
 # DIMENSIONS:
 # Dividers in original file are 3.620 in wide x 2.613 in tall (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice).
 # Cards themselves are 63 x 88 mm (standard poker size).  Therefore original dividers only project about 3-4 mm above the top of cards.
@@ -52,8 +52,8 @@ source("mu dividers resize.r", local = knitr::knit_global())
 % LaTeX setup - some of this could go in the (YAML) header (header-includes), but there's quite a bit, and this works.
 
 % PARAMETERS: Dimensions (inherited from document parameters: `params` R object)
-\def\DivWidth{`r params$div_width`mm}       % Width of each divider (originals are 3.620 in, not sure if that includes the border)
-\def\DivHeight{`r params$div_height`mm}     % Height of each divider (originals are 2.613 in, which is too short for sleeved cards)
+\def\DivWidth{`r params$div_width`mm}       % Width of each divider
+\def\DivHeight{`r params$div_height`mm}     % Height of each divider
 \setlength{\fboxrule}{`r params$border`mm}  % width of border around each divider
 \setlength{\fboxsep}{0mm}    % space separating border from contents (set to 0 for a tight border)
 
@@ -62,16 +62,14 @@ source("mu dividers resize.r", local = knitr::knit_global())
 \renewcommand*{\includegraphics}[2][]{\fbox{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
 
 % control spacing around graphics
-\fontsize{10pt}{10pt}\selectfont    % arg1 = font size, zrg2 = baselineskip
 \setlength{\lineskip}{-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
 
 \raggedright    % force left alignment (aka 'raggedright') instead of fully justified
-\ttfamily   % used a fixed-width font: this makes specifying horizontal space more reliable.
 % Set the inter-word spacing to the same as the border width, but negative, so that they overlap.
 %   For whatever reason, line and page breaks still work fine. 
 %   Alternatively, these lengths can be set very small, and `\hspace{-\fboxrule}` added to the end of the \includegraphics re-definition above.
 \setlength{\spaceskip}{-\fboxrule}
-\setlength{\xspaceskip}{-\fboxrule}
+%\setlength{\xspaceskip}{-\fboxrule}
 ```
 
 ```{r graphics, echo=FALSE}
