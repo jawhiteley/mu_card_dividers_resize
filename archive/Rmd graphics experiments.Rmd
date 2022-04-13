@@ -30,6 +30,10 @@ test_div <- image_read(paste0(base_path, "/div-001.png"))
 # https://stackoverflow.com/questions/43024846/unable-to-force-left-align-text-in-rmarkdown-document
 # https://tex.stackexchange.com/questions/410250/understanding-line-height-line-spacing-baselineskip-in-latex
 # https://tex.stackexchange.com/questions/87509/removing-the-spaces-between-words
+
+# https://bookdown.org/yihui/rmarkdown-cookbook/parameterized-reports.html
+  # Requires shiny package for some reason
+# https://stackoverflow.com/questions/55697684/how-to-output-values-of-r-variables-in-an-inline-latex-equation-in-r-markdown-i
 ```
 
 ## R Markdown

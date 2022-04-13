@@ -20,6 +20,7 @@ I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudi
   + [pdfimager](https://sckott.github.io/pdfimager/)
   + [magick](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) (ImageMagick)
   + magrittr (pipe operator)
+  + shiny (required for parameters in the R Markdown header, for some reason)
 * the pdfimager package also requires the pdfimages command-line tool, which is part of the [poppler](https://poppler.freedesktop.org/) library.
   + This can be installed on a Mac with [homebrew](https://brew.sh/) using the command:
     
@@ -42,12 +43,14 @@ Splitting the process into the two steps above allows you the opportunity to mak
 
 ## Set Parameters
 
-These can all be set in the R Markdown file for 1-step execution.  Any required in the R script have definitions there, too, if you want to run it independently.
+These can all be set in the header of the R Markdown file for 1-step execution (under `params:`).  Any required in the R script have definitions there, too, if you want to run it independently.
 
 * `pdf_file`: Name of input pdf file (or path relative to working directory)
   + I usually copy the pdf file I'm working on into this folder, to make it easier to find within R.  The paths currently assume that's where it will be.
-* Dimensions of dividers in output: `\DivWidth`, `\DivHeight`, and `\fboxrule` (border thickness)
-  + Specified in a LaTeX block {=latex} in the R Markdown file.
+* `extract_images`: run the R script to extract images from the pdf all in 1 step?
+  + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
+  + set to `FALSE` to save time if it was already run.
+* Dimensions of dividers in output: `div_height`, `div_width`, and `border` (border thickness)
   + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), though I'm not sure if that includes the borders or not.  That's about **9.2 cm** wide, and **6.6 cm** tall.
 
 In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but they fit at a slight angle, which also leaves a little extra space to be able to easily take cards out from between dividers.  The current settings might be a bit taller than 7 cm (I can always cut them a bit shorter than printed).  The beauty of this system is that they can be resized to whatever height you prefer.

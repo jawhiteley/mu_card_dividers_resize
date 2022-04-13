@@ -3,9 +3,27 @@ output:
   pdf_document:
     keep_tex: FALSE
 geometry: margin=1cm
+params:
+  pdf_file: mu_card_dividers_v2.pdf
+  div_height: 72 # in mm
+  div_width:  92 # in mm
+  border:   0.25 # in mm
+  extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
+# DIMENSIONS:
+# Dividers in original file are 3.620 in wide x 2.613 in tall (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice).
+# Cards themselves are 63 x 88 mm (standard poker size).  Therefore original dividers only project about 3-4 mm above the top of cards.
+# Sleeves vary in size, but I have found that premium sleeves (e.g., Dragon Shield) are about as wide as the original dividers are tall.  
+# Dragon Shield (one of the largest) specifications are up to 92.5 x 66.5 mm (https://daviscardsandgames.com/products/dragon-shield-clear-matte-sleeves-standard-size)
+# Therefore, a reasonable target is 92 mm wide (about the same as large premium sleeves, maybe even a bit less) and 71-72 mm tall, to allow 4-5 mm above sleeves.
+# Except that my insert from TinkeringPaws only has a vertical clearance of 70 mm (2.76 in), and the core box only has 68 mm (2.68 in) clearance. 
+# 70 mm fits in the core box at an angle, but I might not want to go much taller.  Or use 72 mm (2.83 in) for output here, and just cut mine to 70. ;)
+# BORDERS: 
+# Original uses 1 pixel non-overlapping, so 1 px around the outside and 2 pixels between each divider, 
+#  in an image 1500 x 1200 px that is 254 mm wide on the page ~= 0.3387 mm between dividers?
+# 0.25 mm feels close, and a good compromise between being too thin and too thick.
+  img_dir: pdf_images
 header-includes: |
-  \graphicspath{{./pdf_images/}}
-  \usepackage{setspace}
+  \graphicspath{{./`r params$img_dir`/}}
   \pagenumbering{gobble}  % remove page numbers
 ---
 ```{r setup, include=FALSE}
@@ -13,12 +31,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # PARAMETERS - will be used by `mu dividers resize.r` if run from here.
 setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
-pdf_file <- "mu_card_dividers_v2.pdf"
-img_dir <- "pdf_images"
+pdf_file <- params$pdf_file
+img_dir  <- params$img_dir
 
 library(knitr)
 ```
-```{r extract, include=FALSE, eval=FALSE}
+```{r extract, include=FALSE, eval=params$extract_images}
 # If you already ran the r script and want to skip directly to output, change 'eval=TRUE' to 'eval=FALSE' in the line above.
 # If you want to do everything here in one step, change 'eval=FALSE' to 'eval=TRUE'.
 
@@ -31,22 +49,11 @@ source("mu dividers resize.r", local = knitr::knit_global())
 ```{=latex}
 % LaTeX setup - some of this could go in the (YAML) header (header-includes), but there's quite a bit, and this works.
 
-% PARAMETERS: Dimensions
-\def\DivWidth{92mm}    % Width of each divider (originals are 3.620 in, not sure if that includes the border)
-\def\DivHeight{72mm}   % Height of each divider (originals are 2.613 in, which is too short for sleeved cards)
-\setlength{\fboxrule}{0.25mm}    % width of border around each divider
-\setlength{\fboxsep}{0mm}        % space separating border from contents (set to 0 for a tight border)
-% Dividers in original file are 3.620 in wide x 2.613 in tall (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice).
-% Cards themselves are 63 x 88 mm (standard poker size).  Therefore original dividers only project about 3-4 mm above the top of cards.
-% Sleeves vary in size, but I have found that premium sleeves (e.g., Dragon Shield) are about as wide as the original dividers are tall.  
-% Dragon Shield (one of the largest) specifications are up to 92.5 x 66.5 mm (https://daviscardsandgames.com/products/dragon-shield-clear-matte-sleeves-standard-size)
-% Therefore, a reasonable target is 92 mm wide (about the same as large premium sleeves, maybe even a bit less) and 71-72 mm tall, to allow 4-5 mm above sleeves.
-% Except that my insert from TinkeringPaws only has a vertical clearance of 70 mm (2.76 in), and the core box only has 68 mm (2.68 in) clearance. 
-% 70 mm fits in the core box at an angle, but I might not want to go much taller.  Or use 72 mm (2.83 in) for output here, and just cut mine to 70. ;)
-% Borders: 
-% Original uses 1 pixel non-overlapping, so 1 px around the outside and 2 pixels between each divider, 
-%  in an image 1500 x 1200 px that is 254 mm wide on the page ~= 0.3387 mm between dividers?
-% 0.25 mm feels close, and a good compromise between being too thin and too thick.
+% PARAMETERS: Dimensions (inherited from document parameters: `params` R object)
+\def\DivWidth{`r params$div_width`mm}       % Width of each divider (originals are 3.620 in, not sure if that includes the border)
+\def\DivHeight{`r params$div_height`mm}     % Height of each divider (originals are 2.613 in, which is too short for sleeved cards)
+\setlength{\fboxrule}{`r params$border`mm}  % width of border around each divider
+\setlength{\fboxsep}{0mm}    % space separating border from contents (set to 0 for a tight border)
 
 % re-define \includegraphics command to set desired size and border: the image will be automatically sized to fit the width, flush with the top-left (aspect ratio is preserved by default)
 \let\includegraphicsOG\includegraphics
