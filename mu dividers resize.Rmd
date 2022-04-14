@@ -4,6 +4,7 @@ output:
     keep_tex: FALSE
 geometry: margin=1cm
 params:
+  pdf_file:    # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
   extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
   div_height: 72 # in mm: Height of dividers (originals are 66.4 mm, which is too short for sleeved cards)
   div_width:  92 # in mm: Width of dividers (originals are 91.9 mm, including a 1 px wide black border)
@@ -29,6 +30,7 @@ header-includes: |
 knitr::opts_chunk$set(echo = FALSE)
 
 ## PARAMETERS - will be used by `mu dividers resize.r` if run from here.
+pdf_file <- params$pdf_file
 img_dir  <- params$img_dir
 
 library(knitr)

@@ -6,11 +6,13 @@
 # https://sckott.github.io/pdfimager/
 # https://cran.r-project.org/web/packages/magick/vignettes/intro.html
 
+library(magrittr)
+library(dplyr)    # allows bind_rows, which is more convenient than a fixed number of unlist() calls
 
 ## PARAMETERS
 input_dir <- "input"
 
-if (!exists("img_dir")) {
+if (!exists('img_dir')) {
   # Not source()d from the R Markdown file
   img_dir   <- "pdf_images"
   
@@ -30,26 +32,44 @@ if (!exists("img_dir")) {
   setwd(here)
 }
 
-library(magrittr)
-
 
 # Download pdf file directly? 
 # BGG file links are dynamic and expire, probably to prevent exactly this type of automated request.
 # download.file(pdf_url, pdf_file)
 
-# Instead, copy the file manually into the `input` directory, and set 'pdf_file' to the name of the file (automatically)
-pdf_files <- paste(input_dir, list.files(input_dir, '.pdf$'), sep="/") %>% sort()
-pdf_file <- pdf_files[1]    # keep the first file only, for now
-
-# Check that the pdf file exists, and throw an error if it does not.
-if (file.exists(pdf_file) == FALSE) {
-  stop(sprintf("file '%s' not found: check the 'input_dir' parameter and working directory.", pdf_file))
+# Instead, copy the file manually into the `input` directory, 
+#  and set 'pdf_file' to the name of the file (automatically use all of them if blank)
+# Check if pdf_file is empty and get all files in `input` if it is
+if (!exists('pdf_file'))
+  pdf_file <- ""
+if (length(pdf_file) < 1)  # a blank parameter in R Markdown is assigned NULL: checking length also captures empty vectors
+  pdf_file <- ""
+if (is.na(pdf_file) || pdf_file == "") {   # these expressions would fail (empty results) if NULL
+  pdf_file <- list.files(input_dir, '.pdf$')  # auto-detect all pdf files in the `input` directory
+} else {
+  # Split text into individual items
+  pdf_file <- unlist( strsplit(pdf_file, ", ") )
+  # Check that the specified pdf files exist, and throw an error if any do not.
+  for (file in pdf_file) {
+    if (file.exists(paste(input_dir, file, sep="/")) == FALSE) {
+      stop(sprintf("file '%s' not found: check the `pdf_file` parameter, 'input_dir' parameter and working directory.", file))
+    }
+  }
 }
+# Stop if there is still no pdf_file available (e.g., the `input` directory is empty)
+if (length(pdf_file) < 1 || pdf_file == "")
+  stop(sprintf("No input pdf file found (in directory `%s/%s/`): check the `pdf_file` and `input_dir` parameters, and working directory.", getwd(), input_dir))
+
+# Prepend input directory to make full relative paths
+pdf_file <- paste(input_dir, pdf_file, sep="/")
+
+#pdf_file <- pdf_file[1]    # keep the first file only, for now
+
 
 
 
 ################################################################
-## Extract images from pdf file
+## Extract images from pdf files
 # Each page is one big image of tabs (created in Photoshop)
 
 library(pdfimager)  # remotes::install_github("sckott/pdfimager")
@@ -59,8 +79,9 @@ if (F)    # do not run on source()
   pdimg_help()  # check that poppler and pdfimages is installed and accessible: you will get (command-line) help output if it is, and an error if it's not.
 
 # Extract all images as png files to destination folder (pdfimager automatically creates a sub-folder with the pdf file name).
-# + returned value is a table with the relative path to each extracted image file.
-pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-png")
+# + returned value is a table (within a list) with the relative path to each extracted image file.
+pdf_img <- lapply(pdf_file, pdimg_images, base_dir = img_dir, "-png") %>%
+  bind_rows    # collapse nested lists into 1 data frame: 1 level from lapply(), 1 from value returned by pdimg_images()
 
 
 
@@ -74,8 +95,8 @@ library(magick)
 # px_white <- image_blank(1, 1, color="white")
 
 image_isblank <- function(img, px_white = image_blank(1, 1, color="white")) {
-  img_diff <- img %>% image_scale("1x1") %>% 
-    image_compare(px_white, metric="AE") %>% 
+  img_diff <- img %>% image_scale("1x1") %>%    # collapse image to 1 pixel with average colour
+    image_compare(px_white, metric="AE") %>%    # compare to reference (white pixel)
     attributes()
   # return logical: TRUE if blank (all-white), FALSE otherwise
   return(img_diff$distortion == 0)
@@ -113,9 +134,9 @@ crop_page <- function(page, img_crops = page_crops) {
 
 # Loop over pages and extract dividers, using lapply and nested functions
 #   this is a bit faster than a for loop, and easier to collect results. ;)
-img_list <- lapply(1:nrow(pdf_img[[1]]), function (p) {
-  path_p <- unlist( pdf_img[[1]][p, "path"] )
-  cat(paste("processing page", p, "of", nrow(pdf_img[[1]]), "\n"))
+img_list <- lapply(1:nrow(pdf_img), function (p) {
+  path_p <- unlist( pdf_img[p, "path"] )
+  cat(paste("processing page", p, "of", nrow(pdf_img), "\n"))
   page <- image_read(path_p)
   crop_page(page)
 })

@@ -16,11 +16,12 @@ I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudi
 
 * [R](https://www.r-project.org/), with packages:
   + [rmarkdown](https://rmarkdown.rstudio.com/)
-  + knitr
-  + [pdfimager](https://sckott.github.io/pdfimager/)
+  + [knitr](https://yihui.org/knitr/)
+  + [pdfimager](https://sckott.github.io/pdfimager/) (not on CRAN)
   + [magick](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) (ImageMagick)
-  + magrittr (pipe operator)
-  + shiny (required for parameters in the R Markdown header, for some reason)
+  + [dplyr](https://dplyr.tidyverse.org/) (part of [tidyverse](https://www.tidyverse.org/); makes manipulating lists and tables easier)
+  + magrittr (pipe operator, also included if you install tidyverse)
+  + shiny (required for parameters in the R Markdown header, for [some reason](https://github.com/rstudio/rstudio/issues/4779))
 * the pdfimager package also requires the pdfimages command-line tool, which is part of the [poppler](https://poppler.freedesktop.org/) library.
   + This can be installed on a Mac with [homebrew](https://brew.sh/) using the command:
     
@@ -28,7 +29,7 @@ I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudi
 
 ## Suggestions
 
-[RStudio](https://www.rstudio.com/) should not be required, but makes it easier to edit and run.  All the code was tested in RStudio.
+[RStudio](https://www.rstudio.com/) is not required, but makes it easier to edit and compile the R Markdown file.  All the code was tested in RStudio.
 
 # How to Use
 
@@ -52,15 +53,19 @@ Currently, if there is more than one file in this directory, the script will onl
 
 These can all be set in the header of the R Markdown file for 1-step execution (under `params:`).  Any required in the R script have definitions there, too, if you want to run it independently.
 
+* `pdf_file` (*optional*): Name of input pdf file (or path relative to `input` directory)
+  + You can leave this blank and R will automatically detect all pdf files in the `input` directory, and extract images from all of them.
+  + If you only want to use one file, put the name here.
+  + If you want to use a subset of files in this folder (or control the order), list the names, separated by a comma and space (no quotes).  R will check that they exist and throw an error if it can't find any of them.
 * `extract_images`: run the R script to extract images from the pdf all in 1 step?
   + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
   + set to `FALSE` to save time if it was already run.
 * Dimensions of dividers in output: `div_height`, `div_width`, and `border` (border thickness)
   + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), which includes a 1 pixel wide black border (confirmed in a personal communication).  That's about **9.2 cm** wide, and **6.6 cm** tall.
 
-In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but they fit at a slight angle, which also leaves a little extra space to be able to easily take cards out from between dividers.  The current settings might be a bit taller than 7 cm (I can always cut them a bit shorter than printed).  The beauty of this system is that they can be resized to whatever height you prefer.
+In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but 7 cm tall fits at a slight angle, which also leaves extra space for grabbing cards between dividers.  The current settings might be a bit taller than 7 cm, since I can always cut them shorter than printed.  The beauty of this tool is that they can be resized to whatever height you prefer.
 
-Note that because of how R Markdown and LaTeX handle images, the code here allows you to increase the height relative to the original width, but not decrease it (i.e., it can only _decrease_ the aspect ratio).  It is _possible_ to make the dividers even shorter in LaTeX, but would require additional code and clipping the original graphics.  If you want shorter dividers, you can always just cut them down: this tool is to allow **taller** dividers, which the original files don't allow.
+Note that because of how R Markdown and LaTeX handle images, the code here allows you to _increase the height_ relative to the original width, but not decrease it (i.e., it can only _decrease_ the aspect ratio).  It is possible to make the dividers even shorter in LaTeX, but would require additional code and clipping the original graphics, which isn't necessary for making them bigger.  If you want shorter dividers, you can just cut some off the bottom (up to a point): the main purpose of this tool is to allow **taller** dividers, which the original files don't allow.
 
 ## 3. Compile the Rmarkdown file
 
