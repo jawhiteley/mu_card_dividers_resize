@@ -70,42 +70,63 @@ pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-png")
 
 library(magick)
 
-# Initialize a ontainer list to hold image objects for each divider 
-# + put something into the first item to make it easier to append() objects in the loop
-img_list <- list(0)
+# Create a reference image to check if dividers are blank (all-white)
+# px_white <- image_blank(1, 1, color="white")
 
-for (p in 1:nrow(pdf_img[[1]])) {
+image_isblank <- function(img, px_white = image_blank(1, 1, color="white")) {
+  img_diff <- img %>% image_scale("1x1") %>% 
+    image_compare(px_white, metric="AE") %>% 
+    attributes()
+  # return logical: TRUE if blank (all-white), FALSE otherwise
+  return(img_diff$distortion == 0)
+}
+
+# Define vector of cropping coordinates for each divider on a page (to loop over)
+page_crops <- c(
+  "541x390+1+1", 
+  "541x390+544+1",
+  "541x390+1+393",
+  "541x390+544+393",
+  "541x390+1+785",
+  "541x390+544+785",
+  # the last two are rotated 90º at the end of the page
+  "390x541+1087+1",
+  "390x541+1087+544"
+  )
+# The cropping is manual and was figured out by trial and error.
+# I am taking advantage of the fact that the layout of tabs in each page image is very consistent. :)
+
+crop_page <- function(page, img_crops = page_crops) {
+  lapply(1:length(img_crops), function (d) {
+    # extract 1 divider
+    img <- image_crop(page, img_crops[d])
+    # the last two are rotated 90º at the end of the page
+    if (d > 6)  
+      img <- image_rotate(img, 90)
+    # check if it's blank
+    if (image_isblank(img))
+      return()
+    else
+      img
+  })
+}
+
+# Loop over pages and extract dividers, using lapply and nested functions
+#   this is a bit faster than a for loop, and easier to collect results. ;)
+img_list <- lapply(1:nrow(pdf_img[[1]]), function (p) {
   path_p <- unlist( pdf_img[[1]][p, "path"] )
   cat(paste("processing page", p, "of", nrow(pdf_img[[1]]), "\n"))
   page <- image_read(path_p)
-  # crop out each divider and use image_trim to remove the black borders (not reliable for some dividers)
-  # divider 1
-  #image_crop(page, "543x392") %>% image_trim()
-  img_list <- append(img_list, image_crop(page, "541x390+1+1") )
-  # divider 2
-  img_list <- append(img_list, image_crop(page, "541x390+544+1") )
-  # divider 3
-  img_list <- append(img_list, image_crop(page, "541x390+1+393") )
-  # divider 4
-  img_list <- append(img_list, image_crop(page, "541x390+544+393") )
-  # divider 5
-  img_list <- append(img_list, image_crop(page, "541x390+1+785") )
-  # divider 6
-  img_list <- append(img_list, image_crop(page, "541x390+544+785") )
-  # The last 2 dividers are rotated - in the X-Men file, they may be missing from some pages
-  # divider 7
-  img_list <- append(img_list, image_crop(page, "390x541+1087+1") %>% image_rotate(90) )
-  # divider 8
-  img_list <- append(img_list, image_crop(page, "390x541+1087+544") %>% image_rotate(90) )
-}
-
-# Cleanup: drop first placeholder item
-img_list <- img_list[-1]
+  crop_page(page)
+})
+# Cleanup: collapse list to one level (the nested `lapply` produces a nested list)
+#  this also conveniently drops the NULL entries from blank dividers. :)
+img_list <- unlist(img_list)
 
 
 #==============================================================#
-# Export individual dividers as separate images (
-# + for use in Rmarkdown / LaTeX
+# Export individual dividers as separate images
+# + for use in R Markdown / LaTeX
 div_paths <- lapply(1:length(img_list), function (i) {
   div_path <- sprintf("%s/div-%03i.png", img_dir, i)
   image_write(img_list[[i]], path = div_path, format = "png")
