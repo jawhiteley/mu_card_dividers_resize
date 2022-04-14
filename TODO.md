@@ -15,9 +15,7 @@
     - Can I automatically detect if the top-left pixel is black (border)?
 
   - Automatically check extracted graphics to confirm that they are dividers, and not 'empty space' (X-Men file has pages with <8 dividers on the page for variations and other collections).
-    - I should be able to do with by running image_trim() on the extracted image and checking to see if the width is the same or not.  If not, remove it from the list.
-
-- Make output file name based on input file name, to reduce the number of parameters, and make it easier to run on multiple input files?
+    - I should be able to do this by running `image_trim()` on the extracted image and checking to see if the width is the same or not.  If not, remove it from the list.
 
 - Convert external script to a user-defined function that can be called directly from the R Markdown file.
   - That would allow default values for parameters / arguments that can easily be overidden, and avoid having a script that also needs to be able to run stand-alone.
