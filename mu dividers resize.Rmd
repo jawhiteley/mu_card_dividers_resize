@@ -74,7 +74,7 @@ source("mu dividers resize.r", local = knitr::knit_global())
 %\setlength{\xspaceskip}{-\fboxrule}
 ```
 
-```{r graphics, echo=FALSE}
+```{r output, echo=FALSE}
 # get list of (png) files: 1 file per divider
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
 # loop over the list and apply include_graphics() (vectorized!), which should use the custom command defined above.
