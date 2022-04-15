@@ -80,7 +80,23 @@ These can all be set in the header of the R Markdown file for 1-step execution (
 
   + For season 1 dividers, villians start at **59**.  Adding a page break here will not use extra pages, since the number of dividers pushed to the next page (2) would fit on the last page anyway.
     
-  + For X-Men (including Legion in the appropriate locations), I suggest the following page breaks (these will add up to 3 pages):
+  + For X-Men (including the separate Legion file), I suggest the following page breaks (these will add as many as 4 pages, depending on which ones are used):
+
+    - 4: Heroes (after missing Legion dividers)
+    - 74: Alpha Flight (alternates)
+    - 79: X-Men First Class (alternates)
+    - 84: Fantastic Four (alternates)
+    - 89: Villains
+      - 119: Challenges, Misc. (only 3 cards)
+    - 122: Phoenix 5 (alternates)
+    - 127: Anti-Heroes (as Heroes)
+      - 137: Anti-Heroes (as villains)
+    - 146: Anti-Heroes (Hero alternates)
+      - 156: Anti-Heroes (Villain alternates)
+    - 165: Anti-Heroes (alternates, combined)
+
+  + For X-Men (including Legion in the appropriate locations):
+    <!-- 71, 76, 81, 86, 119, 124, 134, 144 -->
 
     - 71: Alpha Flight (alternates)
     - 76: X-Men First Class (alternates)
