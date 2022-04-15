@@ -64,8 +64,10 @@ These can all be set in the header of the R Markdown file for 1-step execution (
 * `extract_images`: run the R script to extract images from the pdf all in 1 step?
   + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
   + set to `FALSE` to save time if it was already run.
-* Dimensions of dividers in output: `div_height`, `div_width`, and `border` (border thickness)
-  + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), which includes a 1 pixel wide black border (confirmed in a personal communication).  That's about **9.2 cm** wide, and **6.6 cm** tall.
+* Dimensions of dividers in output: `div_height`, `div_width`, and `border_width` (border thickness)
+  + The originals are "3.620 inches wide and 2.613 inches tall" (according to Spiffworld's comment [here](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men)), which includes a 1 pixel wide black border (confirmed in a personal communication).  That's about **9.2 cm** wide, and **6.6 cm** tall.  See below and comments in the R Markdown file for notes on dimensions.
+* `border_colour`: I prefer a light gray border, which is visible enough to see when cutting, but doesn't leave behind such high-contrast edges.  Change to 'black' for the same black border as the original.
+
 
 In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but 7 cm tall fits at a slight angle, which also leaves extra space for grabbing cards between dividers.  The current settings might be a bit taller than 7 cm, since I can always cut them shorter than printed.  The beauty of this tool is that they can be resized to whatever height you prefer.
 

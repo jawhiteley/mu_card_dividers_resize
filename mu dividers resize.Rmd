@@ -8,7 +8,8 @@ params:
   extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
   div_height: 72.5 # in mm: Height of dividers (originals are 66.4 mm, which is too short for sleeved cards)
   div_width:  91.6 # in mm: Width of dividers (originals are 91.9 mm, including a 1 px wide black border)
-  border:   0.35 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
+  border_width:   0.25 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
+  border_colour: lightgray # name of colour to use for the border (https://en.wikibooks.org/wiki/LaTeX/Colors) (https://latex-tutorial.com/color-latex/#colored-boxes)
 # DIMENSIONS:
 # Dividers in original file are 3.620 in wide x 2.613 in tall, including a 1 px border on all sides (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice when printed).
 # Original images (1 / page) are 1500 x 1200 px, scaled to 254 mm wide on the page (according to Inkscape)
@@ -24,11 +25,12 @@ params:
 # Smme have requested an additional 1/4-inch, which would be 72.7 mm (2.863 in, including the border).  I can just cut mine to 70, if I want. ;)
 # BORDERS: 
 # Originals have a 1 pixel border on all sides without overlap, so 1 px around the outside and 2 pixels between each divider, 
-#  in an image 1500 x 1200 px that is 254 mm wide on the page ~= 0.3387 mm between dividers?
-# 0.25 mm is a little thinner between dividers, but a bit thicker around the outside (keeping all borders at the same width).
+#  in an image 1500 x 1200 px, scaled to 254 mm wide on the page = 0.3387 mm between dividers?
+# 0.25 mm is a little thinner between dividers, but a bit thicker around the outside (keeping all borders at the same width). I think I prefer a slightly thinner border.
 # 0.33-0.35 mm would be closer to the original. If the colour is lighter, a thicker border is probably easier to use and less noticeable anyway.
   img_dir: pdf_images
 header-includes: |
+  \usepackage{xcolor}
   \graphicspath{{./`r params$img_dir`/}}
   \pagenumbering{gobble}  % remove page numbers
 ---
@@ -62,12 +64,12 @@ source("mu dividers resize.r", local = knitr::knit_global())
 % PARAMETERS: Dimensions (inherited from document parameters: `params` R object)
 \def\DivWidth{`r params$div_width`mm}       % Width of each divider
 \def\DivHeight{`r params$div_height`mm}     % Height of each divider
-\setlength{\fboxrule}{`r params$border`mm}  % width of border around each divider
+\setlength{\fboxrule}{`r params$border_width`mm}  % width of border around each divider
 \setlength{\fboxsep}{0mm}    % space separating border from contents (set to 0 for a tight border)
 
 % re-define \includegraphics command to set desired size and border: the image will be automatically sized to fit the width, flush with the top-left (aspect ratio is preserved by default)
 \let\includegraphicsOG\includegraphics
-\renewcommand*{\includegraphics}[2][]{\fbox{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
+\renewcommand*{\includegraphics}[2][]{\fcolorbox{`r params$border_colour`}{white}{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
 
 % control spacing around graphics
 \setlength{\lineskip}{-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
