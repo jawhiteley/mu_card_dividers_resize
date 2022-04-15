@@ -58,18 +58,28 @@ Currently, if there is more than one file in this directory, the script will onl
 These can all be set in the header of the R Markdown file for 1-step execution (under `params:`).  Any required in the R script have definitions there, too, if you want to run it independently.
 
 * `pdf_file` (*optional*): Name of input pdf file (or path relative to `input` directory)
+
   + You can leave this blank and R will automatically detect all pdf files in the `input` directory, and extract images from all of them.
   + If you only want to use one file, put the name here.
   + If you want to use a subset of files in this folder (or control the order), list the names, separated by a comma and space (no quotes).  R will check that they exist and throw an error if it can't find any of them.
+
 * `extract_images`: run the R script to extract images from the pdf all in 1 step?
+
   + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
   + set to `FALSE` to save time if it was already run.
+
 * Dimensions of dividers in output: `div_height`, `div_width`, and `border_width` (border thickness)
+
   + The originals are "3.620 inches wide and 2.613 inches tall", including a 1 pixel wide black border.  That's about **92 mm** wide, and **66 mm** tall.  
   + I have set the current width to **91.6 mm**, to preserve the original size and quality as much as possible, and a height of **75 mm**, which is plenty for most sleeves, and taller than I need.  You can always cut them shorter, if you prefer.
   + See [below](#divider-dimensions) for notes on dimensions, and suggested settings.
+
 * `border_colour`: I prefer a light gray border, which is visible enough to see when cutting, but doesn't leave behind such high-contrast edges.  Change to 'black' for the same black border as the original.
 
+* `page_breaks` (*optional*): comma-separated list of numbers.  Page breaks will be added *before* each divider number in this list.  In case you want to group dividers manually.
+
+  + For season 1 dividers, villians start at **59**.  Adding a page break here will not use extra pages, since the number of dividers pushed to the next page (2) would fit on the last page anyway.
+    
 
 ## 3. Compile the R Markdown file
 
