@@ -11,9 +11,8 @@
   - Some visual artifacts visible in the bottom part of vertical borders between adjacent dividers in some viewers: looks like a shadow or anti-aliasing of the border from the divider on the left is visible under the image for the divider on the right, so the border appears slightly thicker under the right divider image.  This effect is not visible at certain zoom levels and disappears when zooming in.  It happens starting at about 70% overlap between borders (`\spaceskip=-0.7\fboxrule` or higher).  Not sure if this will affect printing.
     - The border artifact is **not** visible when printed (at 100% scale).
 
-* Add a way to specify page breaks after certain divider numbers
-  - So that dividers can be grouped, if desired.
-  - Increasing the size (height) of the dividers means fewer will fit on a page, so the same page groupings as the original won't necessarily work, but it might be nice to allow some grouping, if desired.
+* Update suggested page breaks for X-Men to work with only default settings?
+  - For a 'final' version I share, I might re-arrange things to reduce page breaks and save 1-2 pages.
 
 - Convert external script to a user-defined function that can be called directly from the R Markdown file.
   - That would allow default values for parameters / arguments that can easily be overidden, and avoid having a script that also needs to be able to run stand-alone.
