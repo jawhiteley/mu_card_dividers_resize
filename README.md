@@ -96,7 +96,6 @@ These can all be set in the header of the R Markdown file for 1-step execution (
     - 165: Anti-Heroes (alternates, combined)
 
   + For X-Men (including Legion in the appropriate locations):
-    <!-- 71, 76, 81, 86, 119, 124, 134, 144 -->
 
     - 71: Alpha Flight (alternates)
     - 76: X-Men First Class (alternates)
@@ -110,6 +109,7 @@ These can all be set in the header of the R Markdown file for 1-step execution (
       - 154: Anti-Heroes (Villain alternates)
     - 164: Anti-Heroes (alternates, combined)
 
+  <!-- Manual X-Men order (only 1 extra page): 71, 76, 81, 86, 116, 122, 144 -->
 
 
 ## 3. Compile the R Markdown file
