@@ -16,6 +16,9 @@ I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudi
 
 * [R](https://www.r-project.org/), with packages:
   + [rmarkdown](https://rmarkdown.rstudio.com/)
+    + [RStudio](https://www.rstudio.com/) or [pandoc](http://pandoc.org/)
+    + PDF output requires an installation of [LaTeX](https://www.latex-project.org/get/) for your system.
+    + See [R Markdown installation notes](https://bookdown.org/yihui/rmarkdown/installation.html) for suggested LaTeX options.
   + [knitr](https://yihui.org/knitr/)
   + [pdfimager](https://sckott.github.io/pdfimager/) (not on CRAN)
   + [magick](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) (ImageMagick)
@@ -29,7 +32,8 @@ I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudi
 
 ## Suggestions
 
-[RStudio](https://www.rstudio.com/) is not required, but makes it easier to edit and compile the R Markdown file.  All the code was tested in RStudio.
+[RStudio](https://www.rstudio.com/) is not required, but makes it easier to edit and compile the R Markdown file.
+All the code was tested in RStudio.
 
 # How to Use
 
