@@ -6,28 +6,11 @@ geometry: margin=1cm    # not safe to go below 6 mm
 params:
   pdf_file:    # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
   extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
-  div_height: 72.5 # in mm: Height of dividers (originals are 66.4 mm, which is too short for sleeved cards)
-  div_width:  91.6 # in mm: Width of dividers (originals are 91.9 mm, including a 1 px wide black border)
+  div_height: 76  # in mm: Height of dividers
+  div_width:  91.6  # in mm: Width of dividers
   border_width:   0.25 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
-  border_colour: lightgray # name of colour to use for the border (https://en.wikibooks.org/wiki/LaTeX/Colors) (https://latex-tutorial.com/color-latex/#colored-boxes)
-# DIMENSIONS:
-# Dividers in original file are 3.620 in wide x 2.613 in tall, including a 1 px border on all sides (91.9 x 66.4 mm; approximately 92 x 66.5 mm in practice when printed).
-# Original images (1 / page) are 1500 x 1200 px, scaled to 254 mm wide on the page (according to Inkscape)
-# - 1480 x 1176 pixels trimmed: about 250.5 x 199 mm when printed.  Each divider is 541 x 390 px (without the border)
-# To reproduce the original width (and resolution) as closely as possible: (254 mm / 1500 px) * 541 px = 91.61 mm | (250.5 / 1480) * 541 = 91.57
-# 91.6 mm wide seems to be the closest to the original width.
-# Cards themselves are 63 x 88 mm (standard poker size).  Therefore original dividers only project about 3-4 mm above the top of cards.
-# Sleeves vary in size, but I have found that premium sleeves (e.g., Dragon Shield) are about as wide as the original dividers are tall.  
-# Dragon Shield (one of the largest) specifications are up to 92.5 x 66.5 mm (https://daviscardsandgames.com/products/dragon-shield-clear-matte-sleeves-standard-size)
-# Therefore, a reasonable target is 92 mm wide (about the same as large premium sleeves, maybe even a bit less) and 71-72 mm tall, to allow 4-5 mm above sleeves.
-# Except that my insert from TinkeringPaws only has a vertical clearance of 70 mm (2.76 in), and the core box only has 68 mm (2.68 in) clearance. 
-# 70 mm fits in the core box at an angle, but I might not want to go much taller.  
-# Smme have requested an additional 1/4-inch, which would be 72.7 mm (2.863 in, including the border).  I can just cut mine to 70, if I want. ;)
-# BORDERS: 
-# Originals have a 1 pixel border on all sides without overlap, so 1 px around the outside and 2 pixels between each divider, 
-#  in an image 1500 x 1200 px, scaled to 254 mm wide on the page = 0.3387 mm between dividers?
-# 0.25 mm is a little thinner between dividers, but a bit thicker around the outside (keeping all borders at the same width). I think I prefer a slightly thinner border.
-# 0.33-0.35 mm would be closer to the original. If the colour is lighter, a thicker border is probably easier to use and less noticeable anyway.
+  border_colour:  lightgray # name of colour to use for the border (https://en.wikibooks.org/wiki/LaTeX/Colors) (https://latex-tutorial.com/color-latex/#colored-boxes)
+  # Extracted images will be exported here (and LaTeX will look for them here):
   img_dir: pdf_images
 header-includes: |
   \usepackage{xcolor}
