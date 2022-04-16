@@ -5,15 +5,17 @@ output:
     #keep_tex: TRUE
 geometry: margin=1cm    # not safe to go below 6 mm
 params:
-  pdf_file:    # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
+  pdf_file:       # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
   extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
-  div_height: 76  # in mm: Height of dividers
-  div_width:  91.6  # in mm: Width of dividers
-  border_width:   0.25 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
+  div_height:     76  # in mm: Height of dividers
+  div_width:      92  # in mm: Width of dividers
+  border_width:   0.25  # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
   border_colour:  lightgray # name of colour to use for the border (https://en.wikibooks.org/wiki/LaTeX/Colors) (https://latex-tutorial.com/color-latex/#colored-boxes)
+  spacing:        # space between dividers (include units).  Leave blank for no space (overlapping borders).
   page_breaks:    # comma-separated list of divider numbers: page breaks will be added **before** each divider in this list.
   # Extracted images will be exported here (and LaTeX will look for them here):
   img_dir: pdf_images
+classoption: dvipsnames
 header-includes: |
   \usepackage{xcolor}
   \graphicspath{{./`r params$img_dir`/}}
@@ -25,6 +27,17 @@ knitr::opts_chunk$set(echo = FALSE)
 ## PARAMETERS - will be used by `mu dividers resize.r` if run from here.
 pdf_file <- params$pdf_file
 img_dir  <- params$img_dir
+
+if (is.null(params$border_colour))
+  params$border_colour <- ""
+if (params$border_colour == "" || is.na(params$border_colour))
+  params$border_colour <- "black"
+
+spacing <- params$spacing
+if (is.null(spacing))
+  spacing <- ""
+if (spacing == "" || is.na(spacing))
+  spacing <- "-\\fboxrule"
 
 library(knitr)
 library(magrittr)
@@ -51,21 +64,21 @@ source("mu dividers resize.r", local = knitr::knit_global())
 \def\DivWidth{`r params$div_width`mm}       % Width of each divider
 \def\DivHeight{`r params$div_height`mm}     % Height of each divider
 \setlength{\fboxrule}{`r params$border_width`mm}  % width of border around each divider
-\setlength{\fboxsep}{0mm}    % space separating border from contents (set to 0 for a tight border)
+\setlength{\fboxsep}{-0\fboxrule}    % space separating border from contents (set to 0 for a tight border)
 
 % re-define \includegraphics command to set desired size and border: the image will be automatically sized to fit the width, flush with the top-left (aspect ratio is preserved by default)
 \let\includegraphicsOG\includegraphics
 \renewcommand*{\includegraphics}[2][]{\fcolorbox{`r params$border_colour`}{white}{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
 
 % control spacing around graphics
-\setlength{\lineskip}{-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
+\setlength{\lineskip}{`r spacing`}    %-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
 
 \raggedright    % force left alignment (aka 'raggedright') instead of fully justified
 % Set the inter-word spacing to the same as the border width, but negative, so that they overlap.
 %   For whatever reason, line and page breaks still work fine. 
 %   Alternatively, these lengths can be set very small, and `\hspace{-\fboxrule}` added to the end of the \includegraphics re-definition above.
-\setlength{\spaceskip}{-\fboxrule}
-%\setlength{\xspaceskip}{-\fboxrule}
+\setlength{\spaceskip}{`r spacing`}      %-\fboxrule}
+%\setlength{\xspaceskip}{`r spacing`}    %-\fboxrule}
 ```
 
 ```{r output, echo=FALSE, , results="asis"}

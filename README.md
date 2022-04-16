@@ -74,7 +74,9 @@ These can all be set in the header of the R Markdown file for 1-step execution (
   + I have set the current width to **91.6 mm**, to preserve the original size and quality as much as possible, and a height of **75 mm**, which is plenty for most sleeves, and taller than I need.  You can always cut them shorter, if you prefer.
   + See [below](#divider-dimensions) for notes on dimensions, and suggested settings.
 
-* `border_colour`: I prefer a light gray border, which is visible enough to see when cutting, but doesn't leave behind such high-contrast edges.  Change to 'black' for the same black border as the original.
+* `border_colour`: I prefer a light grey border (`lightgray`), which is visible enough to see when cutting, but doesn't leave behind such high-contrast edges.  Change to 'black' (or leave blank) for the same black border as the original.
+
+* `spacing` (*optional*): Distance between dividers.  If blank, the default is for no space (overlapping borders).  Adding some space makes it easier to cut the borders completely away from the dividers, but requires more cuts (4 / divider).
 
 * `page_breaks` (*optional*): comma-separated list of numbers.  Page breaks will be added *before* each divider number in this list.  In case you want to group dividers manually.
 
@@ -156,13 +158,13 @@ To reproduce the original **width** (and resolution) as closely as possible:
 
 The output width can be changed to a desired width if you don't mind a bit of image scaling:
 
-* **92 mm** wide is close to the original, and about the same as large premium sleeves.  In my testing, there was no difference in quality compared to the original, though minor pixellation was visible under 2x magnification.
+* **92 mm** wide is close to the original, and about the same as large premium sleeves.  In my testing, there was no difference in quality compared to the original, though minor differences were visible under 2x magnification.
 
-* You might want to remove the width of 1 border to achieve a desired output size, if you care about variations of less than 1 mm. ;)
+* You might want to remove the width of 1 border to achieve a desired final cut size, if you care about variations of that magnitude. ;)
 
 ## Divider Height
 
-Original dividers only project about 3-4 mm above the top of cards (66.5 vs 63 mm), which is just enough to read the labels.
+Original dividers only project about 3-4 mm above the top of cards (66.5 vs 63 mm), which is barelyh enough to read the labels.
 
 * Sleeves vary in size, but I have found that premium sleeves (e.g., Dragon Shield) are about as wide as the original dividers are tall.  
 * Dragon Shield (one of the largest) [specifications](https://daviscardsandgames.com/products/dragon-shield-clear-matte-sleeves-standard-size) are "up to 66.5 x 92.5 mm" (vertical orientation width x height, so horizontal height x width).
@@ -175,7 +177,7 @@ Original dividers only project about 3-4 mm above the top of cards (66.5 vs 63 m
 
 * Some have [requested](https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men) an additional 1/4-inch above the original height, which would be 72.7 mm (2.863 in, including the border).  Other [examples](https://boardgamegeek.com/geeklist/271344/marvel-legendary-dividers-finnsea15-style) are even larger, at about 93 x 75 mm.  
 
-**76 mm** (about 3 inches, including a 0.25 mm border) seems tall enough for large sleeves, and a convenient size for most.  I can always cut mine down to 70 mm if I want. ;)
+**76 mm** (about 3 inches, even including a 0.25 mm border) seems tall enough for large sleeves, and a convenient size for most.  They can always be cut shorter, if preferred. ;)
 
 
 Note that because of how R Markdown and LaTeX handle images, the code here allows you to _increase the height_ relative to the original width, but not decrease it (i.e., it can only _decrease_ the aspect ratio).  It is possible to make the dividers shorter in LaTeX, but would require additional code and clipping the original graphics, which isn't necessary for making them bigger.  If you want shorter dividers, you can just cut some off the bottom (up to a point): the main purpose of this tool is to allow **taller** dividers, which the original files don't allow.
@@ -184,12 +186,16 @@ Note that because of how R Markdown and LaTeX handle images, the code here allow
 
 * Originals have a 1 pixel border on all sides without overlap, so 1 px around the outside and 2 pixels between each divider, 
 in an image 1500 x 1200 px, scaled to 254 mm wide on the page = 0.3387 mm between dividers?
-* In this tool, all borders are the same width, as they overlap 100% between adjacent dividers.
-* **0.33-0.35 mm** would be closer to the original thickness between dividers. If the colour is lighter, a thicker border might be less noticeable anyway, and easier to use when cutting.
-* **0.25 mm** is a little thinner between dividers, but a bit thicker around the outside, compared with the originals. I think I prefer a slightly thinner border.
+* In this tool, all borders are the same width, as they overlap 100% between adjacent dividers: i.e., one border width between dividers instead of two.
+
+* With a thicker border, it's easier to place the cut within the border, leaving some behind around the edge of each divider.  If the colour is lighter, a thicker border might be less noticeable anyway, and easier to use when cutting.
+* With a thinner border, it's easier to place the cut inside the border, removing as much as possible from the divider; for lines between dividers, there is a greater risk that the border will end up entirely on one of the neighbouring dividers, with none on the other.  This can be avoided by leaving space between dividers, but that also means more cuts.
+
+* **0.33-0.35 mm** would be closer to the original thickness between dividers, and would preserve the original dimensions and functionality.  0.33 mm is also close to '1 pt'.
+* **0.25 mm** is a little thinner between dividers, but a bit thicker around the outside, compared with the originals. This is no more difficult to cut than 0.33mm, but is less likely to leave a lot behind if the cut misses.  
+  + I think I prefer a slightly thinner border. The borders are meant to be cut away, not intended to be part of the final result.
 
 
-In practice, I found 7 cm (2.76 inches) is the minimum height to be readable above sleeved cards, and still fit resonably in the inserts from [TinkeringPaws](https://www.etsy.com/ca/listing/997029350/marvel-united-board-game-insert). The core box only allows for 6.8 cm clearance, but 7 cm tall fits at a slight angle, which also leaves extra space for grabbing cards between dividers.  The current settings might be a bit taller than 7 cm, since I can always cut them shorter than printed.  The beauty of this tool is that they can be resized to whatever height you prefer.
 
 
 # License
