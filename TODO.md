@@ -10,6 +10,9 @@
   - only apparent in Inkscape, but could just be anti-aliasing or lack thereof.  The appearance can be changed with "Object Properties: rendering" - setting it to 'auto' or 'OptimizeQuality' makes it look just like the original.  No difference in Preview
   - Some visual artifacts visible in the bottom part of vertical borders between adjacent dividers in some viewers: looks like a shadow or anti-aliasing of the border from the divider on the left is visible under the image for the divider on the right, so the border appears slightly thicker under the right divider image.  This effect is not visible at certain zoom levels and disappears when zooming in.  It happens starting at about 70% overlap between borders (`\spaceskip=-0.7\fboxrule` or higher).  Not sure if this will affect printing.
     - The border artifact is **not** visible when printed (at 100% scale).
+  - When printed, the border does not appear to be fully 'tight' to the image, with a tiny border (<1 px?) of lighter colours between the black border and image.  Mostly visible under magnification, but still there.
+    - This is **NOT** visible in the pdf files they were printed from. :(  But I do remember seeing similar artifacts in some versions at some magnifications.
+    - Try an \fboxsep with a tiny negative value? (-0.5\fboxrule)
 
 - Convert external script to a user-defined function that can be called directly from the R Markdown file.
   - That would allow default values for parameters / arguments that can easily be overidden, and avoid having a script that also needs to be able to run stand-alone.
