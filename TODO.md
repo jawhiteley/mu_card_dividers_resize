@@ -1,5 +1,7 @@
 # To Do
 
+* X-Men complete set: figure out divider indices to group regular versions of alt heroes together (to make it easier to not print the original versions if you are using the alts)
+
 - Convert external script to a user-defined function that can be called directly from the R Markdown file.
   - That would allow default values for parameters / arguments that can easily be overidden, and avoid having a script that also needs to be able to run stand-alone.
   - If the code is simple enough, just include it directly in the R Markdown file for simplicity.  The block itself can still be run or not, but there would only be 1 file needed to do everything.

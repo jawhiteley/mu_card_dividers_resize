@@ -111,7 +111,8 @@ These can all be set in the header of the R Markdown file for 1-step execution (
       - 154: Anti-Heroes (Villain alternates)
     - 164: Anti-Heroes (alternates, combined)
 
-  <!-- Manual X-Men order (only 1 extra page): 71, 76, 81, 86, 116, 122, 144 -->
+  
+<!-- Custom parameters and code for complete and personal sets are in the 'parameters.md' file -->
 
 
 ## 3. Compile the R Markdown file
