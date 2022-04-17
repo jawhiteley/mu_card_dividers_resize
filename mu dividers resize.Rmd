@@ -66,7 +66,9 @@ source("mu dividers resize.r", local = knitr::knit_global())
 \setlength{\fboxrule}{`r params$border_width`mm}  % width of border around each divider
 \setlength{\fboxsep}{-0\fboxrule}    % space separating border from contents (set to 0 for a tight border)
 
-% re-define \includegraphics command to set desired size and border: the image will be automatically sized to fit the width, flush with the top-left (aspect ratio is preserved by default)
+% re-define \includegraphics command to set desired size and border: 
+%  the image will be automatically sized to fit the width, flush with the top-left
+%  aspect ratio is preserved by default, but can be forced with the `keepaspectratio` option in \includegraphics (graphicx package), if necessary
 \let\includegraphicsOG\includegraphics
 \renewcommand*{\includegraphics}[2][]{\fcolorbox{`r params$border_colour`}{white}{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
 
