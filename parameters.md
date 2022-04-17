@@ -21,9 +21,21 @@ The code below is intended to make it easier to paste in temporarily to produce 
 * divider index list (based on order of files in `pdf_file`): 
 ```
 [
-  c(1:70,    # Heroes
+  c(# Heroes
+    setdiff(
+      c(1:70),
+      c(c(26, 46, 53, 55, 58),  # skip Alpha Flight
+        c(1, 4, 14, 31, 41),    # skip X-Men: First Class
+        c(30, 33, 43, 57, 64)   # skip Fantastic Four
+      )
+    ),
+    c(26, 46, 53, 55, 58),  # Alpha Flight
+    c(1, 4, 14, 31, 41),    # X-Men: First Class
+    c(30, 33, 43, 57, 64),  # Fantastic Four
     71:85,   # alternates (Alpha Flight, X-Men: First Class, Fantastic Four)
-    86:115,  # Villains
+    # Villains
+    86:102, 108:115,
+    103:107, # Phoenix 5 with Super-Skrull
     119:123, # Phoenix 5 alts
     # Ant-Heroes (as standard heroes, villains)
     124:137, 171, # insert Legion villain
@@ -36,7 +48,7 @@ The code below is intended to make it easier to paste in temporarily to produce 
   )
 ]
 # Custom page breaks based on custom divider list above.
-page_breaks <- c(71, 76, 81, 86, 116, 121, 144)
+page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
 ```
 
 
@@ -59,7 +71,7 @@ page_breaks <- c(71, 76, 81, 86, 116, 121, 144)
         #c(26, 35, 55),  # less certain about skipping these
         c(6, 42, 57),  # skip Black Panther
         c(28, 43, 44, 45, 46)   # skip Spider-Verse
-        )
+      )
     ),
     88,  # Missions, Challenges, Misc. (put these here as a separator, regardless of even or odd number of heroes.)
     # Villains: skip Black Panther, Spider-Verse, and unwanted Promos
@@ -91,7 +103,7 @@ page_breaks <- c() # unnecessary
         c(1, 4, 14, 31, 41),    # skip X-Men: First Class
         c(30, 33, 43, 57, 64),  # skip Fantastic Four
         29, 47  # skip Hope, Old Man Logan
-        )
+      )
     ),
     71:75,   # Alpha Flight alts
     76:80,   # X-Men: First Class alts
