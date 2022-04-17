@@ -1,6 +1,14 @@
 # To Do
 
-* X-Men complete set: figure out divider indices to group regular versions of alt heroes together (to make it easier to not print the original versions if you are using the alts)
+- Group parameters together in YAML header to facilitate pasting options from `parameters.md`?
+  - File options: pdf_file, extract_images, page_breaks
+  - Divider options: dimensions, border_colour, spacing
+
+- Add a parameter for custom divider order?
+  - I currently keep custom R code in `parameters.md`.
+    It is actually a bit easier to build the indices in R using c() and subset() to skip desired dividers.
+  - It would be a bit complicated to allow R code in this parameter, or a straight list.  Maybe require R code (`c(...)`)?
+  - This is very much a 'power user' option, and not really necessary for push-button useage.  Maybe it's fine to leave it as-is.
 
 - Convert external script to a user-defined function that can be called directly from the R Markdown file.
   - That would allow default values for parameters / arguments that can easily be overidden, and avoid having a script that also needs to be able to run stand-alone.

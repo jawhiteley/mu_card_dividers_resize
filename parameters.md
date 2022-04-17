@@ -1,24 +1,59 @@
-This is a place to record settings to reproduce certain outputs.
+This is a place to record parameter values used to reproduce certain outputs.
 
 # Complete sets for sharing
 
 ## Season 1 
 
+```
   pdf_file: mu_card_dividers_v2.pdf
   extract_images: TRUE
   page_breaks: 59
+```
 
+Villians start at **59**.  Adding a page break here will not use extra pages, since the number of dividers pushed to the next page (2) would fit on the last page anyway.
 
 ## X-Men
 
+```
   pdf_file: mu_x-men_horiz_dividers.pdf, mu_x-men_horiz_dividers_legion.pdf
   extract_images: TRUE
+```
 
-The `page_breaks` are designed to work with a custom order of divider images, which inserts Legion tabs where they are missing, and moves the Challenges and Misc. dividers, resulting in only 1 extra page.  The extracted images can be re-ordered by renaming them manually, or in the code by adding an index to line 92 in the R Markdown file: `img_files <- list.files(...)[**HERE**]`
++ For X-Men (including the separate Legion file), I suggest the following page breaks (these will add as many as 4 pages, depending on which ones are used):
 
-The code below is intended to make it easier to paste in temporarily to produce a desired output.
+    - 4: Heroes (after missing Legion dividers)
+    - 74: Alpha Flight (alternates)
+    - 79: X-Men First Class (alternates)
+    - 84: Fantastic Four (alternates)
+    - 89: Villains
+      - 119: Challenges, Misc. (only 3 cards)
+    - 122: Phoenix 5 (alternates)
+    - 127: Anti-Heroes (as Heroes)
+      - 137: Anti-Heroes (as villains)
+    - 146: Anti-Heroes (Hero alternates)
+      - 156: Anti-Heroes (Villain alternates)
+    - 165: Anti-Heroes (alternates, combined)
 
-* divider index list (based on order of files in `pdf_file`): 
++ For X-Men (including Legion in the appropriate locations):
+
+    - 71: Alpha Flight (alternates)
+    - 76: X-Men First Class (alternates)
+    - 81: Fantastic Four (alternates)
+    - 86: Villains
+      - 116: Challenges, Misc. (only 3 cards)
+    - 119: Phoenix 5 (alternates)
+    - 124: Anti-Heroes (as Heroes)
+      - 134: Anti-Heroes (as villains)
+    - 144: Anti-Heroes (Hero alternates)
+      - 154: Anti-Heroes (Villain alternates)
+    - 164: Anti-Heroes (alternates, combined)
+
+
+For the file posted on BGG, I used `page_breaks` designed to work with a custom order of divider images, which groups heroes & villains that have alternates together (to make it easier to choose one set over another), inserts Legion tabs where they are missing, and moves the Challenges and Misc. dividers.  The custom order and page breaks only results in 1 extra page.  
+
+The extracted images can be re-ordered by renaming them manually, or in the code by adding an index to line 94 (as of this writing) in the R Markdown file: `img_files <- list.files(...)[**HERE**]`
+
+* divider index list & page breaks (easier to paste into R chunk): 
 ```
 [
   c(# Heroes
@@ -58,8 +93,10 @@ page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
 
 ## Season 1 
 
+```
   pdf_file: mu_card_dividers_v2.pdf
   extract_images: TRUE
+```
 
 * divider index list & page breaks (easier to paste into R chunk): 
 ```
@@ -73,7 +110,7 @@ page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
         c(28, 43, 44, 45, 46)   # skip Spider-Verse
       )
     ),
-    88,  # Missions, Challenges, Misc. (put these here as a separator, regardless of even or odd number of heroes.)
+    88,  # Missions, Challenges, Misc. (put these here as a separator, regardless of even or odd number of heroes)
     # Villains: skip Black Panther, Spider-Verse, and unwanted Promos
     setdiff(59:87, 
       c(
@@ -90,8 +127,10 @@ page_breaks <- c() # unnecessary
  
 ## X-Men
 
+```
   pdf_file: mu_x-men_horiz_dividers.pdf, mu_x-men_horiz_dividers_legion.pdf
   extract_images: TRUE
+```
 
 * divider index list & page breaks (easier to paste into R chunk): 
 ```

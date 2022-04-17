@@ -80,39 +80,7 @@ These can all be set in the header of the R Markdown file for 1-step execution (
 
 * `page_breaks` (*optional*): comma-separated list of numbers.  Page breaks will be added *before* each divider number in this list.  In case you want to group dividers manually.
 
-  + For season 1 dividers, villians start at **59**.  Adding a page break here will not use extra pages, since the number of dividers pushed to the next page (2) would fit on the last page anyway.
-    
-  + For X-Men (including the separate Legion file), I suggest the following page breaks (these will add as many as 4 pages, depending on which ones are used):
-
-    - 4: Heroes (after missing Legion dividers)
-    - 74: Alpha Flight (alternates)
-    - 79: X-Men First Class (alternates)
-    - 84: Fantastic Four (alternates)
-    - 89: Villains
-      - 119: Challenges, Misc. (only 3 cards)
-    - 122: Phoenix 5 (alternates)
-    - 127: Anti-Heroes (as Heroes)
-      - 137: Anti-Heroes (as villains)
-    - 146: Anti-Heroes (Hero alternates)
-      - 156: Anti-Heroes (Villain alternates)
-    - 165: Anti-Heroes (alternates, combined)
-
-  + For X-Men (including Legion in the appropriate locations):
-
-    - 71: Alpha Flight (alternates)
-    - 76: X-Men First Class (alternates)
-    - 81: Fantastic Four (alternates)
-    - 86: Villains
-      - 116: Challenges, Misc. (only 3 cards)
-    - 119: Phoenix 5 (alternates)
-    - 124: Anti-Heroes (as Heroes)
-      - 134: Anti-Heroes (as villains)
-    - 144: Anti-Heroes (Hero alternates)
-      - 154: Anti-Heroes (Villain alternates)
-    - 164: Anti-Heroes (alternates, combined)
-
-  
-<!-- Custom parameters and code for complete and personal sets are in the 'parameters.md' file -->
+See the `parameters.md` file for recommended page breaks and other parameter values for the available divider sets.
 
 
 ## 3. Compile the R Markdown file
