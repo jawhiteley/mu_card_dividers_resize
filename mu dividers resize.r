@@ -63,7 +63,8 @@ if (length(pdf_file) < 1 || pdf_file == "")
 # Prepend input directory to make full relative paths
 pdf_file <- paste(input_dir, pdf_file, sep="/")
 
-#pdf_file <- pdf_file[1]    # keep the first file only, for now
+if (F)
+  pdf_file <- pdf_file[1:2]    # keep a subset for testing
 
 
 
@@ -80,9 +81,9 @@ if (F)    # do not run on source()
 
 # Extract all images as png files to destination folder (pdfimager automatically creates a sub-folder with the pdf file name).
 # + returned value is a table (within a list) with the relative path to each extracted image file.
-pdf_img <- lapply(pdf_file, pdimg_images, base_dir = img_dir, "-png") %>%
-  bind_rows    # collapse nested lists into 1 data frame: 1 level from lapply(), 1 from value returned by pdimg_images()
-
+# pdimg_images() is vectorized for a list of paths. :)
+pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-png") %>%
+  bind_rows    # collapse nested lists into 1 data frame
 
 
 
@@ -148,6 +149,15 @@ img_list <- unlist(img_list)
 #==============================================================#
 # Export individual dividers as separate images
 # + for use in R Markdown / LaTeX
+
+# Remove existing output png files, if any
+#  In case you are processing a new pdf file, this ensures there are no leftovers from the previous one.
+png_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
+if (length(png_files) > 0)
+  file.remove(png_files)
+  
+
+# Export images
 div_paths <- lapply(1:length(img_list), function (i) {
   div_path <- sprintf("%s/div-%03i.png", img_dir, i)
   image_write(img_list[[i]], path = div_path, format = "png")
