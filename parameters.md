@@ -21,17 +21,22 @@ The code below is intended to make it easier to paste in temporarily to produce 
 * divider index list (based on order of files in `pdf_file`): 
 ```
 [
-  c(1:115, # heroes, alts, villains
-    119:123, # Phoenix 5
-    118, 116, 117, # Misc, Challenges
+  c(1:70,    # Heroes
+    71:85,   # alternates (Alpha Flight, X-Men: First Class, Fantastic Four)
+    86:115,  # Villains
+    119:123, # Phoenix 5 alts
+    # Ant-Heroes (as standard heroes, villains)
     124:137, 171, # insert Legion villain
-    138:156, 172, # insert Legion villain alt
+    138:142,
+    116, 117, 118, # Challenges, Misc.
+    # Anti-Heroes alts
+    143:156, 172, # insert Legion villain alt
     157:165, 173, # insert Legion combined
     166:170
-    )
+  )
 ]
 # Custom page breaks based on custom divider list above.
-page_breaks <- c(71, 76, 81, 86, 116, 122, 144)
+page_breaks <- c(71, 76, 81, 86, 116, 121, 144)
 ```
 
 
