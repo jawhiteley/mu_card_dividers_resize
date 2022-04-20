@@ -117,6 +117,23 @@ div_paths <- lapply(1:length(img_list), function (i) {
 
 
 
+# ImageMagick can seemingly read pdf files directly
+# Does this preserve the color profile?
+# - when ImageMagick reads the pdfimages output, or pdf file directly, or exported sliced images (from ImageMagick), they all have 'sRGB' colorspace, but I'm not sure this is the same as a color profile?
+# I think it's actually converting the pdf page to a bitmap, and losing a lot of image detail in the process.
+
+test_pdf <- image_read("input/mu_card_dividers_v2.pdf")
+test_pdf[1]
+
+test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png")
+test_div  <- image_read("pdf_images/div-001.png")
+
+test_comp <- image_compare(test_pdf[1], test_page, metric="AE")
+attributes(test_comp)
+
+image_write(test_pdf[1], path = "pdf_images/pdf_page1.pdf")  # resampled to lower resolution :(
+
+
 
 ################################################################
 ## Layout new pages with resized dividers & output pdf
