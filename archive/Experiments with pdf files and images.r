@@ -124,14 +124,24 @@ div_paths <- lapply(1:length(img_list), function (i) {
 
 test_pdf <- image_read("input/mu_card_dividers_v2.pdf")
 test_pdf[1]
+image_info(test_pdf[1])
 
-test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png")
-test_div  <- image_read("pdf_images/div-001.png")
+test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png") # extracted using pdfimages
+test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick
+test_png  <- image_read("pdf_images/mu_card_dividers_v2.png")  # original pdf exported to PNG in Preview (macOS); only page 1 is read here
 
 test_comp <- image_compare(test_pdf[1], test_page, metric="AE")
 attributes(test_comp)
 
+test_comp2 <- image_compare(image_trim(test_page), image_trim(test_png), metric="AE")
+attributes(test_comp2)
+image_info(image_trim(test_page))
+image_info(image_trim(test_png)) # different 'density'?
+
+image_write(test_pdf[1], path = "pdf_images/pdf_page1.png", format = "png")  # resampled to lower resolution :(
 image_write(test_pdf[1], path = "pdf_images/pdf_page1.pdf")  # resampled to lower resolution :(
+
+image_write(test_page, path = "pdf_images/test-page.png", format = "png")  # resampled to lower resolution :(
 
 
 

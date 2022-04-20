@@ -24,19 +24,31 @@
 
 * Colours in output appear a little "washed out" (not as dark / vivid) compared to originals when printed.  Not sure I can tell the difference on screen, but it is noticeable in print.  Is there a colour profile or pdf setting that I'm missing?
   - Could be an optical illusion due to lighter borders in my output vs black in originals?  Looking at test prints, it looks like a lot of variation in printer output (even from the same printer).  My final print on cardstock is noticeably paler than the originals, but it might just be the particular printer used and toner quality at the time?
-  - Using pdfimages on the original (`pdfimages -list ...`) reveals all images have an 'icc' color profile.  The outputs have color = 'rgb', which does suggest a different color profile. :(
+  - Using pdfimages on the original (`pdfimages -list ...`) reveals all images have an 'icc' color profile (color 'icc').  The outputs have color = 'rgb', which does suggest a different color profile. :(
     - The original also has "interp = yes"
   - pdfimages extraction to png?  (-png or -all)
       - Color space: RGB
       - No ColorSync profile
   - Image Magick slicing of png?
       - Color Space: RGB
-      - Color Profile: sRGB IEC61966-2.1
+      + Color Profile: sRGB IEC61966-2.1
       - ColorSync profile: sRGB IEC61966-2.1
-      - Also Chromaticities and Gamma attributes not present in the original
+      + Also Chromaticities and Gamma attributes not present in the original
   - LaTeX output to pdf?
     - seems unlikely: https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag
   - When saving the original pdf as png (Preview), the output has a ColorSync profile of "Adobe RGB (1998)"
+  - If I use ImageMagick (in R) to read a png extracted by pdfimages, then export it again without any modification, the exported file has the same color profile, chromaticities and gamma added.
+    - ImageMagick is definitely making some changes to the color profile, but it's not clear whether pdfimages is also dropping the original color profile (or if that is causing ImageMagick to add a default).
+  - Original pdf contains a reference to "[ /ICCBased 7 0 R ]", but only once, and it's not clear if this is a property of the image(s) or pdf file.
+  - Can I embed a color profile in the pdf file or does it have to be in the images? (apparently, yes, based on `pdfx` documentation and other info on PDF/X | PDF/A standards)
+    - https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
+    - https://weber.itn.liu.se/~karlu20/div/howto/LaTeX_colour_management.php
+    - https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=33378
+    - https://helpx.adobe.com/ca/acrobat/using/color-managing-documents.html
+    - https://tex.stackexchange.com/questions/576/how-to-generate-pdf-a-and-pdf-x
+      - `pdfx` and `hyperxmp` packages.
+      - https://mirrors.mit.edu/CTAN/macros/latex/contrib/pdfx/pdfx.pdf (s2.6)
+      
 
 ## Width and image quality
 
