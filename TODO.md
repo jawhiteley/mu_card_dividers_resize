@@ -19,6 +19,14 @@
 
 # Notes on image and print quality
 
+* Colours in output are not as dark / vivid as originals when printed.  Not sure I can tell the difference on screen, but it is noticeable in print.  Is there a colour profile or pdf setting that I'm missing?
+  - Could be an optical illusion due to lighter borders in my output vs black in originals.  Looking at test prints, it looks like mostly variation in printer output (even from the same printer).  My final print on cardstock is noticeably paler than the originals, but it might just be the particular printer used and toner quality at the time?
+  - pdfimages extraction to png?  
+      - No ColorSync profile
+  - Image Magick slicing of png?
+      - ColorSync profile: sRGB IEC61966-2.1
+  - LaTeX output to pdf?
+
 ## Width and image quality
 
 * Some pixellation apparent in Inkscape, but could just be the way the images are being rendered.  The appearance can be changed with "Object Properties: rendering" - setting it to 'auto' or 'OptimizeQuality' makes it look just like the original.  No difference in Preview.
