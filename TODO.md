@@ -1,5 +1,8 @@
 # To Do
 
+- Try to preserve original color profile (Adobe RGB 1998)?
+  - Use ImageMagick to slice images directly from command-line (using a call from within R)?
+
 - Group parameters together in YAML header to facilitate pasting options from `parameters.md`?
   - File options: pdf_file, extract_images, page_breaks
   - Divider options: dimensions, border_colour, spacing
