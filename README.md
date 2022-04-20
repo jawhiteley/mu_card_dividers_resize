@@ -123,7 +123,8 @@ To reproduce the original **width** (and resolution) as closely as possible:
 * (254 mm / 1500 px) * 541 px = 91.61 mm | (250.5 / 1480) * 541 = 91.57
   - Including the border, the width would be (254 mm / 1500 px) * 543 px = 91.95 mm (very close to the dimensions from Spiffworld and when printed).
   - In this tool, the border is added to the outside, so I'm not including it in the calculation of the output image size.
-* **91.6 mm** wide seems to be the closest to the original width (and resolution on the page).
+* **91.6 mm** wide seems to be the closest to the original width (and resolution on the page: 150 ppi).
+  <!-- as revealed with `pdfimages -list` -->
 
 The output width can be changed to a desired width if you don't mind a bit of image scaling:
 

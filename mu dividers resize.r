@@ -80,9 +80,11 @@ if (F)    # do not run on source()
   pdimg_help()  # check that poppler and pdfimages is installed and accessible: you will get (command-line) help output if it is, and an error if it's not.
 
 # Extract all images as png files to destination folder (pdfimager automatically creates a sub-folder with the pdf file name).
+# + "-all" option extracts the image in its native format, apparently: https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag
+# + most tutorials recommend "-png": the result appears to be the same as "-all" in this case.  "-all" is equivalent to `-png -tiff -j -jp2 -jbig2 -ccitt`
 # + returned value is a table (within a list) with the relative path to each extracted image file.
 # pdimg_images() is vectorized for a list of paths. :)
-pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-png") %>%
+pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-all") %>%
   bind_rows    # collapse nested lists into 1 data frame
 
 

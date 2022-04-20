@@ -20,12 +20,20 @@
 # Notes on image and print quality
 
 * Colours in output are not as dark / vivid as originals when printed.  Not sure I can tell the difference on screen, but it is noticeable in print.  Is there a colour profile or pdf setting that I'm missing?
-  - Could be an optical illusion due to lighter borders in my output vs black in originals.  Looking at test prints, it looks like mostly variation in printer output (even from the same printer).  My final print on cardstock is noticeably paler than the originals, but it might just be the particular printer used and toner quality at the time?
-  - pdfimages extraction to png?  
+  - Could be an optical illusion due to lighter borders in my output vs black in originals?  Looking at test prints, it looks like a lot of variation in printer output (even from the same printer).  My final print on cardstock is noticeably paler than the originals, but it might just be the particular printer used and toner quality at the time?
+  - Using pdfimages on the original (`pdfimages -list ...`) reveals all images have an 'icc' color profile.  The outputs have color = 'rgb', which does suggest a different color profile. :(
+    - The original also has "interp = yes"
+  - pdfimages extraction to png?  (-png or -all)
+      - Color space: RGB
       - No ColorSync profile
   - Image Magick slicing of png?
+      - Color Space: RGB
+      - Color Profile: sRGB IEC61966-2.1
       - ColorSync profile: sRGB IEC61966-2.1
+      - Also Chromaticities and Gamma attributes not present in the original
   - LaTeX output to pdf?
+    - seems unlikely: https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag
+  - When saving the original pdf as png (Preview), the output has a ColorSync profile of "Adobe RGB (1998)"
 
 ## Width and image quality
 
