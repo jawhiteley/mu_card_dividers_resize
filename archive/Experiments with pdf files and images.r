@@ -131,8 +131,8 @@ test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick (R
 test_png  <- image_read("pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png")  # , defines = c('png:preserve-iCCP' = "true"))  # original pdf exported to PNG in Preview (macOS) with "Adobe RGB (1998)" color profile; only page 1 is read here
 
 image_info(test_png) # why is the colorspace = 'sRGB"?
-image_attributes(test_png) # shows Adobe RGB icc profile, as expected!
-image_attributes(test_page) # has "png:sRGB 'intent=0 (Perceptual Intent)'" ?? But no gamma or chromaticity added
+image_attributes(test_png) # shows Adobe RGB icc profile, as expected! also IHDR.color_type = 6 (RGBA)
+image_attributes(test_page) # has "png:sRGB 'intent=0 (Perceptual Intent)'" ?? But no gamma or chromaticity added.  IHDR.color_type = 2 (Truecolor)
 image_attributes(image_strip(test_page)) # no change
 image_attributes(test_div)  # this was exported by magick and has gamma & chromaticity added
 
@@ -142,7 +142,7 @@ attributes(test_comp)
 test_comp2 <- image_compare(image_trim(test_page), image_trim(test_png), metric="AE")
 attributes(test_comp2)
 image_info(image_trim(test_page)) # why is the colorspace = 'sRGB"?
-image_info(image_trim(test_png)) # different 'density'?  Why is the colorspace='sRGB'?
+image_info(image_trim(test_png)) # different 'density'?  Why is the colorspace='sRGB'? matte = TRUE, which might refer to opacity (RGBA colorspace?)  https://www.imagemagick.org/Magick++/Enumerations.html#ImageType
 image_info(image_strip(test_png)) # different 'density'?  Why is the colorspace='sRGB'?
 
 image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.png", format = "png")  # resampled to lower resolution :(
@@ -151,7 +151,13 @@ image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.pdf")  # resampled t
 image_write(test_png, path = "pdf_images/tests/test-png.png", format = "png")  # Adobe RGB profile retained :)
 image_write(test_page, path = "pdf_images/tests/test-page.png", format = "png") # sRGB color profile and other metadata added. :(
 image_write(image_strip(test_page), "pdf_images/tests/test-page-strip.png") # sRGB color profile and other metadata (Chromaticities, gamma, etc.) removed! :)
+test_page_strip <- image_read("pdf_images/tests/test-page-strip.png")
+image_attributes( image_strip(test_page_strip) ) # no pHYs chunk (resolution), still has a sRGB chunk (seems to be required)
+image_attributes( image_strip(test_page) )
+
 # image_write(image_strip(test_page), "pdf_images/tests/test-page-stripd.png", density=150) # with declared dpi (density)? Nope
+
+
 
 
 
