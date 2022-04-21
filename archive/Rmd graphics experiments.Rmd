@@ -34,6 +34,10 @@ test_div <- image_read(paste0(base_path, "/div-001.png"))
 # https://bookdown.org/yihui/rmarkdown-cookbook/parameterized-reports.html
   # Requires shiny package for some reason
 # https://stackoverflow.com/questions/55697684/how-to-output-values-of-r-variables-in-an-inline-latex-equation-in-r-markdown-i
+
+# Controlling image resolution in LaTeX:
+# https://tex.stackexchange.com/questions/379926/can-i-explicitly-set-dpi-on-a-per-image-basis-with-includegraphics
+# https://stackoverflow.com/questions/5041492/latex-how-to-set-the-pdf-dpi-when-using-images
 ```
 
 ## R Markdown

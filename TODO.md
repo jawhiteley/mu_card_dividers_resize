@@ -3,6 +3,12 @@
 - Try to preserve original color profile (Adobe RGB 1998)?
   - Use ImageMagick to slice images directly from command-line (using a call from within R)?
 
+- Try a different method of preserving 150 ppi / dpi from the original to final output.
+  - set dpi to 150 in extracted images?  Then images can be placed at scale = 100%
+    - make this the default if divider width = blank?
+  - set dpi to 150 in pdf (LaTeX)?
+  - set image width to precisely n_pixels / 150 ppi?
+
 - Group parameters together in YAML header to facilitate pasting options from `parameters.md`?
   - File options: pdf_file, extract_images, page_breaks
   - Divider options: dimensions, border_colour, spacing
@@ -37,14 +43,17 @@
   - LaTeX output to pdf?
     - seems unlikely: https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag
   - When saving the original pdf as png (Preview), the output has a ColorSync profile of "Adobe RGB (1998)"
-  - If I use ImageMagick (in R) to read a png extracted by pdfimages, then export it again without any modification, the exported file has the same color profile, chromaticities and gamma added.
+  - If I use ImageMagick (in R) to read a png extracted by pdfimages, then export it again without any modification, the exported file has the same color profile, chromaticities and gamma added as other outputs from ImageMagick.
     - ImageMagick is definitely making some changes to the color profile, but it's not clear whether pdfimages is also dropping the original color profile (or if that is causing ImageMagick to add a default).
   - Original pdf contains a reference to "[ /ICCBased 7 0 R ]", but only once, and it's not clear if this is a property of the image(s) or pdf file.
+    - It might just be a 'tag' in the pdf file, with a specific RGB profile (Adobe RGB 1998) embedded in each image?
   - Can I embed a color profile in the pdf file or does it have to be in the images? (apparently, yes, based on `pdfx` documentation and other info on PDF/X | PDF/A standards)
     - https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
     - https://weber.itn.liu.se/~karlu20/div/howto/LaTeX_colour_management.php
     - https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=33378
     - https://helpx.adobe.com/ca/acrobat/using/color-managing-documents.html
+    - https://helpx.adobe.com/ca/photoshop/using/working-with-color-profiles.html
+    - https://stackoverflow.com/questions/31591554/embed-icc-color-profile-in-pdf
     - https://tex.stackexchange.com/questions/576/how-to-generate-pdf-a-and-pdf-x
       - `pdfx` and `hyperxmp` packages.
       - https://mirrors.mit.edu/CTAN/macros/latex/contrib/pdfx/pdfx.pdf (s2.6)
