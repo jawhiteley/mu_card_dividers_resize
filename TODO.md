@@ -47,17 +47,33 @@
     - ImageMagick is definitely making some changes to the color profile, but it's not clear whether pdfimages is also dropping the original color profile (or if that is causing ImageMagick to add a default).
   - Original pdf contains a reference to "[ /ICCBased 7 0 R ]", but only once, and it's not clear if this is a property of the image(s) or pdf file.
     - It might just be a 'tag' in the pdf file, with a specific RGB profile (Adobe RGB 1998) embedded in each image?
+    - Or, the Adobe RGB profile is only being 'tagged' as metadata, without being embedded.  It is likely being tagged as the working space (Adobe RGB has a wider gamut than sRGB).
+  - I want to preserve the color profile from the original to the final output, without converting the pixel colour values.  How do I do that?
   - Can I embed a color profile in the pdf file or does it have to be in the images? (apparently, yes, based on `pdfx` documentation and other info on PDF/X | PDF/A standards)
-    - https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
-    - https://weber.itn.liu.se/~karlu20/div/howto/LaTeX_colour_management.php
-    - https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=33378
-    - https://helpx.adobe.com/ca/acrobat/using/color-managing-documents.html
-    - https://helpx.adobe.com/ca/photoshop/using/working-with-color-profiles.html
-    - https://stackoverflow.com/questions/31591554/embed-icc-color-profile-in-pdf
-    - https://tex.stackexchange.com/questions/576/how-to-generate-pdf-a-and-pdf-x
-      - `pdfx` and `hyperxmp` packages.
-      - https://mirrors.mit.edu/CTAN/macros/latex/contrib/pdfx/pdfx.pdf (s2.6)
+
+- https://www.colourmanagement.net/advice/about-icc-colour-profiles
+- https://helpx.adobe.com/ca/acrobat/using/color-managing-documents.html
+- https://helpx.adobe.com/ca/photoshop/using/working-with-color-profiles.html
+
+- https://imagemagick.org/script/color-management.php
+- https://www.rigacci.org/wiki/doku.php/doc/appunti/software/imagemagick_color_management
+- https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=33378
+
+- https://stackoverflow.com/questions/31591554/embed-icc-color-profile-in-pdf
+- https://weber.itn.liu.se/~karlu20/div/howto/LaTeX_colour_management.php
+- https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
+
+- https://tex.stackexchange.com/questions/576/how-to-generate-pdf-a-and-pdf-x
+  - `pdfx` and `hyperxmp` packages.
+  - https://mirrors.mit.edu/CTAN/macros/latex/contrib/pdfx/pdfx.pdf (s2.6)
       
+R magick package in R include bindinge to ImageMagick, but not always clear how to access all the features.  Options:
+
+* image_strip() # removes sRGB color profile and other metada (chromaticities, gamma, etc.)
+  * image_write(image_strip(...), ...)
+* image_read() options: strip = FALSE, defines? etc.
+- image_convert() ? I don't really want to change pixel values, just tag with the Adobe RGB color profile
+
 
 ## Width and image quality
 

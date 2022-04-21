@@ -94,6 +94,12 @@ pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-all") %>%
 
 library(magick)
 
+# This process is automatically applying an sRGB color profile to the images at some point.
+# The originals have "Adobe RGB (1998)" profile, which is the linear working space in Photoshop.
+# sRGB is non-linear and leads to loss of colour.
+# I want to find a way to either prevent a profile from being embedded, 
+# or tag them with the Adobe profile at some point, without changing the pixel values.
+
 # Create a reference image to check if dividers are blank (all-white)
 # px_white <- image_blank(1, 1, color="white")
 

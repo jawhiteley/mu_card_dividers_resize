@@ -126,22 +126,32 @@ test_pdf <- image_read("input/mu_card_dividers_v2.pdf")
 test_pdf[1]
 image_info(test_pdf[1])
 
-test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png") # extracted using pdfimages
-test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick
-test_png  <- image_read("pdf_images/mu_card_dividers_v2.png")  # original pdf exported to PNG in Preview (macOS); only page 1 is read here
+test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png") # extracted using pdfimages: should have 'rgb' colorspace, and maybe "Adobe RGB (1998)" color profile
+test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick (R magick) with default options
+test_png  <- image_read("pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png")  # , defines = c('png:preserve-iCCP' = "true"))  # original pdf exported to PNG in Preview (macOS) with "Adobe RGB (1998)" color profile; only page 1 is read here
+
+image_info(test_png) # why is the colorspace = 'sRGB"?
+image_attributes(test_png) # shows Adobe RGB icc profile, as expected!
+image_attributes(test_page) # has "png:sRGB 'intent=0 (Perceptual Intent)'" ?? But no gamma or chromaticity added
+image_attributes(image_strip(test_page)) # no change
+image_attributes(test_div)  # this was exported by magick and has gamma & chromaticity added
 
 test_comp <- image_compare(test_pdf[1], test_page, metric="AE")
 attributes(test_comp)
 
 test_comp2 <- image_compare(image_trim(test_page), image_trim(test_png), metric="AE")
 attributes(test_comp2)
-image_info(image_trim(test_page))
-image_info(image_trim(test_png)) # different 'density'?
+image_info(image_trim(test_page)) # why is the colorspace = 'sRGB"?
+image_info(image_trim(test_png)) # different 'density'?  Why is the colorspace='sRGB'?
+image_info(image_strip(test_png)) # different 'density'?  Why is the colorspace='sRGB'?
 
-image_write(test_pdf[1], path = "pdf_images/pdf_page1.png", format = "png")  # resampled to lower resolution :(
-image_write(test_pdf[1], path = "pdf_images/pdf_page1.pdf")  # resampled to lower resolution :(
+image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.png", format = "png")  # resampled to lower resolution :(
+image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.pdf")  # resampled to lower resolution :(
 
-image_write(test_page, path = "pdf_images/test-page.png", format = "png")  # resampled to lower resolution :(
+image_write(test_png, path = "pdf_images/tests/test-png.png", format = "png")  # Adobe RGB profile retained :)
+image_write(test_page, path = "pdf_images/tests/test-page.png", format = "png") # sRGB color profile and other metadata added. :(
+image_write(image_strip(test_page), "pdf_images/tests/test-page-strip.png") # sRGB color profile and other metadata (Chromaticities, gamma, etc.) removed! :)
+# image_write(image_strip(test_page), "pdf_images/tests/test-page-stripd.png", density=150) # with declared dpi (density)? Nope
 
 
 
