@@ -48,9 +48,12 @@
   - Original pdf contains a reference to "[ /ICCBased 7 0 R ]", but only once, and it's not clear if this is a property of the image(s) or pdf file.
     - It might just be a 'tag' in the pdf file, with a specific RGB profile (Adobe RGB 1998) embedded in each image?
     - Or, the Adobe RGB profile is only being 'tagged' as metadata, without being embedded.  It is likely being tagged as the working space (Adobe RGB has a wider gamut than sRGB).
+    - also "/Interpolate true"
+    - also "/ColorSpace 6 0 R ", whereas my output has "/ColorSpace /DeviceRGB" :(
   - I want to preserve the color profile from the original to the final output, without converting the pixel colour values.  How do I do that?
   - Can I embed a color profile in the pdf file or does it have to be in the images? (apparently, yes, based on `pdfx` documentation and other info on PDF/X | PDF/A standards)
-
+    - 'colorspace' package? https://ctan.math.washington.edu/tex-archive/macros/latex/contrib/colorspace/colorspace.pdf
+      
 - https://www.colourmanagement.net/advice/about-icc-colour-profiles
 - https://helpx.adobe.com/ca/acrobat/using/color-managing-documents.html
 - https://helpx.adobe.com/ca/photoshop/using/working-with-color-profiles.html

@@ -131,7 +131,7 @@ test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick (R
 test_png  <- image_read("pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png")  # , defines = c('png:preserve-iCCP' = "true"))  # original pdf exported to PNG in Preview (macOS) with "Adobe RGB (1998)" color profile; only page 1 is read here
 
 image_info(test_png) # why is the colorspace = 'sRGB"?
-image_attributes(test_png) # shows Adobe RGB icc profile, as expected! also IHDR.color_type = 6 (RGBA)
+image_attributes(test_png) # shows Adobe RGB icc profile, as expected! also IHDR.color_type = 6 (RGBA) (might correspond to "/ColorSpace" in original pdf)
 image_attributes(test_page) # has "png:sRGB 'intent=0 (Perceptual Intent)'" ?? But no gamma or chromaticity added.  IHDR.color_type = 2 (Truecolor)
 image_attributes(image_strip(test_page)) # no change
 image_attributes(test_div)  # this was exported by magick and has gamma & chromaticity added
