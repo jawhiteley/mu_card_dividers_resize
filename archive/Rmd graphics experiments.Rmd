@@ -12,7 +12,11 @@ header-includes: |
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-setwd("~/_MyFiles/Play/Board Games/Marvel United/mu_card_dividers_resize")
+if (require(rstudioapi, quietly = TRUE)) {
+  here <- dirname(rstudioapi::getActiveDocumentContext()$path)
+  setwd(here)
+}
+
 base_path <- "pdf_images"
 library(magrittr)
 library(knitr)

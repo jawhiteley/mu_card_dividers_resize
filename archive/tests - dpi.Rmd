@@ -1,0 +1,110 @@
+---
+title: "Tests with dpi"
+output: 
+  pdf_document:
+    #keep_tex: TRUE
+geometry: margin=0.5cm, landscape
+header-includes: |
+  \graphicspath{{./../pdf_images/}}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_knit$set(root.dir = paste0(getwd(), "/..") )  # set the working directory for R code chunks to the parent directory: works for R, but not LaTeX
+
+if (require(rstudioapi)) {
+  here <- dirname(rstudioapi::getActiveDocumentContext()$path)
+  if (F)
+    setwd(here)  # setwd(paste0(here, "/.."))
+}
+
+base_path <- "../pdf_images"
+library(magrittr)
+library(knitr)
+library(magick)
+
+
+# Controlling image resolution in LaTeX:
+# https://tex.stackexchange.com/questions/379926/can-i-explicitly-set-dpi-on-a-per-image-basis-with-includegraphics
+# https://stackoverflow.com/questions/5041492/latex-how-to-set-the-pdf-dpi-when-using-images
+```
+
+% Set ppi for entire document: 1 pixel = 1/150 in, or 150 ppi
+% https://stackoverflow.com/questions/5041492/latex-how-to-set-the-pdf-dpi-when-using-images
+% Changes the definition of a 'pixel' for all measurements, but at least it's consistent, and seems to work with R Markdown.
+% Might be specific to pdf engine (pdftex vs pdflatex?)
+
+\pdfpxdimen=1in    
+\divide\pdfpxdimen by 150
+
+% I expected this to work, but I get an error "! Dimension too large" :(
+
+    \setlength{\pdfpxdimen}{1in/150}
+
+
+```{=latex}
+% Change dpi of images only? Using `pdftex` primitive
+% seems to have no effect, even in the preamble ('header-includes')
+
+\pdfimageresolution=150
+
+% Custom macro - no effect :(
+
+\newcommand{\includegraphicsdpi}[3]{%
+    \pdfimageresolution=#1  % Change the dpi of images
+    \includegraphics[#2]{#3}
+    \pdfimageresolution=72  % Change it back to the default
+}
+```
+
+## Test Images
+```{r}
+# 'native' resolution of the file is 72 ppi, but original (and intended) is 150 ppi.
+# png file include both dpi (72) and pHYs chunk (2834 px / m = 150 ppi?)
+include_graphics(paste0(base_path, "/tests/img-000-pdfimages.png"))
+```
+
+```{r out.width = "1500px" }
+# setting out.width to knwon # pixels (depends on document dpi)
+include_graphics(paste0(base_path, "/tests/img-000-pdfimages.png"))
+```
+
+```{r out.width = paste0(1500/150, "in") }
+# setting out.width to inches explicitly, based on known # pixels and desired dpi (150)
+include_graphics(paste0(base_path, "/tests/img-000-pdfimages.png"))
+```
+
+```{r out.width = "100%" }
+# setting out.width to 100%
+include_graphics(paste0(base_path, "/tests/img-000-pdfimages.png"))
+```
+
+```{r}
+# 'native' resolution of this file is 150x150
+include_graphics(paste0(base_path, "/tests/test-png.png"))
+```
+
+
+```{r}
+# individual divider in 'native' or default resolution (72x72?)
+include_graphics(paste0(base_path, "/div-001.png"))
+```
+
+```{r out.width = "541 px" }
+# setting out.width to known # pixels (depends on document dpi, default is 72)
+include_graphics(paste0(base_path, "/div-001.png"))
+```
+
+```{r out.width = paste0(541/150, "in") }
+# setting out.width to inches explicitly, based on known # pixels and desired dpi (150)
+include_graphics(paste0(base_path, "/div-001.png"))
+```
+
+```{r out.width = "100%" }
+# setting out.width to 100%
+include_graphics(paste0(base_path, "/div-001.png"))
+```
+
+Using custom macro and `pdftex` primitive (nope):
+
+\includegraphicsdpi{150}{}{div-001.png}
