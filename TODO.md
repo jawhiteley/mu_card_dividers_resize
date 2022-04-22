@@ -80,6 +80,36 @@ R magick package in R include bindinge to ImageMagick, but not always clear how 
 - image_convert() ? I don't really want to change pixel values, just tag with the Adobe RGB color profile
 
 
+ImageMagick & color profiles?
+
+    convert input/mu_card_dividers_v2.pdf AdobeRGB.icc
+
+This produced an icc file (actually 1 per page), but applying it did not change appearance.  
+
+    convert pdf_images/tests/img-000-pdfimages.png -profile input/AdobeRGB-0.icc pdf_images/tests/img-000-imagick-adobe.png
+
+Worse, the output png still has the default sRGB profile in the metadata!  `identify -verbose` confirms that an Artifex sRGB icc profile was added instead.  Suggests this icc profile is not valid.
+
+Instead, I tried extracting the color profile from a png exported from Preview, which had the original Adobe profile intact:
+
+    convert 'pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png' input/AdobeRGB.icc
+        
+Apply that to an image without a profile did change the colours.  "Adobe RGB (1998)" shows up in Finder info and Preview info, and `identify -verbose`.  Also includes chromaticity chunk, which I'm not sure I want.
+
+    convert pdf_images/tests/img-000-pdfimages.png -profile input/AdobeRGB.icc pdf_images/tests/img-000-imagick+adobe.png
+
+Suggests at least partial success, and that the extracted icc profile is valid.
+
+Adding `-strip` to the command results in no color change, and no color profile appearing anywhere. ??
+
+    convert 'pdf_images/tests/img-000-pdfimages.png' -strip -profile 'input/AdobeRGB.icc' 'pdf_images/tests/img-000-imagick-strip+adobe.png'
+
+The output is identical to the command with only `-strip` and no `-profile` option?
+
+This is supposed to apply the profile, without changing any pixel values (which is what I want); without the `-strip`, an sRGB profile might be assumed, then Adobe RGB is applied, and pixel values converted.
+
+
+
 ## Width and image quality
 
 * Some pixellation apparent in Inkscape, but could just be the way the images are being rendered.  The appearance can be changed with "Object Properties: rendering" - setting it to 'auto' or 'OptimizeQuality' makes it look just like the original.  No difference in Preview.

@@ -127,6 +127,14 @@ test_pdf[1]
 image_info(test_pdf[1])
 image_attributes(test_pdf[1])  # Artifex sRGB Profile??
 
+test_pdf2 <- image_read_pdf("input/mu_card_dividers_v2.pdf", pages = 1, density = 150) # convert at original dpi: doesn't mean rendered pixels align with originals. :P
+test_pdf2
+image_info(test_pdf[1])
+image_attributes(test_pdf[1])  # Artifex sRGB Profile??
+
+test_pdfh <- image_read_pdf("input/mu_card_dividers_v2.pdf", pages = 1, density = 600) # "High-resolution" capture: each original pixel is about 4 pixels here. :D
+
+
 test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png") # extracted using pdfimages: should have 'rgb' colorspace, and maybe "Adobe RGB (1998)" color profile
 test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick (R magick) with default options
 test_png  <- image_read("pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png")  # , defines = c('png:preserve-iCCP' = "true"))  # original pdf exported to PNG in Preview (macOS) with "Adobe RGB (1998)" color profile; only page 1 is read here
@@ -146,8 +154,8 @@ image_info(image_trim(test_page)) # why is the colorspace = 'sRGB"?
 image_info(image_trim(test_png)) # different 'density'?  Why is the colorspace='sRGB'? matte = TRUE, which might refer to opacity (RGBA colorspace?)  https://www.imagemagick.org/Magick++/Enumerations.html#ImageType
 image_info(image_strip(test_png)) # different 'density'?  Why is the colorspace='sRGB'?
 
-image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.png", format = "png")  # resampled to lower resolution :(
-image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.pdf")  # resampled to lower resolution :(
+image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.png", format = "png")  # resampled to lower resolution :(  but pdfimages shows icc color profile (probably Artifex sRGB ICC profile)
+image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.pdf")  # resampled to lower resolution :(  Default sRGB color profile applied. :(
 
 image_write(image_trim(test_png), path = "pdf_images/tests/test-png.png", format = "png")  # Adobe RGB profile retained :)
 image_write(test_page, path = "pdf_images/tests/test-page.png", format = "png") # sRGB color profile and other metadata added. :(

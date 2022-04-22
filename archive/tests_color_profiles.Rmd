@@ -1,0 +1,90 @@
+---
+title: "Tests with color profiles"
+output: 
+  pdf_document:
+    #keep_tex: TRUE
+geometry: margin=1cm, landscape
+header-includes: |
+  \graphicspath{{./../pdf_images/}}
+  % icc profile extracted from original:
+  %     convert input/mu_card_dividers_v2.pdf input/AdobeRGB.icc
+  \immediate\pdfobj stream attr{/N 4}  file{../input/AdobeRGB.icc}
+  \pdfcatalog{%
+    /OutputIntents [ <<
+    /Type /OutputIntent
+    /S/GTS_PDFA1
+    /DestOutputProfile \the\pdflastobj\space 0 R
+    /OutputConditionIdentifier (Adobe RGB (1998))
+    /Info(Adobe RGB (1998))
+   >> ]
+  }
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_knit$set(root.dir = paste0(getwd(), "/..") )  # set the working directory for R code chunks to the parent directory: works for R, but not LaTeX
+
+if (require(rstudioapi)) {
+  here <- dirname(rstudioapi::getActiveDocumentContext()$path)
+  if (F)
+    setwd(here)  # setwd(paste0(here, "/.."))
+}
+
+base_path <- "../pdf_images"
+#library(magrittr)
+library(knitr)
+#library(magick)
+
+# https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
+# https://tex.stackexchange.com/questions/146517/how-to-improve-color-consistency-of-bitmap-pictures-from-native-format-to-target
+
+```
+
+```{=latex}
+% original resolution was 150 dpi, but I'm using slightly higher to shrink full-sized images to fit on the page with the code statements
+% (I care about color, not resolution, but I want things to be the same size / resolution, despite different pixel sizes)
+
+\pdfpxdimen=1in    
+\divide\pdfpxdimen by 200
+
+% automatically insert a page break after each graphic, so the following code echo appears above the corresponding image
+
+\let\includegraphicsOG\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \includegraphicsOG[#1]{#2}
+  \pagebreak
+}
+```
+
+Based on output from `Experiments with pdf files and images.r`
+
+Original file was produced in Phothshop, with 1 image per page, and the "Adobe RGB (1998)" icc profile embedded in the pdf (for the entire document).
+What impact does an embedded profile have on display in a LaTeX pdf file?
+
+Can I specify an icc profile for 1 or more images in a pdf file (without converting or altering pixel values), to recover or preserve the icc profile from the original?
+
+## Test Images
+
+\pagebreak
+
+```{r out.height = paste0(1200/200, "in")}
+# Exported from Preview with Adobe icc profile (1 frame per page)
+include_graphics(paste0(base_path, "/tests/mu_card_dividers_v2 (Preview-Adobe).png"))
+
+# Above, read into R magick, and re-exported after being trimmed (native resolution and Adobe icc profile)
+include_graphics(paste0(base_path, "/tests/test-png.png"))
+
+# Exported from Preview with Adobe icc profile (1 frame per page), sRGB profile assigned (colours appear washed out in Preview)
+include_graphics(paste0(base_path, "/tests/mu_card_dividers_v2 (Preview-Adobe+sRGB).png"))
+
+# Extracted with pdfimages (no icc profile)
+include_graphics(paste0(base_path, "/tests/img-000-pdfimages.png"))
+
+# Extracted with pdfimages (no icc profile), read & exported by `magick`, sRGB profile assigned
+include_graphics(paste0(base_path, "/tests/img-000-magick+sRGB.png"))
+
+# Extracted with pdfimages (no icc profile), Adobe profile assigned in Preview
+include_graphics(paste0(base_path, "/tests/img-000-Preview+Adobe.png"))
+
+# Extracted with pdfimages (no icc profile), sRGB profile assigned in Preview (same one `magick` would assign)
+include_graphics(paste0(base_path, "/tests/img-000-Preview+sRGB.png"))
+```
