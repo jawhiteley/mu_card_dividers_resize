@@ -61,10 +61,12 @@
 - https://imagemagick.org/script/color-management.php
 - https://www.rigacci.org/wiki/doku.php/doc/appunti/software/imagemagick_color_management
 - https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=33378
+- https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=8812
 
 - https://stackoverflow.com/questions/31591554/embed-icc-color-profile-in-pdf
 - https://weber.itn.liu.se/~karlu20/div/howto/LaTeX_colour_management.php
-- https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
+* https://tex.stackexchange.com/questions/61217/latex-color-and-icc-color-profiles
+* https://tex.stackexchange.com/questions/146517/how-to-improve-color-consistency-of-bitmap-pictures-from-native-format-to-target
 
 - https://tex.stackexchange.com/questions/576/how-to-generate-pdf-a-and-pdf-x
   - `pdfx` and `hyperxmp` packages.

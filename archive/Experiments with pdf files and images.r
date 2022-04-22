@@ -125,6 +125,7 @@ div_paths <- lapply(1:length(img_list), function (i) {
 test_pdf <- image_read("input/mu_card_dividers_v2.pdf")
 test_pdf[1]
 image_info(test_pdf[1])
+image_attributes(test_pdf[1])  # Artifex sRGB Profile??
 
 test_page <- image_read("pdf_images/mu_card_dividers_v2/img-000.png") # extracted using pdfimages: should have 'rgb' colorspace, and maybe "Adobe RGB (1998)" color profile
 test_div  <- image_read("pdf_images/div-001.png")  # cropped with ImageMagick (R magick) with default options
@@ -148,7 +149,7 @@ image_info(image_strip(test_png)) # different 'density'?  Why is the colorspace=
 image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.png", format = "png")  # resampled to lower resolution :(
 image_write(test_pdf[1], path = "pdf_images/tests/pdf_page1.pdf")  # resampled to lower resolution :(
 
-image_write(test_png, path = "pdf_images/tests/test-png.png", format = "png")  # Adobe RGB profile retained :)
+image_write(image_trim(test_png), path = "pdf_images/tests/test-png.png", format = "png")  # Adobe RGB profile retained :)
 image_write(test_page, path = "pdf_images/tests/test-page.png", format = "png") # sRGB color profile and other metadata added. :(
 image_write(image_strip(test_page), "pdf_images/tests/test-page-strip.png") # sRGB color profile and other metadata (Chromaticities, gamma, etc.) removed! :)
 test_page_strip <- image_read("pdf_images/tests/test-page-strip.png")
