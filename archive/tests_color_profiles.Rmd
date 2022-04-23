@@ -8,6 +8,7 @@ header-includes: |
   \graphicspath{{./../pdf_images/}}
   % icc profile extracted from original:
   %     convert input/mu_card_dividers_v2.pdf input/AdobeRGB.icc
+  % - might only affect jpeg & pdf inclusions, not pdf?
   \immediate\pdfobj stream attr{/N 4}  file{../input/AdobeRGB.icc}
   \pdfcatalog{%
     /OutputIntents [ <<
@@ -57,7 +58,7 @@ library(knitr)
 
 Based on output from `Experiments with pdf files and images.r`
 
-Original file was produced in Phothshop, with 1 image per page, and the "Adobe RGB (1998)" icc profile embedded in the pdf (for the entire document).
+Original file was produced in Photoshop, with 1 image per page, and the "Adobe RGB (1998)" icc profile embedded in the pdf (for the entire document).
 What impact does an embedded profile have on display in a LaTeX pdf file?
 
 Can I specify an icc profile for 1 or more images in a pdf file (without converting or altering pixel values), to recover or preserve the icc profile from the original?
@@ -87,4 +88,15 @@ include_graphics(paste0(base_path, "/tests/img-000-Preview+Adobe.png"))
 
 # Extracted with pdfimages (no icc profile), sRGB profile assigned in Preview (same one `magick` would assign)
 include_graphics(paste0(base_path, "/tests/img-000-Preview+sRGB.png"))
+
+
+# jpg: exported from Preview with Adobe icc profile
+include_graphics(paste0(base_path, "/tests/mu_x-men_horiz_dividers.jpg"))
+
+# jpg: extracted from pdfimages (with sRGB profile)
+include_graphics(paste0(base_path, "/tests/x-men-000.jpg"))
+
+# jpg: extracted from pdfimages (with sRGB profile), Adobe profile assigned in Preview
+include_graphics(paste0(base_path, "/tests/x-men-000 (Preview+Adobe).jpg"))
+
 ```
