@@ -34,7 +34,9 @@
 
 # Notes on image and print quality
 
-* Colours in output appear a little "washed out" (not as dark / vivid) compared to originals when printed.  Not sure I can tell the difference on screen, but it is noticeable in print.  Is there a colour profile or pdf setting that I'm missing?
+## Color profiles
+
+Colours in output appear a little "washed out" (not as dark / vivid) compared to originals when printed.  Not sure I can tell the difference on screen, but it is noticeable in print.  Is there a colour profile or pdf setting that I'm missing?
   - Could be an optical illusion due to lighter borders in my output vs black in originals?  Looking at test prints, it looks like a lot of variation in printer output (even from the same printer).  My final print on cardstock is noticeably paler than the originals, but it might just be the particular printer used and toner quality at the time?
   - Using pdfimages on the original (`pdfimages -list ...`) reveals all images have an 'icc' color profile (color 'icc').  The outputs have color = 'rgb', which does suggest a different color profile. :(
     - The original also has "interp = yes"
@@ -111,9 +113,11 @@ Adding `-strip` to the command results in no color change, and no color profile 
     convert 'pdf_images/tests/img-000-pdfimages.png' -strip -profile 'input/AdobeRGB.icc' 'pdf_images/tests/img-000-imagick-strip+adobe.png'
 
 The output is identical to the command with only `-strip` and no `-profile` option?
-
 This is supposed to apply the profile, without changing any pixel values (which is what I want); without the `-strip`, an sRGB profile might be assumed, then Adobe RGB is applied, and pixel values converted.
 
+    convert 'pdf_images/tests/img-000-imagick-strip.png' -profile 'input/AdobeRGB.icc' 'pdf_images/tests/img-000-imagick-strip-adobe.png'
+
+Apart from the resolution, the result is the same as simply applying the Adobe RGB profile to the original file (where an sRGB profile is assumed).
 
 
 ## Width and image quality
