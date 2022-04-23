@@ -11,6 +11,8 @@ I am thinking of sleeving some cards for this game, but as some have noted, the 
 
 I used [R](https://www.r-project.org/) and [R Markdown](https://rmarkdown.rstudio.com/) to output to PDF via LaTeX, because that's what I'm familiar with.  I have no doubt this could be done in python, probably more efficiently.  I just haven't learned enough python to do it yet.
 
+**NOTE:** *This workflow is unable to retain the color profile in the original pdf files (Adobe RGB (1998)).*  The result looks fine on screen, but the colours may appear 'washed out' or less vivid when printed. If anyone knows how to retain the color profile in extracted images, or re-apply it somehow in the final output (without changing pixel values), please let me know!
+
 
 # Requirements
 
@@ -100,7 +102,6 @@ The compilation process will:
 This means that there are several places where things can go wrong: in R (step 1), in Markdown (step 2), or LaTeX (step 3).
 
 The R Markdown file uses a lot of custom LaTeX to achieve the desired result, which is to layout the pages dynamically, fitting as many dividers as possible on a page, with no horizontal or vertical space between dividers.  This may not always work on other systems, especially if you have different default LaTeX parameters.  
-
 
 # Divider Dimensions
 
