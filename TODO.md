@@ -24,6 +24,12 @@
   - If the code is simple enough, just include it directly in the R Markdown file for simplicity.  The block itself can still be run or not, but there would only be 1 file needed to do everything.
 
 
++ `pdfimages -all` extracts jpg files from X-Men files.
+  - The classic file seems to include embedded pngs, whereas the X-Men files are embedded jpgs.
+  - jpgs include a bit more metadata (Adobe Photoshop as creator, correct resolution of 150 dpi), but come already with a standard sRGB color profile.  Whereas exporting from the original pdf to jpg from Preview includes the Adobe RGB color profile (as with exporting to png).
+  - Doesn't seem to make much difference. ImageMagick (magick) can still read & slice the image in whichever format it's in (the R function returns a list of the paths and filenames, so it can automatically find the extracted files, which is convenient), and still export to png.  The color profile seems to be lost during the initial extraction (by pdfimages) either way.
+
+
 
 
 # Notes on image and print quality
