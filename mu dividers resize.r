@@ -169,9 +169,10 @@ if (length(png_files) > 0)
 # Export images
 div_paths <- lapply(1:length(img_list), function (i) {
   div_path <- sprintf("%s/div-%03i.png", img_dir, i)
-  image_trim(img_list[[i]]) %>%   # trim empty white space from the bottom to reduce file size?  Doesn't always work
-    image_trim() %>%              # trim empty white space from the bottom to reduce file size? (1 is not enough in most cases, 2 may not even be enough for villains)
-    image_strip() %>%             # strip color profile (it should be 'Adobe RGB (1998)', and should be embedded in final pdf anyway) - also reduces file size
+  img_list[[i]] %>%
+    #image_trim() %>%    # trim empty white space from the bottom to reduce file size?  Doesn't always work, and no noticeable difference in file size.
+    #image_trim() %>%    # trim empty white space from the bottom to reduce file size? (1 is not enough in most cases, 2 may not even be enough for some)
+    image_strip() %>%   # strip color profile (it should be 'Adobe RGB (1998)', and should be embedded in final pdf anyway) - also reduces file size
     image_write(path = div_path, format = "png")
   div_path    # return path to created file
 })
