@@ -69,8 +69,10 @@ source("mu dividers resize.r", local = knitr::knit_global())
 % re-define \includegraphics command to set desired size and border: 
 %  the image will be automatically sized to fit the width, flush with the top-left
 %  aspect ratio is preserved by default, but can be forced with the `keepaspectratio` option in \includegraphics (graphicx package), if necessary
+% To align dividers vertically on a line, [pos] must not  = [contentpos].  
+%  I want the image top-aligned within the box, and the box borders aligned, ideally also along the top, but since they are all the same height, 'bottom' works, too (and is different from 'top').
 \let\includegraphicsOG\includegraphics
-\renewcommand*{\includegraphics}[2][]{\fcolorbox{`r params$border_colour`}{white}{\parbox[t][\DivHeight]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
+\renewcommand*{\includegraphics}[2][]{\fcolorbox{`r params$border_colour`}{white}{\parbox[b][\DivHeight][t]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
 
 % control spacing around graphics
 \setlength{\lineskip}{`r spacing`}    %-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)

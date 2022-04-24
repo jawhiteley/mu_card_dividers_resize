@@ -64,7 +64,7 @@ if (length(pdf_file) < 1 || pdf_file == "")
 pdf_file <- paste(input_dir, pdf_file, sep="/")
 
 if (F)
-  pdf_file <- pdf_file[1:2]    # keep a subset for testing
+  pdf_file <- pdf_file[1]    # keep a subset for testing
 
 
 
@@ -169,7 +169,10 @@ if (length(png_files) > 0)
 # Export images
 div_paths <- lapply(1:length(img_list), function (i) {
   div_path <- sprintf("%s/div-%03i.png", img_dir, i)
-  image_write(img_list[[i]], path = div_path, format = "png")
+  image_trim(img_list[[i]]) %>%   # trim empty white space from the bottom to reduce file size?  Doesn't always work
+    image_trim() %>%              # trim empty white space from the bottom to reduce file size? (1 is not enough in most cases, 2 may not even be enough for villains)
+    image_strip() %>%             # strip color profile (it should be 'Adobe RGB (1998)', and should be embedded in final pdf anyway) - also reduces file size
+    image_write(path = div_path, format = "png")
   div_path    # return path to created file
 })
 
