@@ -106,7 +106,7 @@ Apply that to an image without a profile did change the colours.  "Adobe RGB (19
 
     convert pdf_images/tests/img-000-pdfimages.png -profile input/AdobeRGB.icc pdf_images/tests/img-000-imagick+adobe.png
 
-Suggests at least partial success, and that the extracted icc profile is valid.
+Suggests at least partial success, and that the extracted icc profile is valid.  Image statistics are no different from original (according to `identify -verbose`), though appearance on screen is different.  All the png outputs have 'sRGB' as the Colorspace, though it should probably be 'RGB' to go with the Adobe RGB profile?
 
 Adding `-strip` to the command results in no color change, and no color profile appearing anywhere. ??
 
@@ -118,6 +118,20 @@ This is supposed to apply the profile, without changing any pixel values (which 
     convert 'pdf_images/tests/img-000-imagick-strip.png' -profile 'input/AdobeRGB.icc' 'pdf_images/tests/img-000-imagick-strip-adobe.png'
 
 Apart from the resolution, the result is the same as simply applying the Adobe RGB profile to the original file (where an sRGB profile is assumed).
+
+    convert 'pdf_images/tests/x-men-000.jpg' -strip -profile 'input/AdobeRGB.icc' 'pdf_images/tests/x-men-000-strip+adobe.jpg'
+
+Seems to work with jpg files, but the result has the same color appearance as pngs with the Adobe profile added: i.e., it appears as though pixel values might be changing, not simply adding the profile.
+
+Simply adding the adobe profile without strip produces what I was expecting: same appearance on screen as original, but with the Adobe profile applied:
+
+    convert 'pdf_images/tests/x-men-000.jpg' -profile 'input/AdobeRGB.icc' 'pdf_images/tests/x-men-000+adobe.jpg'
+
+`identify -verbose` suggests pixel values have changed with jpg outputs, but that might be due to compression or quality settings? adding `-quality 100` to the command with `-strip` does not reproduce original statistics and is not noticeably better quality or different from the original.
+
+Exporting to pdf seems to result in the `Artifex sRGB profile` being embedded instead (according to `identify -verbose`)?  Image statistics are different, but that might just be due to the change in format?
+
+  - Except when converting from .jpg to .pdf and applying the Adobe color profile without '-strip': there is no color profile apparent in the pdf according to `identify -verbose`.  Strange.
 
 
 ## Width and image quality
