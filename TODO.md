@@ -9,6 +9,11 @@
   - set dpi to 150 in pdf (LaTeX)?
   - set image width to precisely n_pixels / 150 ppi?
 
+- Vertical version (as requested)?
+  - https://boardgamegeek.com/filepage/221561/vertical-card-dividers
+  - https://boardgamegeek.com/filepage/228931/vertical-card-dividers-x-men
+  * https://drive.google.com/drive/folders/13GJDg8u0EQPtyufb4QNH2CoMHwnT4GTD?usp=sharing
+
 - Group parameters together in YAML header to facilitate pasting options from `parameters.md`?
   - File options: pdf_file, extract_images, page_breaks
   - Divider options: dimensions, border_colour, spacing
