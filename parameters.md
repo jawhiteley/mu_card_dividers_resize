@@ -124,6 +124,36 @@ page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
 page_breaks <- c() # unnecessary
 ```
 
+* Enter the Spider-Verse
+```
+[
+  c(# Heroes
+    c(28, 43, 45, 46)   # Spider-Verse.  Spider-Gwen: , 44
+    ,
+    # Villains
+    c(68, 72)   # Bullseye? , 61
+  )
+]
+# Custom page breaks based on custom divider list above.
+page_breaks <- c() # unnecessary
+```
+
+
+* Rise of the Black Panther
+```
+[
+  c(# Heroes
+    c(6, 42, 57)  # Black Panther
+    ,
+    # Villains
+    71
+  )
+]
+# Custom page breaks based on custom divider list above.
+page_breaks <- c() # unnecessary
+```
+
+
  
 ## X-Men
 

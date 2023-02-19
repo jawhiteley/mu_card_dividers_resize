@@ -94,7 +94,9 @@ page_breaks <- as.character(page_breaks) %>% strsplit(",") %>% unlist %>% as.int
 
 # Get list of (png) files: 1 file per divider
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
-# loop over the list and include graphics, which should apply the custom LaTeX command defined above (for \includegraphics).
+## ^^ paste custom code from `parameters.md` file (divider index list) to the end of the line above this one. ^^
+
+# Loop over the list and include graphics, which should apply the custom LaTeX command defined above (for \includegraphics).
 if (length(page_breaks) > 0){
   for (i in 1:length(img_files)) {
     if (i %in% page_breaks)  # add a page break before output, if requested.
