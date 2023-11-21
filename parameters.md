@@ -86,6 +86,27 @@ The extracted images can be re-ordered by renaming them manually, or in the code
 page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
 ```
 
+## Spider-Geddon
+
+```
+  pdf_file: spider-geddon_horiz_dividers.pdf
+  extract_images: TRUE
+```
+
+* divider index list
+```
+[
+  c(
+    1:8,
+    ## Anti-Venom: Hero, Villain
+    9, 11,
+    ## Superior Spider-Man: Hero, Villain
+    13, 15,
+    ## Anti-Hero (purple) dividers on separate page
+    10, 12, 14, 16
+  )
+]
+```
 
 
 

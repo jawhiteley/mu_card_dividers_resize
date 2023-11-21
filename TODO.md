@@ -1,5 +1,7 @@
 # To Do
 
+- Find a way to add PATH to homebrew binaries (pdfimages) permanently
+
 - Try to preserve original color profile (Adobe RGB 1998)?
   - Use ImageMagick to slice images directly from command-line (using a call from within R)?
 

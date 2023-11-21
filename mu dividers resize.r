@@ -78,6 +78,8 @@ library(pdfimager)  # remotes::install_github("sckott/pdfimager")
 
 if (F)    # do not run on source()
   pdimg_help()  # check that poppler and pdfimages is installed and accessible: you will get (command-line) help output if it is, and an error if it's not.
+# You may need to add the location of pdfimages to the PATH of the shell R uses (different from Terminal)
+# Sys.setenv(PATH=paste("/opt/homebrew/bin", Sys.getenv("PATH"), sep=":"))
 
 # Extract all images as png files to destination folder (pdfimager automatically creates a sub-folder with the pdf file name).
 # + "-all" option extracts the image in its native format, apparently: https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag
