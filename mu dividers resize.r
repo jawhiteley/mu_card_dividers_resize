@@ -57,7 +57,7 @@ if (is.na(pdf_file) || pdf_file == "") {   # these expressions would fail (empty
   }
 }
 # Stop if there is still no pdf_file available (e.g., the `input` directory is empty)
-if (length(pdf_file) < 1 || pdf_file == "")
+if (length(pdf_file) < 1) # || pdf_file == "")
   stop(sprintf("No input pdf file found (in directory `%s/%s/`): check the `pdf_file` and `input_dir` parameters, and working directory.", getwd(), input_dir))
 
 # Prepend input directory to make full relative paths
@@ -88,7 +88,7 @@ if (F)    # do not run on source()
 # + returned value is a table (within a list) with the relative path to each extracted image files (regardless of the format)
 # pdimg_images() is vectorized for a list of paths. :)
 pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-all") %>%
-  bind_rows    # collapse nested lists into 1 data frame
+  bind_rows()    # collapse nested lists into 1 data frame
 
 
 
@@ -136,11 +136,21 @@ crop_page <- function(page, img_crops = page_crops) {
     # the last two are rotated 90º at the end of the page
     if (d > 6)  
       img <- image_rotate(img, 90)
-    # check if it's blank
+    # some dividers at the end might be rotated the other way
+    # check if the top-left corner (4x4) is solid white and rotate 180 if it is
+    if ( 
+      image_compare_dist(  # compare *distortion*
+        image_crop(img, "4x4+1+1"),       # extract 4x4 sample, 1 pixel in from top-left corner
+        image_blank(4, 4, color="white"), # reference image 4x4 pure white
+        metric = "AE"
+      ) == 0 
+    ) 
+      img <- image_rotate(img, 180)
+    # check if it's blank - return nothing if it is
     if (image_isblank(img))
       return()
     else
-      img
+      return(img)
   })
 }
 
