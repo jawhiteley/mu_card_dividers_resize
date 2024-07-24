@@ -108,6 +108,188 @@ page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
 ]
 ```
 
+## Multiverse
+
+```
+  pdf_file:  mu_season3_horiz_dividers.pdf, mu_horiz_update1.pdf
+  extract_images: TRUE 
+```
+
+* divider index list; sort order:
+  - by Box (custom order, depending on what fits best)
+  - Kickstarter Exclusive items grouped together at the end or beginning 
+    (in case a user is printing for a retail edition and doesn't need these, 
+    they can be on a separate page, if necessary).
+  - Heroes, Villains, Anti-Heroes, [Other]
+    - Anti-Hero alts are sorted by name (Hero first, then Villain for each character): 
+      I figure those wanting to use these are grouping them by character name 
+      more than Hero / Villain; 
+      plus, it looks nice with 2 columns and each row is a character.
+  - Alphabetical by name
+```
+[
+  c(# Alphabetical, by box: Heroes, Villains, Anti-Hero alts, Other, KS exclusives (if retail)
+    # Core Box (1:13) [13-14]
+    2, 1, 10, 3, 6, 4, 5, NA, 12, 7:9,
+    11, 13,  # Anti-Hero alts
+    # Galactus (14:23) [10]
+    14, 16, 
+    19:20, 22, 21, 17, 23, 
+    15, 18,  # Anti-Hero alts
+    # Pets (184:191) [8]
+    184:191,
+    # Promos (87:171) [63+7+9+7=85-86]
+    ## Heroes
+    97:98, 91, 96, 95, 89, 94, 88, 92:93, 
+    112, 114, 116, 108, 99, 172, 100, 90, 120:121, 
+    124, 126, 127, 129, 131, 134, 132, 140, 142, 152, 
+    154, 155, 156, 157, 162, 160, 159, 164, 166, 170, 
+    ## Villains
+    167, 101, 103:106, 113, 107, 115, 109, 111, 
+    118:119, 102, 122, 123, 125, 128, 130, 135, 133,
+    153, 141, 158, 163, 165, 169, 171, 110, 
+    ## Other
+    173,     # Generic Equipment (Other or Promos? Wherever fits)  
+    ## Anti-Heroes
+    147, 146, 145, 144, 136, 137, 138, 139, 150, 151, 149, 148, 
+    168,     # Winter Guard (Villain)
+    117, 143, 161,  # Winter Guard (Heroes)
+    # Civil War (49:58) [10-11; 12] - missing Mission, Event, Cell, Last Player cards? (Registration Clash, Clash of Heroes)
+    58, 57,  # KS Exclusives
+    53, 56, 49, 54, 55, 50, 51, 52,
+    239, NA, # Population cards; placeholder for "Registration Clash"?
+    # Maximum Carnage (64:73) [10]
+    70, 
+    67, 72, 64:66, 68,
+    69,      # KS Exclusive
+    71, 73,  # Anti-Hero Alts
+    # World War Hulk (74:87) [14-15] - missing Anti-Hero alt for The Void? (present in vertical dividers)
+    78, 77, 75, 74, 79,
+    86, 87, 83,  # Villain Hulk (83) is "World Breaker Hulk"
+    81, 85, 80, 84, 82, NA,  # Anti-Hero alts (placeholder for The Void)
+    76,      # KS Exclusive
+    # Age of Apocalypse (36:42) [7]
+    38, 37, 39, 36,
+    40:42,   # 40 = Apocalypse, to be replaced with correction (AOA)
+    # Annihilation (59:63, 174) [6]
+    62, 59:61, 63, 
+    174,     # Complications Challenge
+    # Secret Invasion (43:48) [6]
+    44, 43, 45:46,
+    47:48,
+    # War of Kings (24:35) [12]
+    24, 26, 32, 27:28, 30, 25, 29,
+    34, 31,
+    33, 35,  # Anti-Hero alts
+    # Team Decks (192:222, 231:238) [39]
+    192,
+    193, 195:198, 200, 204, 209, 211, 214:218, 222,     # Retail
+    231:233, 237, 234:236, 238,                         # Promos
+    194, 199, 201:203, 205:208, 210, 212:213, 219:221,  # KSE optional buy
+    ## 223-230 are from the equipment card pockets page (not accurately cropped): skip
+    # Campaigns (175:183) [9]
+    175:183,
+    # Other
+    NA
+  )
+]
+# Custom page breaks based on custom divider list above.
+page_breaks <- c(13, 24) # 64, 112)
+# Add Apocalypse (AOA) correction (standalone .jpg file)
+img_tmp <- 
+  magick::image_read('input/apocalypse.jpg') |> 
+  magick::image_crop("541x390+1+1") |>
+  magick::image_strip() |>
+  magick::image_write(path = 'pdf_images/div-aoa.png', format = 'png')
+# Replace image #40 with the corrected image
+img_files <- sub("div-040.png", "div-aoa.png", img_files)
+```
+
+* Alternate layout:
+  - bundle retail content together
+  - then all the Kickstarter Exclusive content (in a separate file)
+```
+[
+  c(# Alphabetical, by box: Heroes, Villains, Anti-Hero alts, Other, KS exclusives (if retail)
+    # Core Box (1:13) [13-14]
+    2, 1, 10, 3, 6, 4, 5, NA, 12, 7:9,
+    11, 13,  # Anti-Hero alts
+    # Maximum Carnage (64:73) [10]
+    70, 
+    67, 72, 64:66, 68,
+    69,      # KS Exclusive
+    71, 73,  # Anti-Hero Alts
+    # Civil War (49:58) [10-11; 12] - missing Mission, Event, Cell, Last Player cards? (Registration Clash, Clash of Heroes)
+    53, 56, 49, 54, 55, 50, 51, 52,
+    58, 57,  # KS Exclusives
+    239, # NA, # Population cards; placeholder for "Registration Clash"?
+    # World War Hulk (74:87) [14-15] - missing Anti-Hero alt for The Void? (present in vertical dividers)
+    76,      # KS Exclusive
+    78, 77, 75, 74, 79,
+    86, 87, 83,  # Villain Hulk (83) is "World Breaker Hulk"
+    81, 85, 80, 84, 82, NA,  # Anti-Hero alts (placeholder for The Void)
+    # Team Decks [15-16]
+    192,
+    193, 195:198, 200, 204, 209, 211, 214:218, 222,     # Retail
+    # Galactus (14:23) [10]
+    14, 16, 
+    19:20, 22, 21, 17, 23, 
+    15, 18,  # Anti-Hero alts
+    # Pets (184:191) [8]
+    184:191,
+    # Promos (87:171) [63+7+9+7=85-86]
+    ## Heroes
+    97:98, 91, 96, 95, 89, 94, 88, 92:93, 
+    112, 114, 116, 108, 99, 172, 100, 90, 120:121, 
+    124, 126, 127, 129, 131, 134, 132, 140, 142, 152, 
+    154, 155, 156, 157, 162, 160, 159, 164, 166, 170, 
+    ## Villains
+    167, 101, 103:106, 113, 107, 115, 109, 111, 
+    118:119, 102, 122, 123, 125, 128, 130, 135, 133,
+    153, 141, 158, 163, 165, 169, 171, 110, 
+    ## Other
+    173,     # Generic Equipment (Other or Promos? Wherever fits)  
+    ## Anti-Heroes
+    147, 146, 145, 144, 136, 137, 138, 139, 150, 151, 149, 148, 
+    168,     # Winter Guard (Villain)
+    117, 143, 161,  # Winter Guard (Heroes)
+    # Age of Apocalypse (36:42) [7]
+    38, 37, 39, 36,
+    40:42,   # 40 = Apocalypse, to be replaced with correction (AOA)
+    # Annihilation (59:63, 174) [6]
+    62, 59:61, 63, 
+    174,     # Complications Challenge
+    # Secret Invasion (43:48) [6]
+    44, 43, 45:46,
+    47:48,
+    # War of Kings (24:35) [12]
+    24, 26, 32, 27:28, 30, 25, 29,
+    34, 31,
+    33, 35,  # Anti-Hero alts
+    # Team Decks (192:222, 231:238) [39]
+    192,
+    231:233, 237, 234:236, 238,                         # Promos
+    194, 199, 201:203, 205:208, 210, 212:213, 219:221,  # KSE optional buy
+    ## 223-230 are from the equipment card pockets page (not accurately cropped): skip
+    # Campaigns (175:183) [9]
+    175:183,
+    # Other
+    NA
+  )
+]
+# Custom page breaks based on custom divider list above.
+page_breaks <- c(13, 125, 178)
+# Add Apocalypse (AOA) correction (standalone .jpg file)
+img_tmp <- 
+  magick::image_read('input/apocalypse.jpg') |> 
+  magick::image_crop("541x390+1+1") |>
+  magick::image_strip() |>
+  magick::image_write(path = 'pdf_images/div-aoa.png', format = 'png')
+# Replace image #40 with the corrected image
+img_files <- sub("div-040.png", "div-aoa.png", img_files)
+```
+
+
 
 
 # Personal Settings (just what I want to print)
