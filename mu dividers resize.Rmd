@@ -5,14 +5,15 @@ output:
     #keep_tex: TRUE
 geometry: margin=1cm    # not safe to go below 6 mm
 params:
-  pdf_file:       # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
-  extract_images: FALSE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
+  modular_code: modular_code/    # path to R script with modular code (for a specific set of input files)
+  pdf_file:               # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
+  extract_images: FALSE   # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
+  page_breaks:    # comma-separated list of divider numbers: page breaks will be added **before** each divider in this list.
   div_height:   76    # in mm: Height of dividers
   div_width:    91.6  # in mm: Width of dividers
   border_width:  0.25 # in mm: Thickness of borders around dividers (added to the _outside_ of dividers: not included in the dimensions above)
   border_colour:  lightgray # name of colour to use for the border (https://en.wikibooks.org/wiki/LaTeX/Colors) (https://latex-tutorial.com/color-latex/#colored-boxes)
   spacing:        # space between dividers (include units).  Leave blank for no space (overlapping borders).
-  page_breaks:    # comma-separated list of divider numbers: page breaks will be added **before** each divider in this list.
   # Extracted images will be exported here (and LaTeX will look for them here):
   img_dir: pdf_images
 classoption: dvipsnames
@@ -21,8 +22,11 @@ header-includes: |
   \graphicspath{{./`r params$img_dir`/}}
   \pagenumbering{gobble}  % remove page numbers
 ---
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, cache=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+library(knitr)
+library(magrittr)
 
 ## PARAMETERS - will be used by `mu dividers resize.r` if run from here.
 pdf_file <- params$pdf_file
@@ -39,14 +43,24 @@ if (is.null(spacing))
 if (spacing == "" || is.na(spacing))
   spacing <- "-\\fboxrule"
 
-library(knitr)
-library(magrittr)
-
 ## Working Directory: all paths are relative to here
 # When compiling an R Markdown document (using render()), the default working directory is automatically the same directory as the file itself. :)
 # https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html
+
+## LOAD custom modular code 
+# Code specific to processing a particular set of input files is stored in individual files in `modular_code/`
+# Code chunks in this external file will be inserted in chunks below with corresponding names
+# https://bookdown.org/yihui/rmarkdown-cookbook/read-chunk.html
+# See 'modular_code/template.R' for a basic template with appropriately-named chunks
+if ( exists('modular_code', where = params) ) {
+  if ( file.exists(params$modular_code) && !dir.exists(params$modular_code) ) # file exists and is not a directory
+    knitr::read_chunk(params$modular_code)
+}
 ```
-```{r extract, include=FALSE, eval=params$extract_images}
+```{r, modular-setup, include=FALSE}
+# Code from `modular_code` file, if any, is inserted here.
+```
+```{r extract, include=FALSE, eval=isTRUE(params$extract_images)}
 # If you want to do everything here in one step, set the value of the 'extract_images' parameter to 'TRUE' in the in the document header.
 # If you already ran the r script and want to skip directly to output, set the value of the 'extract_images' parameter to 'FALSE' in the in the document header.
 
@@ -85,7 +99,7 @@ source("mu dividers resize.r", local = knitr::knit_global())
 %\setlength{\xspaceskip}{`r spacing`}    %-\fboxrule}
 ```
 
-```{r output, echo=FALSE, , results="asis"}
+```{r processing, include=FALSE}
 # Page Break locations (if any)
 page_breaks <- params$page_breaks
 if (length(page_breaks) < 1)
@@ -94,10 +108,11 @@ page_breaks <- as.character(page_breaks) %>% strsplit(",") %>% unlist %>% as.int
 
 # Get list of (png) files: 1 file per divider
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
-## ^^ paste custom code from `parameters.md` file (divider index list) to the end of the line above this one. ^^
-## TODO: replace the copy-paste approach with custom code in dedicated files
-##  and a parameter that specifies which one to source()
+```
+```{r, modular-processing, include=FALSE}
+```
 
+```{r output, echo=FALSE, , results="asis"}
 # Loop over the list and include graphics, which should apply the custom LaTeX command defined above (for \includegraphics).
 if (length(page_breaks) > 0){
   for (i in 1:length(img_files)) {

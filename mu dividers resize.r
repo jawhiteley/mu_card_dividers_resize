@@ -1,4 +1,4 @@
-# R v4.1.3        Jonathan Whiteley        2022-04-14
+# R v4.4.1        Jonathan Whiteley        2023-07-22
 # Extract images from Spiffworld's card dividers for Marvel United
 # https://boardgamegeek.com/filepage/220250/horizontal-card-dividers
 # https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men
