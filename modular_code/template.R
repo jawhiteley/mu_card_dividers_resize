@@ -3,11 +3,12 @@
 # TEMPLATE ====
 
 ## ---- modular-setup ----
-pdf_file <- "mu_card_dividers_v2.pdf"
+pdf_file <- "mu_x-men_horiz_dividers_legion.pdf"
 unlockBinding("params", env = .GlobalEnv)  # `params` in knitr is usually locked during rendering.
 params$extract_images <- TRUE
 lockBinding("params", env = .GlobalEnv)  # lock `params` again.
 
 
 ## ---- modular-processing ----
-page_breaks <- 59
+img_files <- img_files[c(1:3, 1:3)]
+page_breaks <- 5

@@ -57,11 +57,23 @@ if (spacing == "" || is.na(spacing))
 # https://bookdown.org/yihui/rmarkdown-cookbook/read-chunk.html
 # See 'modular_code/template.R' for a basic template with appropriately-named chunks
 if ( !is.null(params$modular_code) ) {
-  if ( file.exists(params$modular_code) && !dir.exists(params$modular_code) ) # file exists and is not a directory
-    knitr::read_chunk(params$modular_code)
+  if ( file.exists(params$modular_code) && !dir.exists(params$modular_code) ) { 
+    # file exists and is not a directory
+    codefile_ext <- basename(params$modular_code) %>% 
+      strsplit(split = ".", fixed = T) %>% 
+      unlist() %>% `[`(-1) %>% tolower()
+    if (codefile_ext == "rmd") {
+      # https://stackoverflow.com/questions/75233545/rmarkdown-how-to-use-code-chunk-from-other-rmd-file
+      tmp_script <- tempfile("modular_code")
+      invisible(knitr::purl(params$modular_code, output=tmp_script, quiet=TRUE))
+      knitr::read_chunk(tmp_script)
+    } else {
+      knitr::read_chunk(params$modular_code)
+    }
+  } 
 }
 ```
-```{r, modular-setup, include=FALSE}
+```{r, ref.label='modular-setup', include=FALSE}
 # Code from `modular_code` file, if any, is inserted here.
 ```
 ```{r extract, include=FALSE, eval=isTRUE(params$extract_images)}
@@ -113,7 +125,8 @@ page_breaks <- as.character(page_breaks) %>% strsplit(",") %>% unlist %>% as.int
 # Get list of (png) files: 1 file per divider
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
 ```
-```{r, modular-processing, include=FALSE}
+```{r, ref.label='modular-processing', include=FALSE}
+# Code from `modular_code` file, if any, is inserted here.
 ```
 
 ```{r output, echo=FALSE, , results="asis"}
