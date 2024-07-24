@@ -1,0 +1,47 @@
+# Marvel United: X-Men (season 2)
+
+Personal file for printing.
+
+
+```{r modular-setup}
+pdf_file <- "mu_x-men_horiz_dividers.pdf, mu_x-men_horiz_dividers_legion.pdf"
+```
+
+
+
+```{r modular-processing}
+img_files <- img_files[
+  c(# Heroes: skip FF & P5, and ones with alts that I'm using instead
+    setdiff(
+      c(1:70),
+      c(c(26, 46, 53, 55, 58),  # skip Alpha Flight
+        c(1, 4, 14, 31, 41),    # skip X-Men: First Class
+        c(30, 33, 43, 57, 64),  # skip Fantastic Four
+        29, 47  # skip Hope, Old Man Logan
+      )
+    ),
+    71:75,   # Alpha Flight alts
+    76:80,   # X-Men: First Class alts
+    # 81:85, # skip Fantastic Four
+    118, 116, 117, # Misc, Challenges
+    # Villains: skip FF & P5
+    setdiff(86:115, 
+            c(103:107, 115)  # skip Phoenix 5, Super-Skrull
+    ),  
+    # 119:123, # skip Phoenix 5
+    # Anti-heroes
+    c(124:133)[-3], # skip Dr. Doom
+    c(134:137, 
+      171,          # insert Legion villain
+      138:142)[-3], # skip Dr. Doom
+    c()      # skip the rest
+    # 143:156, # anti-heroes alts
+    # 172, # insert Legion villain alt
+    # 157:165, 
+    # 173, # insert Legion combined
+    # 166:170
+  )
+]
+# Custom page breaks based on custom divider list above.
+page_breaks <- c()  # c(67, 91) unnecessary
+```

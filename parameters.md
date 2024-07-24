@@ -1,3 +1,16 @@
+# DEPRECATED
+Reproducible custom settings are now stored in individual files in the `modulcar_code/` directory.
+These can be easily included in the main Rmarkdown file by specifying the relative path to one of these files in the `modular_code:` parameter (in the YAML header).
+Code in those external files can overwrite parameter values, or derived variables directly.
+
+*This file can be deleted, or converted to documentation with instructions,
+once all the custom code has been converted to files in `modular_code/`.*
+
+
+
+
+# ARCHIVE
+
 This is a place to record parameter values used to reproduce certain outputs.
 
 # Complete sets for sharing

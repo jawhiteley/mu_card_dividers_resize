@@ -1,6 +1,6 @@
 # R v4.4.1        Jonathan Whiteley        2024-07-24
 # Modular code for processing a specific set of files
-# Marvel United season 1 ====
+# Marvel United (season 1) ====
 
 ## ---- modular-setup ----
 pdf_file <- "mu_card_dividers_v2.pdf"

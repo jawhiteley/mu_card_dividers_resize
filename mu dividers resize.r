@@ -1,4 +1,4 @@
-# R v4.4.1        Jonathan Whiteley        2023-07-22
+# R v4.4.1        Jonathan Whiteley        2023-07-24
 # Extract images from Spiffworld's card dividers for Marvel United
 # https://boardgamegeek.com/filepage/220250/horizontal-card-dividers
 # https://boardgamegeek.com/filepage/228893/horizontal-card-dividers-x-men
@@ -44,11 +44,13 @@ if (!exists('pdf_file'))
   pdf_file <- ""
 if (length(pdf_file) < 1)  # a blank parameter in R Markdown is assigned NULL: checking length also captures empty vectors
   pdf_file <- ""
-if (is.na(pdf_file) || pdf_file == "") {   # these expressions would fail (empty results) if NULL
+if (length(pdf_file) > 1)  # just in case: R Markdown parameters are passed as plain text (length() == 1)
+  pdf_file <- paste(pdf_file, collapse = ", ")
+if (all(is.na(pdf_file) | pdf_file == "")) {  # these expressions would fail (empty results) if NULL
   pdf_file <- list.files(input_dir, '.pdf$')  # auto-detect all pdf files in the `input` directory
 } else {
   # Split text into individual items
-  pdf_file <- unlist( strsplit(pdf_file, ", ") )
+  pdf_file <- strsplit(pdf_file, ",") %>% unlist() %>% trimws()
   # Check that the specified pdf files exist, and throw an error if any do not.
   for (file in pdf_file) {
     if (file.exists(paste(input_dir, file, sep="/")) == FALSE) {

@@ -1,0 +1,72 @@
+# Marvel United: X-Men (season 2)
+
+
+```{r modular-setup}
+pdf_file <- "mu_x-men_horiz_dividers.pdf, mu_x-men_horiz_dividers_legion.pdf"
+```
+
++ For X-Men (including the separate Legion file), I suggest the following page breaks (these will add as many as 4 pages, depending on which ones are used):
+
+    - 4: Heroes (after missing Legion dividers)
+    - 74: Alpha Flight (alternates)
+    - 79: X-Men First Class (alternates)
+    - 84: Fantastic Four (alternates)
+    - 89: Villains
+      - 119: Challenges, Misc. (only 3 cards)
+    - 122: Phoenix 5 (alternates)
+    - 127: Anti-Heroes (as Heroes)
+      - 137: Anti-Heroes (as villains)
+    - 146: Anti-Heroes (Hero alternates)
+      - 156: Anti-Heroes (Villain alternates)
+    - 165: Anti-Heroes (alternates, combined)
+
++ For X-Men (if including Legion in the appropriate locations):
+
+    - 71: Alpha Flight (alternates)
+    - 76: X-Men First Class (alternates)
+    - 81: Fantastic Four (alternates)
+    - 86: Villains
+      - 116: Challenges, Misc. (only 3 cards)
+    - 119: Phoenix 5 (alternates)
+    - 124: Anti-Heroes (as Heroes)
+      - 134: Anti-Heroes (as villains)
+    - 144: Anti-Heroes (Hero alternates)
+      - 154: Anti-Heroes (Villain alternates)
+    - 164: Anti-Heroes (alternates, combined)
+
+
+For the file posted on BGG, I used `page_breaks` designed to work with a custom order of divider images, which groups heroes & villains that have alternates together (to make it easier to choose one set over another), inserts Legion tabs where they are missing, and moves the Challenges and Misc. dividers.  The custom order and page breaks only results in 1 extra page.  
+
+The extracted images can be re-ordered by renaming them manually, or in the code by modifying the index in the code below:
+
+```{r modular-processing}
+img_files <- img_files[
+  c(# Heroes
+    setdiff(
+      c(1:70),
+      c(c(26, 46, 53, 55, 58),  # skip Alpha Flight
+        c(1, 4, 14, 31, 41),    # skip X-Men: First Class
+        c(30, 33, 43, 57, 64)   # skip Fantastic Four
+      )
+    ),
+    c(26, 46, 53, 55, 58),  # Alpha Flight
+    c(1, 4, 14, 31, 41),    # X-Men: First Class
+    c(30, 33, 43, 57, 64),  # Fantastic Four
+    71:85,   # alternates (Alpha Flight, X-Men: First Class, Fantastic Four)
+    # Villains
+    86:102, 108:115,
+    103:107, # Phoenix 5 with Super-Skrull
+    119:123, # Phoenix 5 alts
+    # Ant-Heroes (as standard heroes, villains)
+    124:137, 171, # insert Legion villain
+    138:142,
+    116, 117, 118, # Challenges, Misc.
+    # Anti-Heroes alts
+    143:156, 172, # insert Legion villain alt
+    157:165, 173, # insert Legion combined
+    166:170
+  )
+]
+# Custom page breaks based on custom divider list above.
+page_breaks <- c(61, 66, 71, 76, 81, 86, 116, 121, 144)
+```
