@@ -32,16 +32,20 @@ library(magrittr)
 pdf_file <- params$pdf_file
 img_dir  <- params$img_dir
 
+# Convert some parameters to variables for cleaning (modification)
+# https://stackoverflow.com/questions/41979027/modify-params-in-r-notebooks
+border_colour <- params$border_colour
 if (is.null(params$border_colour))
-  params$border_colour <- ""
-if (params$border_colour == "" || is.na(params$border_colour))
-  params$border_colour <- "black"
+  border_colour <- ""
+if (border_colour == "" || is.na(border_colour))
+  border_colour <- "black"
 
 spacing <- params$spacing
 if (is.null(spacing))
   spacing <- ""
 if (spacing == "" || is.na(spacing))
   spacing <- "-\\fboxrule"
+
 
 ## Working Directory: all paths are relative to here
 # When compiling an R Markdown document (using render()), the default working directory is automatically the same directory as the file itself. :)
@@ -52,7 +56,7 @@ if (spacing == "" || is.na(spacing))
 # Code chunks in this external file will be inserted in chunks below with corresponding names
 # https://bookdown.org/yihui/rmarkdown-cookbook/read-chunk.html
 # See 'modular_code/template.R' for a basic template with appropriately-named chunks
-if ( exists('modular_code', where = params) ) {
+if ( !is.null(params$modular_code) ) {
   if ( file.exists(params$modular_code) && !dir.exists(params$modular_code) ) # file exists and is not a directory
     knitr::read_chunk(params$modular_code)
 }
@@ -86,7 +90,7 @@ source("mu dividers resize.r", local = knitr::knit_global())
 % To align dividers vertically on a line, [pos] must not  = [contentpos].  
 %  I want the image top-aligned within the box, and the box borders aligned, ideally also along the top, but since they are all the same height, 'bottom' works, too (and is different from 'top').
 \let\includegraphicsOG\includegraphics
-\renewcommand*{\includegraphics}[2][]{\fcolorbox{`r params$border_colour`}{white}{\parbox[b][\DivHeight][t]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
+\renewcommand*{\includegraphics}[2][]{\fcolorbox{`r border_colour`}{white}{\parbox[b][\DivHeight][t]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
 
 % control spacing around graphics
 \setlength{\lineskip}{`r spacing`}    %-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
