@@ -95,16 +95,21 @@ page_breaks <- as.character(page_breaks) %>% strsplit(",") %>% unlist %>% as.int
 # Get list of (png) files: 1 file per divider
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
 ## ^^ paste custom code from `parameters.md` file (divider index list) to the end of the line above this one. ^^
+## TODO: replace the copy-paste approach with custom code in dedicated files
+##  and a parameter that specifies which one to source()
 
 # Loop over the list and include graphics, which should apply the custom LaTeX command defined above (for \includegraphics).
 if (length(page_breaks) > 0){
   for (i in 1:length(img_files)) {
     if (i %in% page_breaks)  # add a page break before output, if requested.
       cat("\\par \n\\pagebreak")
+    if (is.na(img_files[i]))  # add a line break before output, if file is missing (NA).
+      cat("\\hspace{\\DivWidth} \n")
+    else
       cat("![](", img_files[i], ")\n")  # use the md syntax, which pandoc will convert to \includegraphics{}
   }
 } else {
   # If no page breaks, use the simple (vectorized!) function to produce md syntax, which will end up as \includegraphics
-  include_graphics(img_files)
+  include_graphics(img_files[!is.na(img_files)])
 }
 ```
