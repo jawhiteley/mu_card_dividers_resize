@@ -3,6 +3,27 @@
 
 ```{r modular-setup}
 pdf_file <- "mu_season3_horiz_dividers.pdf, mu_horiz_update1.pdf"
+add_jpg_dividers <- function(img_files) {
+  # This will be run later, in 'modular-processing',
+  # but I define it here so it can be used reliably in any version below.
+  # Meant to be run *before* reordering the list of image files ;)
+  # helper function to read in standalong .jpg files
+  proc_jpg <- function (input, output) {
+    magick::image_read(input) |> 
+    magick::image_crop("541x390+1+1") |>
+    magick::image_strip() |>
+    magick::image_write(path = output, format = 'png')
+  }
+  ## Add Apocalypse (AOA) correction (standalone .jpg file)
+  # and replace image #40 with the corrected image
+  img_tmp <- proc_jpg('input/apocalypse.jpg', 'pdf_images/div-040.png')
+  ## Add missing Void Anti-Hero Villain alt (standalone .jpg file)
+  void_file <- sprintf("pdf_images/div-%03d.png", length(img_files) +1)
+  img_tmp <- proc_jpg('input/void_-_vp.jpg', void_file)
+  # Append to the end of the list 
+  img_files <- c(img_files, void_file)
+  return(img_files)
+}
 ```
 
 Divider index list sort order:
@@ -18,7 +39,10 @@ Divider index list sort order:
       plus, it looks nice with 2 columns and each row is a character.
   - Alphabetical by name
 
-```{r modular-processing}
+```{r modular-processing-alt}
+# Add jpg dividers [Apocalypse (AOA), Void Villain alt]
+img_files <- add_jpg_dividers(img_files)
+# Reorder divider image files
 img_files <- img_files[
   c(# Alphabetical, by box: Heroes, Villains, Anti-Hero alts, Other, KS exclusives (if retail)
     # Core Box (1:13) [13-14]
@@ -104,7 +128,10 @@ img_files <- sub("div-040.png", "div-aoa.png", img_files)
 - bundle retail content together
 - then all the Kickstarter Exclusive content (in a separate file)
   
-```{r modular-processing-alt}
+```{r modular-processing}
+# Add jpg dividers [Apocalypse (AOA), Void Villain alt]
+img_files <- add_jpg_dividers(img_files)
+# Reorder divider image files
 img_files <- img_files[
   c(# Alphabetical, by box: Heroes, Villains, Anti-Hero alts, Other, KS exclusives (if retail)
     # Core Box (1:13) [13-14]
@@ -123,7 +150,7 @@ img_files <- img_files[
     76,      # KS Exclusive
     78, 77, 75, 74, 79,
     86, 87, 83,  # Villain Hulk (83) is "World Breaker Hulk"
-    81, 85, 80, 84, 82, NA,  # Anti-Hero alts (placeholder for The Void)
+    81, 85, 80, 84, 82, 241,  # Anti-Hero alts (+ The Void Villain alt)
     # Team Decks [15-16]
     192,
     193, 195:198, 200, 204, 209, 211, 214:218, 222,     # Retail
@@ -175,12 +202,4 @@ img_files <- img_files[
 ]
 # Custom page breaks based on custom divider list above.
 page_breaks <- c(13, 125, 178)
-# Add Apocalypse (AOA) correction (standalone .jpg file)
-img_tmp <- 
-  magick::image_read('input/apocalypse.jpg') |> 
-  magick::image_crop("541x390+1+1") |>
-  magick::image_strip() |>
-  magick::image_write(path = 'pdf_images/div-aoa.png', format = 'png')
-# Replace image #40 with the corrected image
-img_files <- sub("div-040.png", "div-aoa.png", img_files)
 ```
