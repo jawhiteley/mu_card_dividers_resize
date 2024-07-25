@@ -7,6 +7,10 @@ add_jpg_dividers <- function(img_files) {
   # This will be run later, in 'modular-processing',
   # but I define it here so it can be used reliably in any version below.
   # Meant to be run *before* reordering the list of image files ;)
+  if (!isTRUE(params$extract_images)) {
+    # Don't do anything unless image extraction was run.
+    return(img_files)
+  }
   # helper function to read in standalong .jpg files
   proc_jpg <- function (input, output) {
     magick::image_read(input) |> 
@@ -83,7 +87,7 @@ img_files <- img_files[
     # World War Hulk (74:87) [14-15] - missing Anti-Hero alt for The Void? (present in vertical dividers)
     78, 77, 75, 74, 79,
     86, 87, 83,  # Villain Hulk (83) is "World Breaker Hulk"
-    81, 85, 80, 84, 82, NA,  # Anti-Hero alts (placeholder for The Void)
+    81, 85, 80, 84, 82, 240,  # Anti-Hero alts (placeholder for The Void)
     76,      # KS Exclusive
     # Age of Apocalypse (36:42) [7]
     38, 37, 39, 36,
@@ -150,7 +154,7 @@ img_files <- img_files[
     76,      # KS Exclusive
     78, 77, 75, 74, 79,
     86, 87, 83,  # Villain Hulk (83) is "World Breaker Hulk"
-    81, 85, 80, 84, 82, 241,  # Anti-Hero alts (+ The Void Villain alt)
+    81, 85, 80, 84, 82, 240,  # Anti-Hero alts (+ The Void Villain alt)
     # Team Decks [15-16]
     192,
     193, 195:198, 200, 204, 209, 211, 214:218, 222,     # Retail
