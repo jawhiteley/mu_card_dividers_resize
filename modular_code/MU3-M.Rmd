@@ -275,12 +275,27 @@ if (F) {
 } else {
   div_sorted <- div_long |> 
     mutate(
-      type = factor(type, levels = c("Hero", "Villain", "Anti-Hero", "Pet", "Other", "Challenge")),
-      type.ah = factor(type.ah, levels = c("hero", "villain", "ah.hero", "ah.villain")),
-      box = ifelse(type == "Other", box, NA) |> 
-        factor(levels = c("Teams", "Campaigns")) # drop other values so they are grouped together.
+      # set sort order with order of levels = (don't forget any!)
+      type = factor(
+        type, 
+        levels = c(
+          "Hero", 
+          "Villain", 
+          "Anti-Hero", 
+          "Pet", 
+          "Team", 
+          "Campaign", 
+          "Other", 
+          "Challenge"
+        )
+      ),
+      type.ah = factor(
+        type.ah, 
+        levels = c("hero", "villain", "ah.hero", "ah.villain")
+      ),
+      # box = ifelse(type %in% c("Team", "Other"), box, NA)
     ) |> 
-    arrange(type, type.ah, box, str_rank(name)) |> 
+    arrange(type, type.ah, str_rank(name)) |> 
     filter(!is.na(value)) |> 
     # derive page breaks
     mutate(
