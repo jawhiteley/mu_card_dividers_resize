@@ -3,6 +3,13 @@
 
 ```{r modular-setup}
 pdf_file <- "mu_season3_horiz_dividers.pdf, mu_horiz_update1.pdf"
+
+# libraries needed for code in this file
+library(readr)
+library(dplyr)
+library(tidyr)
+library(stringr)
+
 add_jpg_dividers <- function(img_files) {
   # This will be run later, in 'modular-processing',
   # but I define it here so it can be used reliably in any version below.
@@ -43,7 +50,7 @@ Divider index list sort order:
       plus, it looks nice with 2 columns and each row is a character.
   - Alphabetical by name
 
-```{r modular-processing-alt}
+```{r modular-processing-box}
 # Add jpg dividers [Apocalypse (AOA), Void Villain alt]
 img_files <- add_jpg_dividers(img_files)
 # Reorder divider image files
@@ -132,7 +139,7 @@ img_files <- sub("div-040.png", "div-aoa.png", img_files)
 - bundle retail content together
 - then all the Kickstarter Exclusive content (in a separate file)
   
-```{r modular-processing}
+```{r modular-processing-retail}
 # Add jpg dividers [Apocalypse (AOA), Void Villain alt]
 img_files <- add_jpg_dividers(img_files)
 # Reorder divider image files
@@ -206,4 +213,87 @@ img_files <- img_files[
 ]
 # Custom page breaks based on custom divider list above.
 page_breaks <- c(13, 125, 178)
+```
+
+
+## Set order using external dataset
+
+- bundle retail content together
+- then all the Kickstarter Exclusive content (in a separate file)
+  
+```{r modular-processing}
+# Add jpg dividers [Apocalypse (AOA), Void Villain alt]
+img_files <- add_jpg_dividers(img_files)
+
+# Read data file with dividers information for ordering
+div_data <- read_csv(
+  'modular_code/MU3-M-data.csv', 
+  na = "", 
+  name_repair = function(.x) {
+    .x |> vctrs::vec_as_names(repair = "universal") |> make.names(allow_ = FALSE) |> tolower()
+  }
+)
+# Clean data
+div_data <- div_data |> 
+  rename(
+    divider     = divider.., 
+    villain.div = villain.div.., 
+    ah.hero     = anti.hero..hero, 
+    ah.villain  = anti.hero..villain
+  ) |> 
+  filter(!if_all(c(divider, villain.div, ah.hero, ah.villain), ~ is.na(.x) )) |> 
+  mutate( across(villain.div:ah.villain, as.character) )
+# pivot (Anti-Hero columns) to a single column with divider numbers
+div_long <- div_data |> 
+  pivot_longer(
+    cols = divider:ah.villain,
+    names_to = 'type.ah'
+  ) |> 
+  filter(
+    ifelse(type == "Villain", type.ah == "divider", !is.na(value))
+  ) |> 
+  mutate(
+    value = as.numeric(value) |> suppressWarnings(),
+    type.ah = case_when(
+      type != "Anti-Hero" ~ NA,
+      str_starts(type.ah, "div")      ~ "hero",
+      str_starts(type.ah, "villain")  ~ "villain",
+      .default = type.ah
+    ),
+    # assign alternate names to villain forms of Anti-Heroes
+    name = case_when(
+      type == "Anti-Hero" & str_detect(type.ah, "villain") ~ str_replace(name, "^.*\\/\\s?", ""),
+      type == "Anti-Hero" & str_detect(type.ah, "hero")    ~ str_replace(name, "\\s?\\/.*$", ""),
+     .default = name
+    )
+  ) |> 
+  relocate(type.ah, .after = type) |> 
+  relocate(value, .before = page.break)
+
+# Sort divider data to desired order
+div_sorted <- div_long |> 
+  mutate(
+    type = factor(type, levels = c("Hero", "Villain", "Anti-Hero", "Pets", "Other")),
+    type.ah = factor(type.ah, levels = c("hero", "villain", "ah.hero", "ah.villain")),
+    box = ifelse(type == "Other", box, NA)
+  ) |> 
+  arrange(type, type.ah, box, str_rank(name)) |> 
+  # derive page breaks
+  mutate(
+    page.break = case_when(
+      # type == "Villain"   & !duplicated(type)  ~ TRUE,
+      type == "Anti-Hero" & !duplicated(type)  ~ TRUE,
+      .default = NA
+    )
+  )
+
+# extract page breaks (if any)
+page_breaks <- div_sorted |> 
+  pull(page.break) |> 
+  as.logical() |> 
+  which()
+# Reorder divider image file list
+img_files <- img_files[div_sorted$value]
+# Custom page breaks based on custom divider list above.
+#page_breaks <- c(13, 125, 178)
 ```
