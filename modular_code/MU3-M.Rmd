@@ -269,30 +269,35 @@ div_long <- div_data |>
   relocate(value, .before = page.break)
 
 # Sort divider data to desired order
-div_sorted <- div_long |> 
-  mutate(
-    type = factor(type, levels = c("Hero", "Villain", "Anti-Hero", "Pet", "Other", "Challenge")),
-    type.ah = factor(type.ah, levels = c("hero", "villain", "ah.hero", "ah.villain")),
-    box = ifelse(type == "Other", box, NA) |> 
-      factor(levels = c("Teams", "Campaigns")) # drop other values so they are grouped together.
-  ) |> 
-  arrange(type, type.ah, box, str_rank(name)) |> 
-  filter(!is.na(value)) |> 
-  # derive page breaks
-  mutate(
-    page.break = case_when(
-      # type == "Villain"   & !duplicated(type)  ~ TRUE,
-      type == "Anti-Hero" & !duplicated(type)  ~ TRUE,
-      .default = NA
+if (F) {
+  # Manual order - just use the same order as in the data file (notwithstanding Anti-Hero grouping)
+  div_sorted <- div_long
+} else {
+  div_sorted <- div_long |> 
+    mutate(
+      type = factor(type, levels = c("Hero", "Villain", "Anti-Hero", "Pet", "Other", "Challenge")),
+      type.ah = factor(type.ah, levels = c("hero", "villain", "ah.hero", "ah.villain")),
+      box = ifelse(type == "Other", box, NA) |> 
+        factor(levels = c("Teams", "Campaigns")) # drop other values so they are grouped together.
+    ) |> 
+    arrange(type, type.ah, box, str_rank(name)) |> 
+    filter(!is.na(value)) |> 
+    # derive page breaks
+    mutate(
+      page.break = case_when(
+        # type == "Villain"   & !duplicated(type)  ~ TRUE,
+        type == "Anti-Hero" & !duplicated(type)  ~ TRUE,
+        .default = NA
+      )
     )
-  )
+}
 
+# Reorder divider image file list
+img_files <- img_files[div_sorted$value]
 # extract page breaks (if any)
 page_breaks <- div_sorted |> 
   pull(page.break) |> 
   as.logical() |> 
   which()
-# Reorder divider image file list
-img_files <- img_files[div_sorted$value]
 
 ```
