@@ -337,12 +337,17 @@ if (sort_divs == "by type") {
     mutate(
       # make "Teams" divider KSE: assuming it's only really needed if you got more than the retail Team decks.
       ks.exclusive = ifelse(name == "_ Teams", 1, ks.exclusive),
-      # treat "Doc Samson" as "Other" for sorting within the box
+      # treat "Doc Samson" as "Other" for sorting within the box (unless grouping all KSE together)
       type = ifelse(!str_detect(sort_divs, "KSE") & name == "Doc Samson", 
                     "Other", 
                     type
       ),
-      # set sort order with order of levels = (don't forget any!)
+      # treat "Doc Samson" as part of "Civil War" for sorting with other KSE content
+      box = ifelse(str_detect(sort_divs, "KSE") & name == "Doc Samson", 
+                    "Civil War", 
+                    box
+      ),
+      # Set sort order with order of levels = (don't forget any!)
       type.ah = type.ah |> 
         factor(levels = c("hero", "villain", "ah.hero", "ah.villain")),
       type = ifelse(
@@ -374,16 +379,18 @@ if (sort_divs == "by type") {
           "Civil War",
           "World War Hulk",
           "Team Decks",
-          "The Coming of Galactus",
+          ifelse(!str_detect(sort_divs, "KSE"), "The Coming of Galactus", NA), 
           "Multiverse Promos",
           "Multiverse Promos (Omniverse All-In Bonus)",
           "The Age of Apocalypse",
+          ifelse(str_detect(sort_divs, "KSE"), "The Coming of Galactus", NA), 
+          ifelse(str_detect(sort_divs, "KSE"), "Pets", NA), 
           "Annihilation",
           "Secret Invasion",
           "War of Kings",
           "Teams",
           "Campaigns", "EQ",
-          "Pets"
+          ifelse(!str_detect(sort_divs, "KSE"), "Pets", NA)
         )
         ),
       # Ensure "Teams" divider stays in front of others
