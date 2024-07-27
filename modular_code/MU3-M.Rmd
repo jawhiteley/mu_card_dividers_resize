@@ -219,7 +219,7 @@ page_breaks <- c(13, 125, 178)
 # Add jpg dividers [Apocalypse (AOA), Void Villain alt]
 img_files <- add_jpg_dividers(img_files)
 
-# Read data file with dividers information for ordering
+# Read data file with dividers information for ordering ====
 div_data <- read_csv(
   'modular_code/MU3-M-data.csv', 
   na = "", 
@@ -257,22 +257,14 @@ div_long <- div_data |>
       str_starts(type.ah, "villain")  ~ "villain",
       .default = type.ah
     ),
-    # assign alternate names to villain forms of Anti-Heroes
-    name = case_when(
-      type == "Anti-Hero" & str_detect(type.ah, "villain") ~ str_replace(name, "^.*\\/\\s?", ""),
-      type == "Anti-Hero" & str_detect(type.ah, "hero")    ~ str_replace(name, "\\s?\\/.*$", ""),
-     .default = name
-    )
   ) |> 
   # move columns to desired locations
   relocate(type.ah, .after = type) |> 
   relocate(value, .before = page.break)
 
-# Sort divider data to desired order
-if (F) {
-  # Manual order - just use the same order as in the data file (notwithstanding Anti-Hero grouping)
-  div_sorted <- div_long
-} else {
+# Sort divider data to desired order ====
+sort_divs <- "by box"
+if (sort_divs == "by type") {
   div_sorted <- div_long |> 
     mutate(
       # set sort order with order of levels = (don't forget any!)
@@ -294,6 +286,12 @@ if (F) {
         levels = c("hero", "villain", "ah.hero", "ah.villain")
       ),
       # box = ifelse(type %in% c("Team", "Other"), box, NA)
+      # assign alternate names to villain forms of Anti-Heroes
+      name = case_when(
+        type == "Anti-Hero" & str_detect(type.ah, "villain") ~ str_replace(name, "^.*\\/\\s?", ""),
+        type == "Anti-Hero" & str_detect(type.ah, "hero")    ~ str_replace(name, "\\s?\\/.*$", ""),
+        .default = name
+      )
     ) |> 
     arrange(type, type.ah, str_rank(name)) |> 
     filter(!is.na(value)) |> 
@@ -305,7 +303,99 @@ if (F) {
         .default = NA
       )
     )
-}
+  
+} else if (str_detect("by box, KSE", sort_divs)) {
+  # Group all Retail & KSE content together, then by box; sort by type, then name
+  div_sorted <- div_long |> 
+    # Insert blank dividers for spacing
+    bind_rows(
+      filter(div_long, 
+             str_detect(box, "Core"), 
+             type == "Villain", 
+             !duplicated(type)
+      ) |> 
+        mutate(
+          name = "_ blank _",
+          value = NA
+        )
+    ) |> 
+    # duplicate "Teams" divider?  Not worth having an extra, just include it with Retail or KSE
+    mutate(
+      # set sort order with order of levels = (don't forget any!)
+      type.ah = ifelse(type %in% c("Hero", "Villain"), 
+                       tolower(type), 
+                       type.ah
+      ) |> 
+        factor(levels = c("hero", "villain")), # , "ah.hero", "ah.villain")),
+      type = ifelse(type == "Anti-Hero" & !is.na(type.ah), NA, type) |> 
+        factor(levels = c(
+                 # "Hero", 
+                 # "Villain", 
+                 "Anti-Hero", # alts
+                 "Pet", 
+                 "Challenge",
+                 "Team", 
+                 "Campaign", 
+                 "Other"
+               )
+        ),
+      collection = case_when(
+        type == "Team"   ~ "Teams",
+        .default = box
+      ) |> 
+        factor(levels = c(
+          "Multiverse Core",
+          "Maximum Carnage",
+          "Civil War",
+          "World War Hulk",
+          "The Coming of Galactus",
+          "Pets",
+          "Multiverse Promos",
+          "Multiverse Promos (Omniverse All-In Bonus)",
+          "The Age of Apocalypse",
+          "Annihilation",
+          "Secret Invasion",
+          "War of Kings",
+          "Teams",
+          "Campaigns"
+        )
+        ),
+      box = ifelse(box == "Team", "_ Team", box),
+      # make "Teams" divider KSE: assuming it's only really needed if you got more than the retail Team decks.
+      ks.exclusive = ifelse(name == "_ Teams", 1, ks.exclusive),
+      # Move "Generic Equipment" to front of villain dividers in Bore box?
+      # Group Winter Guard together (Anti-Heroes)
+      name = ifelse(
+        str_detect(team, "Winter Guard") & name != "Winter Guard" & !is.na(team),
+        paste("Winter Guard:", name),
+        name
+      ),
+      # assign alternate names to villain forms of Anti-Heroes, but not alts
+      name = case_when(
+        type == "Anti-Hero" & str_detect(type.ah, "^villain") ~ str_replace(name, "^.*\\/\\s?", ""),
+        type == "Anti-Hero" & str_detect(type.ah, "^hero")    ~ str_replace(name, "\\s?\\/.*$", ""),
+        .default = name
+      )
+    ) |> 
+    arrange(ks.exclusive, collection, type.ah, type, 
+            str_rank(box), str_rank(name)
+    ) |> 
+    # derive page breaks
+    mutate(
+      page.break = case_when(
+        box == "Multiverse Core" & 
+          type == "Anti-Hero" & 
+          !duplicated(type)  ~ TRUE,
+        as.logical(ks.exclusive) & 
+          !duplicated(ks.exclusive) ~ TRUE,
+        box == "Civil War" &
+          !duplicated(box) ~ TRUE,
+        .default = NA
+      )
+    )
+} else {  # Manual order - just use the same order as in the data file (notwithstanding Anti-Hero grouping)
+  div_sorted <- div_long
+} 
 
 # Reorder divider image file list
 img_files <- img_files[div_sorted$value]
