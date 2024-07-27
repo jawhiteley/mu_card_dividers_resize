@@ -262,7 +262,7 @@ div_long <- div_data |>
   relocate(type.ah, .after = type) |> 
   relocate(value, .before = page.break)
 
-# Sort divider data to desired order ====
+# Porcess & Sort divider data to desired order ====
 sort_divs <- "by box"
 if (sort_divs == "by type") {
   div_sorted <- div_long |> 
@@ -293,6 +293,7 @@ if (sort_divs == "by type") {
         .default = name
       )
     ) |> 
+    ## SORT
     arrange(type, type.ah, str_rank(name)) |> 
     filter(!is.na(value)) |> 
     # derive page breaks
@@ -322,15 +323,16 @@ if (sort_divs == "by type") {
     # duplicate "Teams" divider?  Not worth having an extra, just include it with Retail or KSE
     mutate(
       # set sort order with order of levels = (don't forget any!)
-      type.ah = ifelse(type %in% c("Hero", "Villain"), 
-                       tolower(type), 
-                       type.ah
+      type.ah = type.ah |> 
+        factor(levels = c("hero", "villain", "ah.hero", "ah.villain")),
+      type = ifelse(
+        type == "Anti-Hero" & !str_detect(type.ah, "^ah"), 
+        paste0( toupper(substring(type.ah, 1, 1)), tolower(substring(type.ah, 2)) ), 
+        type
       ) |> 
-        factor(levels = c("hero", "villain")), # , "ah.hero", "ah.villain")),
-      type = ifelse(type == "Anti-Hero" & !is.na(type.ah), NA, type) |> 
         factor(levels = c(
-                 # "Hero", 
-                 # "Villain", 
+                 "Hero", 
+                 "Villain", 
                  "Anti-Hero", # alts
                  "Pet", 
                  "Challenge",
@@ -364,9 +366,10 @@ if (sort_divs == "by type") {
       # make "Teams" divider KSE: assuming it's only really needed if you got more than the retail Team decks.
       ks.exclusive = ifelse(name == "_ Teams", 1, ks.exclusive),
       # Move "Generic Equipment" to front of villain dividers in Bore box?
-      # Group Winter Guard together (Anti-Heroes)
+      # Group Winter Guard together (Anti-Hero alts)
       name = ifelse(
-        str_detect(team, "Winter Guard") & name != "Winter Guard" & !is.na(team),
+        type == "Anti-Hero" & str_detect(team, "Winter Guard") & 
+          name != "Winter Guard" & !is.na(team),
         paste("Winter Guard:", name),
         name
       ),
@@ -377,8 +380,9 @@ if (sort_divs == "by type") {
         .default = name
       )
     ) |> 
-    arrange(ks.exclusive, collection, type.ah, type, 
-            str_rank(box), str_rank(name)
+    ## SORT
+    arrange(ks.exclusive, collection, type,
+            str_rank(box), str_rank(name), type.ah
     ) |> 
     # derive page breaks
     mutate(
@@ -389,6 +393,8 @@ if (sort_divs == "by type") {
         as.logical(ks.exclusive) & 
           !duplicated(ks.exclusive) ~ TRUE,
         box == "Civil War" &
+          !duplicated(box) ~ TRUE,
+        box == "Annihilation" &
           !duplicated(box) ~ TRUE,
         .default = NA
       )
