@@ -363,6 +363,9 @@ if (sort_divs == "by type") {
         ),
       collection = case_when(
         type == "Team" & box != "Team Decks"   ~ "Teams",
+        # Move "Generic Equipment" to end (of Campaigns) 
+        # [or to blank space in front of villain dividers in Core box instead?]
+        str_detect(name, "Generic Equipment") ~ "EQ",
         .default = box
       ) |> 
         factor(levels = c(
@@ -372,7 +375,6 @@ if (sort_divs == "by type") {
           "World War Hulk",
           "Team Decks",
           "The Coming of Galactus",
-          "Pets",
           "Multiverse Promos",
           "Multiverse Promos (Omniverse All-In Bonus)",
           "The Age of Apocalypse",
@@ -380,11 +382,12 @@ if (sort_divs == "by type") {
           "Secret Invasion",
           "War of Kings",
           "Teams",
-          "Campaigns"
+          "Campaigns", "EQ",
+          "Pets"
         )
         ),
+      # Ensure "Teams" divider stays in front of others
       box = ifelse(box == "Team", "_ Team", box),
-      # Move "Generic Equipment" to front of villain dividers in Core box?
       # Group Winter Guard together (Anti-Hero alts)
       name = ifelse(
         type == "Anti-Hero" & str_detect(team, "Winter Guard") & 
@@ -392,7 +395,9 @@ if (sort_divs == "by type") {
         paste("Winter Guard:", name),
         name
       ),
-      # assign alternate names to villain forms of Anti-Heroes, but not alts
+      # Move Galactus and Heralds dividers to front of their group
+      name = ifelse(str_detect(name, "Galactus"), paste("_", name), name),
+      # assign alternate names to villain forms of Anti-Heroes, but not alts (so they stay together)
       name = case_when(
         type == "Anti-Hero" & str_detect(type.ah, "^villain") ~ str_replace(name, "^.*\\/\\s?", ""),
         type == "Anti-Hero" & str_detect(type.ah, "^hero")    ~ str_replace(name, "\\s?\\/.*$", ""),
@@ -413,7 +418,7 @@ if (sort_divs == "by type") {
        )
      }
     )() |> 
-    # derive page breaks
+    # add page breaks
     mutate(
       page.break = case_when(
         box == "Multiverse Core" & 
@@ -431,6 +436,7 @@ if (sort_divs == "by type") {
         .default = NA
       )
     )
+  # derive page numbers? (increment after number of dividers per page [6] *and* at a page.break)
 } else {  # Manual order - just use the same order as in the data file (notwithstanding Anti-Hero grouping)
   div_sorted <- div_long
 } 
