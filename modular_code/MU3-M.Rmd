@@ -305,16 +305,29 @@ if (sort_divs == "by type") {
       )
     )
   
-} else if (str_detect("by box, KSE", sort_divs)) {
-  # Group all Retail & KSE content together, then by box; sort by type, then name
+} else if (str_detect(sort_divs, "by box")) {
+  # Group by box, all Retail boxes together; sort by type, then name (mostly)
+  # Decided it wasn't worth grouping the KSE content from retail boxes with other KSE content.  
+  # Keeping them with their boxes (but grouping retail ones together) 
+  # is a nicer layout (to me), and it's only 4 extra dividers 
+  # for those who purchased the retail-only versions.  Apologies for the FOMO.
+  # Add "KSE" to sort_divs to group all KSE together instead.
   div_sorted <- div_long |> 
     # Insert blank dividers for spacing
     bind_rows(
       filter(div_long, 
              str_detect(box, "Core"), 
-             type == "Villain", 
-             !duplicated(type)
-      ) |> 
+             type == "Villain"
+      )[1, ] |> 
+        mutate(
+          name = "_ blank _",
+          value = NA
+        ),
+      filter(div_long, 
+             str_detect(box, "Carnage"), 
+             type == "Anti-Hero",
+             str_detect(type.ah, "ah\\.")
+      )[str_detect(sort_divs, "KSE") |> as.integer( ), ] |> 
         mutate(
           name = "_ blank _",
           value = NA
@@ -322,6 +335,13 @@ if (sort_divs == "by type") {
     ) |> 
     # duplicate "Teams" divider?  Not worth having an extra, just include it with Retail or KSE
     mutate(
+      # make "Teams" divider KSE: assuming it's only really needed if you got more than the retail Team decks.
+      ks.exclusive = ifelse(name == "_ Teams", 1, ks.exclusive),
+      # treat "Doc Samson" as "Other" for sorting within the box
+      type = ifelse(!str_detect(sort_divs, "KSE") & name == "Doc Samson", 
+                    "Other", 
+                    type
+      ),
       # set sort order with order of levels = (don't forget any!)
       type.ah = type.ah |> 
         factor(levels = c("hero", "villain", "ah.hero", "ah.villain")),
@@ -342,7 +362,7 @@ if (sort_divs == "by type") {
                )
         ),
       collection = case_when(
-        type == "Team"   ~ "Teams",
+        type == "Team" & box != "Team Decks"   ~ "Teams",
         .default = box
       ) |> 
         factor(levels = c(
@@ -350,6 +370,7 @@ if (sort_divs == "by type") {
           "Maximum Carnage",
           "Civil War",
           "World War Hulk",
+          "Team Decks",
           "The Coming of Galactus",
           "Pets",
           "Multiverse Promos",
@@ -363,9 +384,7 @@ if (sort_divs == "by type") {
         )
         ),
       box = ifelse(box == "Team", "_ Team", box),
-      # make "Teams" divider KSE: assuming it's only really needed if you got more than the retail Team decks.
-      ks.exclusive = ifelse(name == "_ Teams", 1, ks.exclusive),
-      # Move "Generic Equipment" to front of villain dividers in Bore box?
+      # Move "Generic Equipment" to front of villain dividers in Core box?
       # Group Winter Guard together (Anti-Hero alts)
       name = ifelse(
         type == "Anti-Hero" & str_detect(team, "Winter Guard") & 
@@ -381,17 +400,30 @@ if (sort_divs == "by type") {
       )
     ) |> 
     ## SORT
-    arrange(ks.exclusive, collection, type,
-            str_rank(box), str_rank(name), type.ah
-    ) |> 
+    (\(.x)  # anonymous function for if() in a pipe sequence
+     if (str_detect(sort_divs, "KSE")) {
+       .x |> 
+       arrange(ks.exclusive, collection, type,
+               str_rank(box), str_rank(name), type.ah
+       )
+     } else {
+       .x |> 
+       arrange(collection, type, ks.exclusive, 
+               str_rank(box), str_rank(name), type.ah
+       )
+     }
+    )() |> 
     # derive page breaks
     mutate(
       page.break = case_when(
         box == "Multiverse Core" & 
           type == "Anti-Hero" & 
           !duplicated(type)  ~ TRUE,
-        as.logical(ks.exclusive) & 
-          !duplicated(ks.exclusive) ~ TRUE,
+        str_detect(sort_divs, "KSE") & 
+          as.logical(ks.exclusive) & !duplicated(ks.exclusive) ~ TRUE,
+        !str_detect(sort_divs, "KSE") & 
+          box == "The Coming of Galactus" &
+          !duplicated(box) ~ TRUE,
         box == "Civil War" &
           !duplicated(box) ~ TRUE,
         box == "Annihilation" &
