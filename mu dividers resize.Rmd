@@ -101,8 +101,16 @@ source("mu dividers resize.r", local = knitr::knit_global())
 %  aspect ratio is preserved by default, but can be forced with the `keepaspectratio` option in \includegraphics (graphicx package), if necessary
 % To align dividers vertically on a line, [pos] must not  = [contentpos].  
 %  I want the image top-aligned within the box, and the box borders aligned, ideally also along the top, but since they are all the same height, 'bottom' works, too (and is different from 'top').
+\newcommand*{\divbox}[1]{\fcolorbox{`r border_colour`}{white}{%
+  \parbox[b][\DivHeight][t]{\DivWidth}{%
+    \rule{0pt}{0pt}#1
+    % not too sure why the \rule with 0 width and height works, 
+    % but having *something* inside the parbox ensures it is the correct size, even if otherwise 'empty' 
+    % - this should not take up any actual space if there is content (an image) inside the box.
+  }
+}}
 \let\includegraphicsOG\includegraphics
-\renewcommand*{\includegraphics}[2][]{\fcolorbox{`r border_colour`}{white}{\parbox[b][\DivHeight][t]{\DivWidth}{\includegraphicsOG[#1]{#2}}}}
+\renewcommand*{\includegraphics}[2][]{\divbox{\includegraphicsOG[#1]{#2}}}
 
 % control spacing around graphics
 \setlength{\lineskip}{`r spacing`}    %-\fboxrule}   % remove veritcal space between dividers (negative width of the border, so borders from adjacent lines overlap)
@@ -135,8 +143,8 @@ if (length(page_breaks) > 0){
   for (i in 1:length(img_files)) {
     if (i %in% page_breaks)  # add a page break before output, if requested.
       cat("\\par \n\\pagebreak")
-    if (is.na(img_files[i]))  # add a line break before output, if file is missing (NA).
-      cat("\\hspace{\\DivWidth} \n")
+    if (is.na(img_files[i]))  # add an empty divider box if file is missing (NA).
+      cat("\\divbox{} \n")
     else
       cat("![](", img_files[i], ")\n")  # use the md syntax, which pandoc will convert to \includegraphics{}
   }
