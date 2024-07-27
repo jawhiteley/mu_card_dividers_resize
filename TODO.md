@@ -1,8 +1,9 @@
 # To Do
 
-- Find a way to add PATH to homebrew binaries (pdfimages) permanently
++ [x] Find a way to add PATH to homebrew binaries (pdfimages) permanently
+  + This should be set in your .Rprofile
 
-- Try to preserve original color profile (Adobe RGB 1998)?
+- [ ] Try to preserve original color profile (Adobe RGB 1998)?
   - Use ImageMagick to slice images directly from command-line (using a call from within R)?
 
 - Try a different method of preserving 150 ppi / dpi from the original to final output.
@@ -16,15 +17,9 @@
   - https://boardgamegeek.com/filepage/228931/vertical-card-dividers-x-men
   * https://drive.google.com/drive/folders/13GJDg8u0EQPtyufb4QNH2CoMHwnT4GTD?usp=sharing
 
-- Group parameters together in YAML header to facilitate pasting options from `parameters.md`?
+- Group parameters together in YAML header (to facilitate pasting options from `parameters.md`)?  [lower priority, now that I have added 'modular code' to collect all relevant parameters and code in a single file.]
   - File options: pdf_file, extract_images, page_breaks
   - Divider options: dimensions, border_colour, spacing
-
-- Add a parameter for custom divider order?
-  - I currently keep custom R code in `parameters.md`.
-    It is actually a bit easier to build the indices in R using c() and subset() to skip desired dividers.
-  - It would be a bit complicated to allow R code in this parameter, or a straight list.  Maybe require R code (`c(...)`)?
-  - This is very much a 'power user' option, and not really necessary for push-button useage.  Maybe it's fine to leave it as-is.
 
 - Convert external script to a user-defined function that can be called directly from the R Markdown file.
   - That would allow default values for parameters / arguments that can easily be overidden, and avoid having a script that also needs to be able to run stand-alone.

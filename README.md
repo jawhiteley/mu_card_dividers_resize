@@ -70,6 +70,8 @@ These can all be set in the header of the R Markdown file for 1-step execution (
   + set to `TRUE` if the script hasn't been run, to extract images from the input pdf.
   + set to `FALSE` to save time if it was already run.
 
+* `page_breaks` (*optional*): comma-separated list of numbers.  Page breaks will be added *before* each divider number in this list.  In case you want to group dividers manually.
+
 * Dimensions of dividers in output: `div_height`, `div_width`, and `border_width` (border thickness)
 
   + The originals are "3.620 inches wide and 2.613 inches tall", including a 1 pixel wide black border.  That's about **92 mm** wide, and **66 mm** tall.  
@@ -80,9 +82,7 @@ These can all be set in the header of the R Markdown file for 1-step execution (
 
 * `spacing` (*optional*): Distance between dividers.  If blank, the default is for no space (overlapping borders).  Adding some space makes it easier to cut the borders completely away from the dividers, but requires more cuts (4 / divider).
 
-* `page_breaks` (*optional*): comma-separated list of numbers.  Page breaks will be added *before* each divider number in this list.  In case you want to group dividers manually.
-
-See the `parameters.md` file for recommended page breaks and other parameter values for the available divider sets.
+* `modular_code`: this is the path to an external file with code and settings used to used to produce files posted on BGG.  You can specify any of the files in that folder here.  These files include custom order of dividers, recommended page breaks, and other parameter values for the available divider sets. The code in these files will overwrite some of the parameters described above.  
 
 
 ## 3. Compile the R Markdown file
