@@ -1,0 +1,208 @@
+---
+title: "Colour Profiles Notebook"
+output: html_notebook
+---
+
+# Introduction
+
+This file is not intended to be compiled to output --- it is more of a notebook to keep track of commands and operations I have tried, and results, as notes. It is based on `Notes.md`, but with commands that can be executed directly from the document in RStudio.
+
+Eventually, I might combine some of this with `tests_color_profiles.Rmd`, to standardize the production of test files, and print them, in a reproducible way. Then, I might be able to clean up some of the test files that are accumulating.
+
+The focus of this document is on color profiles, and how different steps affect them, and the results – when viewed on screen and especially when printed.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tools
+
+-   pdfimages (part of [Poppler](https://poppler.freedesktop.org/) [utils](https://en.wikipedia.org/wiki/Poppler_(software))) to extract images from pdfs
+
+    -   [pdfimager](https://sckott.github.io/pdfimager/) package for R interface
+
+-   [ImageMagick](https://imagemagick.org/) to manipulate images programmatically
+
+    -   [magick](https://docs.ropensci.org/magick/index.html) package for R interface
+
+-   [Preview](https://support.apple.com/en-ca/guide/preview/welcome/mac) (macOS) to preview and explore images - some manual editing, mostly to test things and improve my understanding.
+
+# Extracting images
+
+## pdfimages
+
+```{zsh}
+pdfinfo '../input/mu_card_dividers_v2.pdf'
+```
+
+```{zsh}
+pdfinfo '../input/mu_x-men_horiz_dividers.pdf'
+```
+
+-   "-all" option extracts the image in its native format: <https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag>
+    -   "-all" is equivalent to `-png -tiff -j -jp2 -jbig2 -ccitt`
+-   most tutorials recommend "-png"
+    -   the result appears to be the same as "-all" for the classic set (MU season 1), but X-Men (and Multiverse) is all `.jpg`.
+-   with the `-j` (or `-jp2`) flag, non-jpeg images are exported to `.ppm` (colour), or `.pbm` (monochrome) - this is the case for the season 1 pdf
+    -   <https://askubuntu.com/questions/150100/extracting-embedded-images-from-a-pdf>
+
+```{zsh}
+# MU season 1
+pdfimages -all -f 1 -l 1 -print-filenames '../input/mu_card_dividers_v2.pdf' '../pdf_images/tests/mu1'
+pdfimages -j -f 1 -l 1 -print-filenames '../input/mu_card_dividers_v2.pdf' '../pdf_images/tests/mu1-j'
+pdfimages -jp2 -f 1 -l 1 -print-filenames '../input/mu_card_dividers_v2.pdf' '../pdf_images/tests/mu1-jp2'
+
+# MU: X-Men
+pdfimages -all -f 1 -l 1 -print-filenames '../input/mu_x-men_horiz_dividers.pdf' '../pdf_images/tests/mux'
+pdfimages -j -f 1 -l 1 -print-filenames '../input/mu_x-men_horiz_dividers.pdf' '../pdf_images/tests/mux-j'
+pdfimages -png -f 1 -l 1 -print-filenames '../input/mu_x-men_horiz_dividers.pdf' '../pdf_images/tests/mux-png'
+
+```
+
+Some options don't affect the output - cleanup extra files:
+
+```{bash}
+cmp '../pdf_images/tests/mu1-j-000.ppm' '../pdf_images/tests/mu1-jp2-000.ppm'
+status=$?  # capture the exit status
+# https://stackoverflow.com/questions/36313216/why-is-testing-to-see-if-a-command-succeeded-or-not-an-anti-pattern
+if [ $status = 0 ]; then
+  # if no output, the files are identical!
+  echo "The files are identical!"
+  rm '../pdf_images/tests/mu1-jp2-000.ppm'
+  echo "../pdf_images/tests/mu1-jp2-000.ppm deleted"
+fi
+```
+
+```{bash}
+cmp ../pdf_images/tests/mux-000.jpg ../pdf_images/tests/mux-j-000.jpg 
+status=$?  # capture the exit status
+if [ $status = 0 ]; then
+  echo "The files are identical!"
+  rm  ../pdf_images/tests/mux-j-000.jpg
+  echo "../pdf_images/tests/mux-j-000.jpg deleted"
+fi
+```
+
+# Manipulating images
+
+## ImageMagick
+
+<https://imagemagick.org/>
+
+```         
+brew install imagemagick
+```
+
+Get information about an image file:
+
+```         
+identify -verbose 'path/to/file'
+```
+
+Output of interest:
+
+-   Colorspace
+-   Properties
+    -   "icc: ..."
+
+### MU file information
+
+Use ImageMagick to look at information and details about files extracted from the MU season 1 dividers pdf (see [pdfimages]):
+
+```{bash}
+identify -verbose '../pdf_images/tests/mu1-000.png'
+```
+
+```{bash}
+identify -verbose '../pdf_images/tests/mu1-j-000.ppm'
+```
+
+-   Neither file has an icc color profile, according to Imagemagick
+
+-   But Preview does show a "ColorSync profile: **sRGB IEC61966-2.1**" *for the `ppm` (jpeg) files*, but not for the png file.
+
+    -   The Finder shows the same information under "Color profile"
+
+The `identify` command works on pdf files, too, but provides information on each image in the pdf:
+
+```{bash}
+identify '../input/mu_card_dividers_v2.pdf'
+```
+
+No icc color profile found:
+
+```{r}
+cmd_out <- system("identify -verbose '../input/mu_card_dividers_v2.pdf'", intern = TRUE)
+grep("icc", cmd_out, ignore.case = TRUE, value = TRUE)
+grep("profile", cmd_out, ignore.case = TRUE, value = TRUE)
+grep("iec", cmd_out, ignore.case = TRUE, value = TRUE)
+```
+
+### MU: X-Men files (jpg instead of png)
+
+Still no color profile apparent in pdf files:
+
+```{r}
+if (F) {
+  cmd_out <- system("identify -verbose '../input/mu_x-men_horiz_dividers.pdf'", intern = TRUE)
+} else {
+  # fewer pages, but expected to be similar (produced soon after the main file):
+  cmd_out <- system("identify -verbose '../input/mu_x-men_horiz_dividers_legion.pdf'", intern = TRUE)
+}
+grep("icc", cmd_out, ignore.case = TRUE, value = TRUE)
+grep("profile", cmd_out, ignore.case = TRUE, value = TRUE)
+grep("iec", cmd_out, ignore.case = TRUE, value = TRUE)
+# cat(paste(cmd_out, collapse = "\n"))
+```
+
+... unless the "Profile-xmp" entry is the color profile (just not an ICC profile)?
+
+Examine images extracted by `pdfimages`:
+
+```{bash}
+identify -verbose ../pdf_images/tests/mux-000.jpg
+```
+
+```{bash}
+identify -verbose ../pdf_images/tests/mux-png-000.png
+```
+
+-   `png` files do not seem to have icc color profiles, but the `jpg` files do!
+
+-   The color profile showing in the MUX `jpg` files appears to be the same one he Preview finds in the `ppm` exported from the MU season 1 pdf.
+
+This file was exported manually from Preview to `png` (File \> Export ..., choose "PNG" as output format), and includes the color profile "Adobe RGB (1998)":
+
+```{bash}
+identify -verbose '../pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png'
+```
+
+-   Where did Preview get this color profile? Was it tagged in the original pdf, but not the embedded `png` images? Was it an assumption?
+
+## ImageMagick & color profiles
+
+Extract the icc color profile from a file (formerly `convert`):
+
+```{bash}
+# FAIL:
+magick ../input/mu_card_dividers_v2.pdf ../pdf_images/tests/mu1-pdf.icc
+magick ../pdf_images/tests/mu1-j-000.ppm ../pdf_images/tests/mu1-ppm.icc
+# SUCCESS:
+magick ../pdf_images/tests/mux-000.jpg ../pdf_images/tests/mux-IEC61966-2_1.icc
+magick '../pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png' ../pdf_images/tests/mu1-Adobe1998.icc
+```
+
+Add a color profile to an image - this might actually convert colors from the existing (or assumed if missing) color profile to the new one, which would change the color values:
+
+```{bash}
+magick ../pdf_images/tests/mu1-000.png -profile ../pdf_images/tests/mu1-Adobe1998.icc ../pdf_images/tests/mu1-000+adobe.png
+magick ../pdf_images/tests/mu1-000.png -profile ../pdf_images/tests/mux-IEC61966-2_1.icc ../pdf_images/tests/mu1-000+iec61966.png
+
+magick ../pdf_images/tests/mux-000.jpg -profile ../pdf_images/tests/mu1-Adobe1998.icc ../pdf_images/tests/mux-000+adobe.jpg
+magick ../pdf_images/tests/mux-png-000.png -profile ../pdf_images/tests/mu1-Adobe1998.icc ../pdf_images/tests/mux-png-000+adobe.png
+magick ../pdf_images/tests/mux-png-000.png -profile ../pdf_images/tests/mux-IEC61966-2_1.icc ../pdf_images/tests/mux-png-000+iec61966.png
+```
+
+<https://stackoverflow.com/questions/29633390/apply-and-remove-color-profile-with-image-magick>
+
+Based on the documentation, I probably want to add `-strip`?
