@@ -215,6 +215,10 @@ page_breaks <- c(13, 125, 178)
 -   bundle retail content together
 -   then all the Kickstarter Exclusive content (in a separate file)
 
+This is a lot of code, but was an interesting experiment. :D  
+
+Next time, it might be simpler to just arrange the external file manually instead of all this manipulation.  Alternate sort orders can be 'saved' as indices in separate columns ('sort1', 'page.break1', 'sort2', etc.).
+
 ```{r modular-processing}
 # Add jpg dividers [Apocalypse (AOA), Void Villain alt]
 img_files <- add_jpg_dividers(img_files)
