@@ -75,7 +75,7 @@ These can all be set in the header of the R Markdown file for 1-step execution (
 * Dimensions of dividers in output: `div_height`, `div_width`, and `border_width` (border thickness)
 
   + The originals are "3.620 inches wide and 2.613 inches tall", including a 1 pixel wide black border.  That's about **92 mm** wide, and **66 mm** tall.  
-  + I have set the current width to **91.6 mm**, to preserve the original size and quality as much as possible, and a height of **75 mm**, which is plenty for most sleeves, and taller than I need.  You can always cut them shorter, if you prefer.
+  + I have set the current width to **91.6 mm**, to preserve the original size and quality as much as possible, and a height of **76 mm**, which is plenty for most sleeves, and taller than I need.  You can always cut them shorter, if you prefer.
   + See [below](#divider-dimensions) for notes on dimensions, and suggested settings.
 
 * `border_colour`: I prefer a light grey border (`lightgray`), which is visible enough to see when cutting, but doesn't leave behind such high-contrast edges.  Change to 'black' (or leave blank) for the same black border as the original.

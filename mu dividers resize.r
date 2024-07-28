@@ -87,6 +87,8 @@ if (F)    # do not run on source()
 # + "-all" option extracts the image in its native format, apparently: https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag
 #   "-all" is equivalent to `-png -tiff -j -jp2 -jbig2 -ccitt`
 # + most tutorials recommend "-png": the result appears to be the same as "-all" for the classic set, but X-Men is all jpgs.
+# + with the '-j' (or '-jp2') flag, non-jpeg images are exported to ".ppm" (colour), ".pbm" (monochrome) - this is the case for the season 1 pdf
+#   - https://askubuntu.com/questions/150100/extracting-embedded-images-from-a-pdf
 # + returned value is a table (within a list) with the relative path to each extracted image files (regardless of the format)
 # pdimg_images() is vectorized for a list of paths. :)
 pdf_img <- pdimg_images(pdf_file, base_dir = img_dir, "-all") %>%
