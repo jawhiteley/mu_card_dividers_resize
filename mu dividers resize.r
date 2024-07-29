@@ -162,7 +162,7 @@ crop_page <- function(page, img_crops = page_crops) {
 #   this is a bit faster than a for loop, and easier to collect results. ;)
 img_list <- lapply(1:nrow(pdf_img), function (p) {
   path_p <- unlist( pdf_img[p, "path"] )
-  cat(paste("processing page", p, "of", nrow(pdf_img), "\n"))
+  message(paste("processing page", p, "of", nrow(pdf_img), "\n"))
   page <- image_read(path_p)
   crop_page(page)
 })

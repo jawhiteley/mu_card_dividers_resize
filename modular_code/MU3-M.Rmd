@@ -215,6 +215,8 @@ page_breaks <- c(13, 125, 178)
 -   bundle retail content together
 -   then all the Kickstarter Exclusive content (in a separate file)
 
+The overwhelming majority of users responding to [my poll on BGG](https://boardgamegeek.com/thread/3339049/dividers-sort-order-preferences) preferred grouping by type (Heroes, Villains, etc.), so the first file posted to BGG was grouped that way.  I might make a second version sorted by box, in case it's useful for those who didn't get everything.
+
 This is a lot of code, but was an interesting experiment. :D  
 
 Next time, it might be simpler to just arrange the external file manually instead of all this manipulation.  Alternate sort orders can be 'saved' as indices in separate columns ('sort1', 'page.break1', 'sort2', etc.).
@@ -267,7 +269,7 @@ div_long <- div_data |>
   relocate(value, .before = page.break)
 
 # Porcess & Sort divider data to desired order ====
-sort_divs <- "by box"
+sort_divs <- "by type"
 if (sort_divs == "by type") {
   div_sorted <- div_long |> 
     mutate(
