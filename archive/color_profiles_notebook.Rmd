@@ -201,8 +201,25 @@ magick ../pdf_images/tests/mu1-000.png -profile ../pdf_images/tests/mux-IEC61966
 magick ../pdf_images/tests/mux-000.jpg -profile ../pdf_images/tests/mu1-Adobe1998.icc ../pdf_images/tests/mux-000+adobe.jpg
 magick ../pdf_images/tests/mux-png-000.png -profile ../pdf_images/tests/mu1-Adobe1998.icc ../pdf_images/tests/mux-png-000+adobe.png
 magick ../pdf_images/tests/mux-png-000.png -profile ../pdf_images/tests/mux-IEC61966-2_1.icc ../pdf_images/tests/mux-png-000+iec61966.png
+
+echo $?  # output to confirm if the above succeeded.
 ```
 
 <https://stackoverflow.com/questions/29633390/apply-and-remove-color-profile-with-image-magick>
 
 Based on the documentation, I probably want to add `-strip`?
+
+# Tests & Comparisons
+
+I can't even seem to reproduce colours on my printer from early tests with the same file. So confusing. :(
+
+| file                          | color profile | based on original file        | treatment                            | results - screen | results - print | Notes     |
+|-------------------------------|---------------|-------------------------------|--------------------------------------|------------------|-----------------|-----------|
+| input/mu_card_dividers_v2.pdf | ?             | \-                            | \-                                   | baseline         | baseline        | reference |
+|                               |               | input/mu_card_dividers_v2.pdf | extracted image - native             |                  |                 |           |
+|                               |               |                               | extracted image - other (ppm or png) |                  |                 |           |
+|                               |               |                               | +Adobe 1998                          |                  |                 |           |
+|                               |               |                               | +IEC                                 |                  |                 |           |
+|                               |               |                               |                                      |                  |                 |           |
+
+A table might be too wide for all the information I want to gather. I might consider a list format instead, or for more details (in addition to a summary table).
