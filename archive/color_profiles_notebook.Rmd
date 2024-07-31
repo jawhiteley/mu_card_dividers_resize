@@ -211,7 +211,7 @@ Based on the documentation, I probably want to add `-strip`?
 
 # Tests & Comparisons
 
-I can't even seem to reproduce colours on my printer from early tests with the same file. So confusing. :(
+I can't even seem to reproduce colours on my printer from early tests with the same file (might have been a different computer). So confusing. :(
 
 | file                          | color profile | based on original file        | treatment                            | results - screen | results - print | Notes     |
 |-------------------------------|---------------|-------------------------------|--------------------------------------|------------------|-----------------|-----------|
