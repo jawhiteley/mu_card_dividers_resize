@@ -269,7 +269,7 @@ div_long <- div_data |>
   relocate(value, .before = page.break)
 
 # Porcess & Sort divider data to desired order ====
-sort_divs <- "by type"
+sort_divs <- "by box"
 if (sort_divs == "by type") {
   div_sorted <- div_long |> 
     mutate(
