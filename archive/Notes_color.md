@@ -154,6 +154,18 @@ The **Adobe RGB** working space has a slightly wider colour gamut than sRGB (esp
 
 [^notes_color-25]: <https://www.cambridgeincolour.com/tutorials/srgb-adobergb1998.htm>
 
+-   A larger gamut also means that available bit depth (e.g., 8-bit) has to cover a wider range of colours. If all the colours in use are within a smaller gamut, using a larger colour space ends up in 'wasted' bits, and fewer unique colours that are actually used.[^notes_color-26]
+
+    -   "Using larger gamuts just wastes 'color precision' on unused colors."[^notes_color-27]
+
+-   With more bit-depth, this trade-off is less important, and using a working space with a larger gamut is not as much of an issue.[^notes_color-28]
+
+[^notes_color-26]: <https://www.cambridgeincolour.com/tutorials/srgb-adobergb1998.htm>
+
+[^notes_color-27]: [https://discussions.apple.com/thread/574176](https://discussions.apple.com/thread/574176?sortBy=rank){.uri}
+
+[^notes_color-28]: <https://www.cambridgeincolour.com/tutorials/srgb-adobergb1998.htm>
+
 # Reading list
 
 <https://www.color.org/ss84.pdf>
@@ -164,9 +176,9 @@ The **Adobe RGB** working space has a slightly wider colour gamut than sRGB (esp
 
 <https://www.colourmanagement.net/advice/about-icc-colour-profiles>
 
-<https://en.wikipedia.org/wiki/ICC_profile>
-
 <https://www.cambridgeincolour.com/tutorials/srgb-adobergb1998.htm>
+
+<https://en.wikipedia.org/wiki/ICC_profile>
 
 <https://en.wikipedia.org/wiki/ColorSync>
 
@@ -180,11 +192,11 @@ The **Adobe RGB** working space has a slightly wider colour gamut than sRGB (esp
 
 -   ~~'color space'~~ vs ~~'color model'~~ vs ~~'color profile'~~ (in Preview and Finder on macOS)?
 
-    -   The macOS Finder reports a 'color space', which is simply 'RGB' for colour or 'Gray' for Greyscale.[^notes_color-26]
+    -   The macOS Finder reports a 'color space', which is simply 'RGB' for colour or 'Gray' for Greyscale.[^notes_color-29]
 
     -   The Finder also reports a "Color profile", which is the (/a?) icc color profile, which Preview reports as the "ColorSync profile".
 
-    -   I'm assuming the 'color model' reflects how the color values are specified in the file: RGB, CMYK, etc.[^notes_color-27]
+    -   I'm assuming the 'color model' reflects how the color values are specified in the file: RGB, CMYK, etc.[^notes_color-30]
 
 -   Can an image have more than one embedded profile? Why? How are they used?
 
@@ -200,11 +212,11 @@ The **Adobe RGB** working space has a slightly wider colour gamut than sRGB (esp
 
 -   ~~color + color profile? screen vs print? device-dependent vs device-independent?~~
 
-    -   An icc colour profile converts RGB information into an exact meaning related to human vision ('unequivocal').[^notes_color-28]
+    -   An icc colour profile converts RGB information into an exact meaning related to human vision ('unequivocal').[^notes_color-31]
 
     -   A "device independent" profile is a "working space" used for editing.
 
-    -   A "device independent" profile acts as a reference to define XYZ or L\*a\*b\* values used in a *Profile Conversion Space* when applying other profiles, such as a "device-dependent" *output* profile. This can also allow for "soft-proofing" where one output device (a monitor) can mimick another (print) by adjusting the colours.[^notes_color-29]
+    -   A "device independent" profile acts as a reference to define XYZ or L\*a\*b\* values used in a *Profile Conversion Space* when applying other profiles, such as a "device-dependent" *output* profile. This can also allow for "soft-proofing" where one output device (a monitor) can mimick another (print) by adjusting the colours.[^notes_color-32]
 
 -   Is a "ColorSync profile" in Preview the same thing as a "color profile" (i.e., in Finder)?
 
@@ -229,10 +241,18 @@ The **Adobe RGB** working space has a slightly wider colour gamut than sRGB (esp
 
 -   Can a profile be tagged / embedded in a pdf file, embedded images, or both?
 
-[^notes_color-26]: <https://apple.stackexchange.com/questions/445640/which-exact-color-space-is-rgb-in-macos-finders-get-info>
+    -   <https://www.color.org/profile_embedding.xalter>
 
-[^notes_color-27]: See also: <https://developer.apple.com/design/human-interface-guidelines/color#Color-management>
+        -   <https://www.color.org/technotes/ICC-Technote-ProfileEmbedding.pdf>
 
-[^notes_color-28]: <https://www.colourmanagement.net/advice/about-icc-colour-profiles#what_profiles_do>
+    -   <https://stackoverflow.com/questions/31591554/embed-icc-color-profile-in-pdf>
 
-[^notes_color-29]: <https://www.colourmanagement.net/advice/about-icc-colour-profiles#what_profiles_do>
+    -   <https://www.littlecms.com/> (part of poppler-utils)
+
+[^notes_color-29]: <https://apple.stackexchange.com/questions/445640/which-exact-color-space-is-rgb-in-macos-finders-get-info>
+
+[^notes_color-30]: See also: <https://developer.apple.com/design/human-interface-guidelines/color#Color-management>
+
+[^notes_color-31]: <https://www.colourmanagement.net/advice/about-icc-colour-profiles#what_profiles_do>
+
+[^notes_color-32]: <https://www.colourmanagement.net/advice/about-icc-colour-profiles#what_profiles_do>
