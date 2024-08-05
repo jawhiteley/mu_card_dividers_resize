@@ -27,9 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -   [Preview](https://support.apple.com/en-ca/guide/preview/welcome/mac) (macOS) to preview and explore images - some manual editing, mostly to test things and improve my understanding.
 
-# Extracting images
-
-## pdfimages
+# PDF Information
 
 ```{zsh}
 pdfinfo '../input/mu_card_dividers_v2.pdf'
@@ -38,6 +36,14 @@ pdfinfo '../input/mu_card_dividers_v2.pdf'
 ```{zsh}
 pdfinfo '../input/mu_x-men_horiz_dividers.pdf'
 ```
+
+How to find out what icc color profile is embedded / tagged in a pdf file itself?
+
+Or in the embedded images (if any or different from document)?
+
+# Extracting images
+
+## pdfimages {data-link="pdfimages"}
 
 -   "-all" option extracts the image in its native format: <https://askubuntu.com/questions/776679/why-are-the-images-produced-by-pdfimages-different-when-using-the-all-flag>
     -   "-all" is equivalent to `-png -tiff -j -jp2 -jbig2 -ccitt`
@@ -81,6 +87,25 @@ if [ $status = 0 ]; then
   rm  ../pdf_images/tests/mux-j-000.jpg
   echo "../pdf_images/tests/mux-j-000.jpg deleted"
 fi
+```
+
+## pdftocairo
+
+-   doesn't extact images, so much as convert pages to graphics formats.
+
+-   I am curious what color profile is included in these exported files.
+
+```{bash}
+pdftocairo -png -f 1 -l 1 '../input/mu_card_dividers_v2.pdf' '../pdf_images/tests/mu1-pdftocairo'
+pdftocairo -png -f 1 -l 1 '../input/mu_x-men_horiz_dividers.pdf' '../pdf_images/tests/mux-pdftocairo'
+```
+
+```{bash}
+identify -verbose '../pdf_images/tests/mu1-pdftocairo-01.png'
+```
+
+```{bash}
+identify -verbose '../pdf_images/tests/mux-pdftocairo-01.png'
 ```
 
 # Manipulating images
@@ -169,7 +194,7 @@ identify -verbose ../pdf_images/tests/mux-png-000.png
 
 -   `png` files do not seem to have icc color profiles, but the `jpg` files do!
 
--   The color profile showing in the MUX `jpg` files appears to be the same one he Preview finds in the `ppm` exported from the MU season 1 pdf.
+-   The color profile showing in the MUX `jpg` files appears to be the same one that Preview finds in the `ppm` exported from the MU season 1 pdf.
 
 This file was exported manually from Preview to `png` (File \> Export ..., choose "PNG" as output format), and includes the color profile "Adobe RGB (1998)":
 
@@ -191,6 +216,24 @@ magick ../pdf_images/tests/mu1-j-000.ppm ../pdf_images/tests/mu1-ppm.icc
 magick ../pdf_images/tests/mux-000.jpg ../pdf_images/tests/mux-IEC61966-2_1.icc
 magick '../pdf_images/tests/mu_card_dividers_v2 (Preview-Adobe).png' ../pdf_images/tests/mu1-Adobe1998.icc
 ```
+
+Compare extracted profiles with system profiles:
+
+```{bash}
+cmp '../pdf_images/tests/mux-IEC61966-2_1.icc' '/System/Library/ColorSync/Profiles/sRGB Profile.icc'
+identify '../pdf_images/tests/mux-IEC61966-2_1.icc'
+identify '/System/Library/ColorSync/Profiles/sRGB Profile.icc'
+diff <(identify -verbose '../pdf_images/tests/mux-IEC61966-2_1.icc') <(identify -verbose '/System/Library/ColorSync/Profiles/sRGB Profile.icc')
+```
+
+Only differ in terms of creation and modification dates, as expected. Not sure what "pixels per second" is.
+
+```{bash}
+cmp '../pdf_images/tests/mu1-Adobe1998.icc' '/System/Library/ColorSync/Profiles/AdobeRGB1998.icc'
+diff <(identify -verbose '../pdf_images/tests/mu1-Adobe1998.icc') <(identify -verbose '/System/Library/ColorSync/Profiles/AdobeRGB1998.icc')
+```
+
+Different file size and copyright information (!), but otherwise similar.
 
 Add a color profile to an image - this might actually convert colors from the existing (or assumed if missing) color profile to the new one, which would change the color values:
 
@@ -214,7 +257,7 @@ Based on the documentation, I probably want to add `-strip`?
 I can't even seem to reproduce colours on my printer from early tests with the same file (might have been a different computer). So confusing. :(
 
 | file                          | color profile | based on original file        | treatment                            | results - screen | results - print | Notes     |
-|-------------------------------|---------------|-------------------------------|--------------------------------------|------------------|-----------------|-----------|
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | input/mu_card_dividers_v2.pdf | ?             | \-                            | \-                                   | baseline         | baseline        | reference |
 |                               |               | input/mu_card_dividers_v2.pdf | extracted image - native             |                  |                 |           |
 |                               |               |                               | extracted image - other (ppm or png) |                  |                 |           |

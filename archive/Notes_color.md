@@ -249,6 +249,8 @@ The **Adobe RGB** working space has a slightly wider colour gamut than sRGB (esp
 
     -   <https://www.littlecms.com/> (part of poppler-utils)
 
+    -   <https://www.bitsgalore.org/2021/09/06/pdf-processing-and-analysis-with-open-source-tools>
+
 [^notes_color-29]: <https://apple.stackexchange.com/questions/445640/which-exact-color-space-is-rgb-in-macos-finders-get-info>
 
 [^notes_color-30]: See also: <https://developer.apple.com/design/human-interface-guidelines/color#Color-management>
