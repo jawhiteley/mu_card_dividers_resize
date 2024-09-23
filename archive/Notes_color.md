@@ -119,10 +119,9 @@ Still learning — but becoming clearer. :)
 
 [^notes_color-18]: <https://en.wikipedia.org/wiki/Color_space#Absolute_color_space>
 
-## Working Space 
+## Working Space
 
-> Back in the late 1990's, with Photoshop 5, Adobe introduced an invaluable concept to its users, the RGB working space. These "device independent working spaces" are designed to be used for editing and storage or archiving of images. Unlike printer, scanner, camera or display screen profiles, working spaces are not used to describe
-> specific devices.[^notes_color-19]
+> Back in the late 1990's, with Photoshop 5, Adobe introduced an invaluable concept to its users, the RGB working space. These "device independent working spaces" are designed to be used for editing and storage or archiving of images. Unlike printer, scanner, camera or display screen profiles, working spaces are not used to describe specific devices.[^notes_color-19]
 
 [^notes_color-19]: <https://www.colourmanagement.net/advice/about-icc-colour-profiles#workingspaces>
 
