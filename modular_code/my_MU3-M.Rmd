@@ -129,97 +129,10 @@ img_tmp <-
 img_files <- sub("div-040.png", "div-aoa.png", img_files)
 ```
 
-## Alternate layout
-
--   bundle retail content together
--   then all the Kickstarter Exclusive content (in a separate file)
-
-```{r modular-processing-retail}
-# Add jpg dividers [Apocalypse (AOA), Void Villain alt]
-img_files <- add_jpg_dividers(img_files)
-# Reorder divider image files
-img_files <- img_files[
-  c(# Alphabetical, by box: Heroes, Villains, Anti-Hero alts, Other, KS exclusives (if retail)
-    # Core Box (1:13) [13-14]
-    2, 1, 10, 3, 6, 4, 5, NA, 12, 7:9,
-    11, 13,  # Anti-Hero alts
-    # Maximum Carnage (64:73) [10]
-    70, 
-    67, 72, 64:66, 68,
-    69,      # KS Exclusive
-    71, 73,  # Anti-Hero Alts
-    # Civil War (49:58) [10-11; 12] - missing Mission, Event, Cell, Last Player cards? (Registration Clash, Clash of Heroes)
-    53, 56, 49, 54, 55, 50, 51, 52,
-    58, 57,  # KS Exclusives
-    239, # NA, # Population cards; placeholder for "Registration Clash"?
-    # World War Hulk (74:87) [14-15] - missing Anti-Hero alt for The Void? (present in vertical dividers)
-    76,      # KS Exclusive
-    78, 77, 75, 74, 79,
-    86, 87, 83,  # Villain Hulk (83) is "World Breaker Hulk"
-    81, 85, 80, 84, 82, 240,  # Anti-Hero alts (+ The Void Villain alt)
-    # Team Decks [15-16]
-    192,
-    193, 195:198, 200, 204, 209, 211, 214:218, 222,     # Retail
-    # Galactus (14:23) [10]
-    14, 16, 
-    19:20, 22, 21, 17, 23, 
-    15, 18,  # Anti-Hero alts
-    # Pets (184:191) [8]
-    184:191,
-    # Promos (87:171) [63+7+9+7=85-86]
-    ## Heroes
-    97:98, 91, 96, 95, 89, 94, 88, 92:93, 
-    112, 114, 116, 108, 99, 172, 100, 90, 120:121, 
-    124, 126, 127, 129, 131, 134, 132, 140, 142, 152, 
-    154, 155, 156, 157, 162, 160, 159, 164, 166, 170, 
-    ## Villains
-    167, 101, 103:106, 113, 107, 115, 109, 111, 
-    118:119, 102, 122, 123, 125, 128, 130, 135, 133,
-    153, 141, 158, 163, 165, 169, 171, 110, 
-    ## Other
-    173,     # Generic Equipment (Other or Promos? Wherever fits)  
-    ## Anti-Heroes
-    147, 146, 145, 144, 136, 137, 138, 139, 150, 151, 149, 148, 
-    168,     # Winter Guard (Villain)
-    117, 143, 161,  # Winter Guard (Heroes)
-    # Age of Apocalypse (36:42) [7]
-    38, 37, 39, 36,
-    40:42,   # 40 = Apocalypse, to be replaced with correction (AOA)
-    # Annihilation (59:63, 174) [6]
-    62, 59:61, 63, 
-    174,     # Complications Challenge
-    # Secret Invasion (43:48) [6]
-    44, 43, 45:46,
-    47:48,
-    # War of Kings (24:35) [12]
-    24, 26, 32, 27:28, 30, 25, 29,
-    34, 31,
-    33, 35,  # Anti-Hero alts
-    # Team Decks (192:222, 231:238) [39]
-    192,
-    231:233, 237, 234:236, 238,                         # Promos
-    194, 199, 201:203, 205:208, 210, 212:213, 219:221,  # KSE optional buy
-    ## 223-230 are from the equipment card pockets page (not accurately cropped): skip
-    # Campaigns (175:183) [9]
-    175:183,
-    # Other
-    NA
-  )
-]
-# Custom page breaks based on custom divider list above.
-page_breaks <- c(13, 125, 178)
-```
-
 ## Set order using external dataset
 
--   bundle retail content together
--   then all the Kickstarter Exclusive content (in a separate file)
-
-The overwhelming majority of users responding to [my poll on BGG](https://boardgamegeek.com/thread/3339049/dividers-sort-order-preferences) preferred grouping by type (Heroes, Villains, etc.), so the first file posted to BGG was grouped that way.  I might make a second version sorted by box, in case it's useful for those who didn't get everything.
-
-This is a lot of code, but was an interesting experiment. :D  
-
-Next time, it might be simpler to just arrange the external file manually instead of all this manipulation.  Alternate sort orders can be 'saved' as indices in separate columns ('sort1', 'page.break1', 'sort2', etc.).
+- By box; Heroes, Villains, Other; Alphabetical by Name
+- no Anti-Hero alts (purple dividers)
 
 ```{r modular-processing}
 # Add jpg dividers [Apocalypse (AOA), Void Villain alt]
@@ -267,92 +180,38 @@ div_long <- div_data |>
   # move columns to desired locations
   relocate(type.ah, .after = type) |> 
   relocate(value, .before = page.break)
+# Filter out content I don't want to print
+div_long <- div_long |> 
+  filter(
+    !(box %in% c(
+      "The Coming of Galactus",
+      "Multiverse Promos (Omniverse All-In Bonus)",
+      "World War Hulk",
+      "Maximum Carnage",
+      "Campaigns"
+    )),
+    is.na(type.ah) | str_starts(type.ah, "ah\\.", neg = TRUE)
+  )
 
 # Process & Sort divider data to desired order ====
 sort_divs <- "by box"
-if (sort_divs == "by type") {
-  div_sorted <- div_long |> 
-    mutate(
-      # set sort order with order of levels = (don't forget any!)
-      type = factor(
-        type, 
-        levels = c(
-          "Hero", 
-          "Villain", 
-          "Anti-Hero", 
-          "Pet", 
-          "Team", 
-          "Campaign", 
-          "Other", 
-          "Challenge"
-        )
-      ),
-      type.ah = factor(
-        type.ah, 
-        levels = c("hero", "villain", "ah.hero", "ah.villain")
-      ),
-      # box = ifelse(type %in% c("Team", "Other"), box, NA)
-      # assign alternate names to villain forms of Anti-Heroes
-      name = case_when(
-        type == "Anti-Hero" & str_detect(type.ah, "villain") ~ str_replace(name, "^.*\\/\\s?", ""),
-        type == "Anti-Hero" & str_detect(type.ah, "hero")    ~ str_replace(name, "\\s?\\/.*$", ""),
-        .default = name
-      )
-    ) |> 
-    ## SORT
-    arrange(type, type.ah, str_rank(name)) |> 
-    filter(!is.na(value)) |> 
-    # derive page breaks
-    mutate(
-      page.break = case_when(
-        # type == "Villain"   & !duplicated(type)  ~ TRUE,
-        type == "Anti-Hero" & !duplicated(type)  ~ TRUE,
-        .default = NA
-      )
-    )
-  
-} else if (str_detect(sort_divs, "by box")) {
-  # Group by box, all Retail boxes together; sort by type, then name (mostly)
-  # Decided it wasn't worth grouping the KSE content from retail boxes with other KSE content.  
-  # Keeping them with their boxes (but grouping retail ones together) 
-  # is a nicer layout (to me), and it's only 4 extra dividers 
-  # for those who purchased the retail-only versions.  Apologies for the FOMO.
-  # Add "KSE" to sort_divs to group all KSE together instead.
+if (str_detect(sort_divs, "by box")) {
+  # Group by box; sort by type, then name (mostly)
   div_sorted <- div_long |> 
     # Insert blank dividers for spacing
-    bind_rows(
-      filter(div_long, 
-             str_detect(box, "Core"), 
-             type == "Villain"
-      )[1, ] |> 
-        mutate(
-          name = "_ blank _",
-          value = NA
-        ),
-      filter(div_long, 
-             str_detect(box, "Carnage"), 
-             type == "Anti-Hero",
-             str_detect(type.ah, "ah\\.")
-      )[str_detect(sort_divs, "KSE") |> as.integer( ), ] |> 
-        mutate(
-          name = "_ blank _",
-          value = NA
-        )
-    ) |> 
-    # duplicate "Teams" divider?  Not worth having an extra, just include it with Retail or KSE
+    # bind_rows(
+    #   filter(div_long, 
+    #          str_detect(box, "Core"), 
+    #          type == "Villain"
+    #   )[1, ] |> 
+    #     mutate(
+    #       name = "_ blank _",
+    #       value = NA
+    #     )
+    # ) |> 
     mutate(
       # make "Teams" divider KSE: assuming it's only really needed if you got more than the retail Team decks.
       ks.exclusive = ifelse(name == "_ Teams", 1, ks.exclusive),
-      # treat "Doc Samson" as "Other" for sorting within the box (unless grouping all KSE together)
-      type = ifelse(!str_detect(sort_divs, "KSE") & name == "Doc Samson", 
-                    "Other", 
-                    type
-      ),
-      # treat "Doc Samson" as part of "Civil War" for sorting with other KSE content
-      box = ifelse(str_detect(sort_divs, "KSE") & name == "Doc Samson", 
-                    "Civil War", 
-                    box
-      ),
       # Set sort order with order of levels = (don't forget any!)
       type.ah = type.ah |> 
         factor(levels = c("hero", "villain", "ah.hero", "ah.villain")),
@@ -380,36 +239,20 @@ if (sort_divs == "by type") {
         .default = box
       ) |> 
         factor(levels = c(
-          "Multiverse Core",
-          "Maximum Carnage",
+          "EQ", "Multiverse Core", 
           "Civil War",
-          "World War Hulk",
-          "Team Decks",
-          ifelse(!str_detect(sort_divs, "KSE"), "The Coming of Galactus", NA), 
           "Multiverse Promos",
-          "Multiverse Promos (Omniverse All-In Bonus)",
           "The Age of Apocalypse",
-          ifelse(str_detect(sort_divs, "KSE"), "The Coming of Galactus", NA), 
-          ifelse(str_detect(sort_divs, "KSE"), "Pets", NA), 
+          "Team Decks",
           "Annihilation",
           "Secret Invasion",
           "War of Kings",
-          "Teams",
-          "Campaigns", "EQ",
-          ifelse(!str_detect(sort_divs, "KSE"), "Pets", NA)
+          "Pets",
+          "Teams"
         )
         ),
       # Ensure "Teams" divider stays in front of others
       box = ifelse(box == "Team", "_ Team", box),
-      # Group Winter Guard together (Anti-Hero alts)
-      name = ifelse(
-        type == "Anti-Hero" & str_detect(team, "Winter Guard") & 
-          name != "Winter Guard" & !is.na(team),
-        paste("Winter Guard:", name),
-        name
-      ),
-      # Move Galactus and Heralds dividers to front of their group
-      name = ifelse(str_detect(name, "Galactus"), paste("_", name), name),
       # assign alternate names to villain forms of Anti-Heroes, but not alts (so they stay together)
       name = case_when(
         type == "Anti-Hero" & str_detect(type.ah, "^villain") ~ str_replace(name, "^.*\\/\\s?", ""),
@@ -418,30 +261,15 @@ if (sort_divs == "by type") {
       )
     ) |> 
     ## SORT
-    (\(.x)  # anonymous function for if() in a pipe sequence
-     if (str_detect(sort_divs, "KSE")) {
-       .x |> 
-       arrange(ks.exclusive, collection, type,
-               str_rank(box), str_rank(name), type.ah
-       )
-     } else {
-       .x |> 
-       arrange(collection, type, ks.exclusive, 
-               str_rank(box), str_rank(name), type.ah
-       )
-     }
-    )() |> 
+    arrange(collection, type, ks.exclusive, 
+            str_rank(box), str_rank(name), type.ah
+    ) |> 
     # add page breaks
     mutate(
       page.break = case_when(
         box == "Multiverse Core" & 
           type == "Anti-Hero" & 
           !duplicated(type)  ~ TRUE,
-        str_detect(sort_divs, "KSE") & 
-          as.logical(ks.exclusive) & !duplicated(ks.exclusive) ~ TRUE,
-        !str_detect(sort_divs, "KSE") & 
-          box == "The Coming of Galactus" &
-          !duplicated(box) ~ TRUE,
         box == "Civil War" &
           !duplicated(box) ~ TRUE,
         box == "Annihilation" &
