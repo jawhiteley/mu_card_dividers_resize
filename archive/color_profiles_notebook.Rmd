@@ -256,13 +256,13 @@ Based on the documentation, I probably want to add `-strip`?
 
 I can't even seem to reproduce colours on my printer from early tests with the same file (might have been a different computer). So confusing. :(
 
-| file                          | color profile | based on original file        | treatment                            | results - screen | results - print | Notes     |
-|-------------------------------|---------------|-------------------------------|--------------------------------------|------------------|-----------------|-----------|
-| input/mu_card_dividers_v2.pdf | ?             | \-                            | \-                                   | baseline         | baseline        | reference |
-|                               |               | input/mu_card_dividers_v2.pdf | extracted image - native             |                  |                 |           |
-|                               |               |                               | extracted image - other (ppm or png) |                  |                 |           |
-|                               |               |                               | +Adobe 1998                          |                  |                 |           |
-|                               |               |                               | +IEC                                 |                  |                 |           |
-|                               |               |                               |                                      |                  |                 |           |
+| file | color profile | based on original file | treatment | results - screen | results - print | Notes |
+|----|----|----|----|----|----|----|
+| input/mu_card_dividers_v2.pdf | ? | \- | \- | baseline | baseline | reference |
+|  |  | input/mu_card_dividers_v2.pdf | extracted image - native |  |  |  |
+|  |  |  | extracted image - other (ppm or png) |  |  |  |
+|  |  |  | +Adobe 1998 |  |  |  |
+|  |  |  | +IEC |  |  |  |
+|  |  |  |  |  |  |  |
 
 A table might be too wide for all the information I want to gather. I might consider a list format instead, or for more details (in addition to a summary table).
