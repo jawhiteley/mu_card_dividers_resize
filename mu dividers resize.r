@@ -75,7 +75,7 @@ if (F)
 ## Extract images from pdf files
 # Each page is one big image of tabs (created in Photoshop)
 
-library(pdfimager)  # remotes::install_github("sckott/pdfimager")
+library(pdfimager)  # pak::pak("sckott/pdfimager") # remotes::install_github("sckott/pdfimager")
 # Requires 'poppler' to be installed on your system (homebrew: `brew install poppler`)
 
 if (F)    # do not run on source()

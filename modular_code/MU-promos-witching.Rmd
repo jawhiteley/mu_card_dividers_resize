@@ -1,0 +1,12 @@
+# Marvel United: Witching Hour + Promos
+
+```{r modular-setup}
+pdf_file <- "witching_hour.pdf"
+```
+
+Spiffworld's file include both horizontal and vertical (and an extra divider for the "Hybrid" Promo). I will only keep the horizontal dividers.
+
+```{r modular-processing}
+img_files <- img_files[c(3:7, 1, 2, 8, 9:14)]
+page_breaks <- 9
+```

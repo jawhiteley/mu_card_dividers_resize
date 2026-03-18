@@ -5,7 +5,7 @@ output:
     #keep_tex: TRUE
 geometry: margin=1cm    # not safe to go below 6 mm
 params:
-  modular_code: modular_code/my_MU3-M.Rmd    # path to R script with modular code (for a specific set of input files)
+  modular_code: modular_code/MU-promos-witching.Rmd    # path to R script with modular code (for a specific set of input files)
   pdf_file:             # name of pdf file to process in the `input` directory.  Leave blank to process **all** pdf files in the directory.
   extract_images: TRUE  # run the R script to extract images (everything at once)?  Set to FALSE to run it manually (or to save time if you already ran it and have the outputs)
   page_breaks:    # comma-separated list of divider numbers: page breaks will be added **before** each divider in this list.
@@ -22,6 +22,7 @@ header-includes: |
   \graphicspath{{./`r params$img_dir`/}}
   \pagenumbering{gobble}  % remove page numbers
 ---
+
 ```{r setup, include=FALSE, cache=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
@@ -73,9 +74,11 @@ if ( !is.null(params$modular_code) ) {
   } 
 }
 ```
+
 ```{r, ref.label='modular-setup', include=FALSE}
 # Code from `modular_code` file, if any, is inserted here.
 ```
+
 ```{r extract, include=FALSE, eval=isTRUE(params$extract_images)}
 # If you want to do everything here in one step, set the value of the 'extract_images' parameter to 'TRUE' in the in the document header.
 # If you already ran the r script and want to skip directly to output, set the value of the 'extract_images' parameter to 'FALSE' in the in the document header.
@@ -133,23 +136,28 @@ page_breaks <- as.character(page_breaks) %>% strsplit(",") %>% unlist %>% as.int
 # Get list of (png) files: 1 file per divider
 img_files <- list.files(img_dir, '.png$', recursive = FALSE, full.names = TRUE)
 ```
+
 ```{r, ref.label='modular-processing', include=FALSE}
 # Code from `modular_code` file, if any, is inserted here.
 ```
 
-```{r output, echo=FALSE, , results="asis"}
-# Loop over the list and include graphics, which should apply the custom LaTeX command defined above (for \includegraphics).
+```{r output, echo=FALSE, out.width='100%', results='asis'}
+# Loop over the list and include graphics, 
+# which should apply the custom LaTeX command defined above (for \includegraphics).
 if (length(page_breaks) > 0){
   for (i in 1:length(img_files)) {
     if (i %in% page_breaks)  # add a page break before output, if requested.
       cat("\\par \n\\pagebreak")
     if (is.na(img_files[i]))  # add an empty divider box if file is missing (NA).
       cat("\\divbox{} \n")
-    else
-      cat("![](", img_files[i], ")\n")  # use the md syntax, which pandoc will convert to \includegraphics{}
+    else {
+      # include_graphics(img_files[i]) # ERROR in PDF output :(
+      cat("![](", img_files[i], "){width=100%}\n")  # use the md syntax, which pandoc will convert to \includegraphics{}
+    }
   }
 } else {
   # If no page breaks, use the simple (vectorized!) function to produce md syntax, which will end up as \includegraphics
+  # uses out.width chunk option.
   include_graphics(img_files[!is.na(img_files)])
 }
 ```

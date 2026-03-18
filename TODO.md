@@ -6,6 +6,8 @@
 - [ ] Try to preserve original color profile (Adobe RGB 1998)?
   - Use ImageMagick to slice images directly from command-line (using a call from within R)?
 
+- [ ] Figure out how to use `knitr::include_graphics()` for all cases to include images.
+
 - Try a different method of preserving 150 ppi / dpi from the original to final output.
   - set dpi to 150 in extracted images?  Then images can be placed at scale = 100%
     - make this the default if divider width = blank?
